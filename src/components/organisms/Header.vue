@@ -1,0 +1,20 @@
+<template>
+  <header class="max-w-[1024px] mx-auto py-16 pl-10 pr-4 text-center sm:text-left">
+    <h1 class="text-[5rem] leading-[5.1rem] tracking-[1px] font-extrabold text-slate-900 mb-2 max-w-[60%]">{{ profile.name }}</h1>
+    <p class="text-[2rem] font-light text-accent mb-12">{{ profile.title }}</p>
+    
+    <div class="max-w-2xl">
+      <h2 class="text-sm uppercase tracking-widest text-slate-400 font-bold mb-3">Professional Profile</h2>
+      <p class="text-slate-600 leading-relaxed">
+        {{ profile.summary }}
+      </p>
+    </div>
+  </header>
+</template>
+
+<script setup lang="ts">
+import type { UserProfile } from '../../stores/cv'
+defineProps<{
+  profile: UserProfile
+}>()
+</script>
