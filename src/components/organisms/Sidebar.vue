@@ -26,8 +26,8 @@
     </div>
 
     <!-- The Content Layer -->
-    <div class="relative w-full px-8 flex justify-start">
-      <div class="flex flex-col gap-12 w-full py-12">
+    <div class="relative w-full px-8 flex justify-start sticky top-0 h-screen">
+      <div class="flex flex-col gap-9 w-full py-6">
         <div v-for="section in sections" :key="section.title" class="flex flex-col gap-3">
           <h3 class="text-xs uppercase tracking-widest text-slate-400 font-bold">{{ section.title }}</h3>
           <div class="flex flex-col gap-2">
