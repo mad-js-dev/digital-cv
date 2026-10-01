@@ -1,5 +1,6 @@
 <template>
   <aside 
+    ref="asideRef"
     class="hidden lg:flex flex-col justify-start w-1/3 bg-[#2c3e50] text-white"
   >
     <!-- Grey Box Container -->
@@ -43,9 +44,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useCvStore } from '../../stores/cv'
 
 const store = useCvStore()
 const sections = computed(() => store.sidebar)
+const asideRef = ref<HTMLElement | null>(null)
+
+// Expose the ref to the parent (App.vue)
+defineExpose({
+  asideRef
+})
 </script>
