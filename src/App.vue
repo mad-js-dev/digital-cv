@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex justify-center min-h-screen bg-slate-50">
+  <div class="relative flex justify-center min-h-screen">
     <!-- Background Bleed: Fills the left half of the screen with the sidebar color -->
     <div class="fixed top-0 left-0 h-full w-1/2 bg-[#2c3e50] z-0"></div>
 
