@@ -21,8 +21,89 @@ export interface SidebarSection {
   items: { label: string; value: string }[];
 }
 
+interface Palette {
+  light: Record<string, string>;
+  dark: Record<string, string>;
+}
+
+export const PALETTES: Record<string, Palette> = {
+  midnight: {
+    light: {
+      '--color-bg-page': '#f1f5f9',
+      '--color-bg-main': '#f8fafc',
+      '--color-bg-sidebar': '#2c3e50',
+      '--color-text-primary': '#0f172a',
+      '--color-text-secondary': '#475569',
+      '--color-accent': '#e67e22',
+    },
+    dark: {
+      '--color-bg-page': '#0f172a',
+      '--color-bg-main': '#1e293b',
+      '--color-bg-sidebar': '#0f172a',
+      '--color-text-primary': '#e2e8f0',
+      '--color-text-secondary': '#94a3b8',
+      '--color-accent': '#f97316',
+    },
+  },
+  forest: {
+    light: {
+      '--color-bg-page': '#f0f4f0',
+      '--color-bg-main': '#f9fdf9',
+      '--color-bg-sidebar': '#2d3a2d',
+      '--color-text-primary': '#1a2e1a',
+      '--color-text-secondary': '#4a634a',
+      '--color-accent': '#c5a059',
+    },
+    dark: {
+      '--color-bg-page': '#0a140a',
+      '--color-bg-main': '#142214',
+      '--color-bg-sidebar': '#0a140a',
+      '--color-text-primary': '#d1dcd1',
+      '--color-text-secondary': '#8a9d8a',
+      '--color-accent': '#e5c17a',
+    },
+  },
+  sunset: {
+    light: {
+      '--color-bg-page': '#fdf8f8',
+      '--color-bg-main': '#fffafa',
+      '--color-bg-sidebar': '#3b2d3d',
+      '--color-text-primary': '#2d1b2d',
+      '--color-text-secondary': '#6b536b',
+      '--color-accent': '#ff7f50',
+    },
+    dark: {
+      '--color-bg-page': '#1a0f1a',
+      '--color-bg-main': '#2d1b2d',
+      '--color-bg-sidebar': '#1a0f1a',
+      '--color-text-primary': '#f5e6f5',
+      '--color-text-secondary': '#a38da3',
+      '--color-accent': '#ff9a7b',
+    },
+  },
+  monochrome: {
+    light: {
+      '--color-bg-page': '#f5f5f5',
+      '--color-bg-main': '#ffffff',
+      '--color-bg-sidebar': '#1a1a1a',
+      '--color-text-primary': '#000000',
+      '--color-text-secondary': '#666666',
+      '--color-accent': '#3b82f6',
+    },
+    dark: {
+      '--color-bg-page': '#000000',
+      '--color-bg-main': '#111111',
+      '--color-bg-sidebar': '#000000',
+      '--color-text-primary': '#eeeeee',
+      '--color-text-secondary': '#888888',
+      '--color-accent': '#60a5fa',
+    },
+  },
+}
+
 export const useCvStore = defineStore('cv', {
   state: () => ({
+    themeName: (localStorage.getItem('themeName') as string) || 'midnight',
     theme: (localStorage.getItem('theme') as 'light' | 'dark') || 'light',
     profile: {
       name: 'Brais Vázquez',
@@ -138,7 +219,20 @@ export const useCvStore = defineStore('cv', {
     toggleTheme() {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
       localStorage.setItem('theme', this.theme);
+      this.applyTheme();
+    },
+    setThemeName(name: string) {
+      this.themeName = name;
+      localStorage.setItem('themeName', name);
+      this.applyTheme();
+    },
+    applyTheme() {
+      const palette = PALETTES[this.themeName][this.theme];
       document.documentElement.classList.toggle('dark', this.theme === 'dark');
+      
+      Object.entries(palette).forEach(([variable, value]) => {
+        document.documentElement.style.setProperty(variable, value);
+      });
     }
   },
 })

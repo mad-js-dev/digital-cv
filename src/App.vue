@@ -1,6 +1,6 @@
 <template>
   <div class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300">
-    <ThemeToggle />
+    <ThemeControl />
     <!-- Background Bleed: Fills the left half of the screen with the sidebar color -->
     <div class="fixed top-0 left-0 h-full w-1/2 bg-[var(--color-bg-sidebar)] z-0 transition-colors duration-300"></div>
     
@@ -28,7 +28,7 @@ import { useCvStore } from './stores/cv'
 import Header from './components/organisms/Header.vue'
 import Timeline from './components/organisms/Timeline.vue'
 import Sidebar from './components/organisms/Sidebar.vue'
-import ThemeToggle from './components/atoms/ThemeToggle.vue'
+import ThemeControl from './components/atoms/ThemeControl.vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -40,8 +40,9 @@ const sidebarComponent = ref<any>(null)
 let trigger = null
 
 onMounted(() => {
-  // Initialize theme class
+  // Initialize theme class and apply palette
   document.documentElement.classList.toggle('dark', cvStore.theme === 'dark');
+  cvStore.applyTheme();
 
   if (!contentContainer.value || !sidebarComponent.value) return
 
