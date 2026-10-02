@@ -1,7 +1,7 @@
 <template>
   <aside 
     ref="asideRef"
-    class="hidden lg:flex flex-col justify-start w-1/3 bg-[#2c3e50] text-white"
+    class="hidden lg:flex flex-col justify-start w-1/3 bg-[var(--color-bg-sidebar)] text-white transition-colors duration-300"
   >
     <!-- Grey Box Container -->
     <div class="relative h-[75vh]">
@@ -12,7 +12,7 @@
       >
         <!-- Gradient Background -->
         <div 
-          class="absolute inset-0 bg-slate-100 bg-gradient-to-t from-slate-400 via-slate-200 to-slate-100"
+          class="absolute inset-0 bg-slate-100 dark:bg-slate-800 bg-gradient-to-t from-slate-400 via-slate-200 to-slate-100 dark:from-slate-700 dark:via-slate-800 dark:to-slate-900"
         ></div>
         
         <!-- Image Container: Aligned to the sidebar's width to center the image correctly -->
@@ -33,7 +33,7 @@
           <div class="flex items-center gap-3">
             <svg 
               :key="section.icon"
-              class="w-5 h-5 text-[#e67e22]" 
+              class="w-5 h-5 text-[var(--color-accent)]" 
               xmlns="http://www.w3.org/2000/svg" 
               fill="none" 
               viewBox="0 0 24 24" 
@@ -44,11 +44,11 @@
               <path v-if="section.icon === 'cpu'" stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M6.75 8.25h15M6.75 11.25h15M6.75 14.25h15M6.75 17.25h15m-15 3.75h15m-15-11.25V18m0-12V5.25m0 12v.75m0-13.5v.75" />
               <path v-if="section.icon === 'graduation'" stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147L12 15l7.74-4.853M12 15V3m0 12l-3-3m3 3l3-3" />
             </svg>
-            <h3 class="text-base uppercase tracking-widest text-[#e67e22] font-bold">{{ section.title }}</h3>
+            <h3 class="text-base uppercase tracking-widest text-[var(--color-accent)] font-bold">{{ section.title }}</h3>
           </div>
           <div class="flex flex-col gap-2">
             <div v-for="item in section.items" :key="item.label" class="flex flex-col">
-              <span class="text-[10px] uppercase text-slate-300 font-semibold">{{ item.label }}</span>
+              <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ item.label }}</span>
               <span class="text-sm text-white font-medium leading-tight">{{ item.value }}</span>
             </div>
           </div>

@@ -23,6 +23,7 @@ export interface SidebarSection {
 
 export const useCvStore = defineStore('cv', {
   state: () => ({
+    theme: (localStorage.getItem('theme') as 'light' | 'dark') || 'light',
     profile: {
       name: 'Brais Vázquez',
       title: 'Front-end Developer',
@@ -133,4 +134,11 @@ export const useCvStore = defineStore('cv', {
       }
     ]
   }),
+  actions: {
+    toggleTheme() {
+      this.theme = this.theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('theme', this.theme);
+      document.documentElement.classList.toggle('dark', this.theme === 'dark');
+    }
+  },
 })

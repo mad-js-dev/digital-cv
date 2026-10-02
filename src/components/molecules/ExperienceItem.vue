@@ -8,7 +8,7 @@
     style="transform-style: preserve-3d;"
   >
     <!-- Mobile Vertical Line -->
-    <div class="absolute left-1 sm:hidden top-2 bottom-0 w-0.5 bg-slate-400"></div>
+    <div class="absolute left-1 sm:hidden top-2 bottom-0 w-0.5 bg-slate-400 dark:bg-slate-600"></div>
     
     <!-- ANIMATED GROUP: Wraps both the Axis (Dot/Line) and the Content -->
     <div 
@@ -24,7 +24,7 @@
         <!-- The Horizontal Line -->
         <div 
           :class="[
-            'absolute top-2 h-px bg-[#e67e22] w-[250px] hidden sm:block', 
+            'absolute top-2 h-px bg-[var(--color-accent)] w-[250px] hidden sm:block', 
             isRight ? 'left-2' : 'right-2'
           ]"
         ></div>
@@ -44,7 +44,7 @@
         <!-- Date: Now floating relative to the content and the line -->
         <div 
           :class="[
-            'text-sm text-slate-500 font-medium mb-1',
+            'text-sm text-slate-500 dark:text-slate-400 font-medium mb-1',
             isRight ? 'sm:text-left' : 'sm:text-right'
           ]"
         >
@@ -53,11 +53,11 @@
       
         <!-- Company -->
         <div :class="['flex flex-col gap-1', isRight ? 'sm:items-start' : 'sm:items-end']">
-          <h3 class="font-bold text-lg text-slate-800">{{ company }}</h3>
+          <h3 class="font-bold text-lg text-[var(--color-text-primary)]">{{ company }}</h3>
         </div>
         
-        <div class="text-[#2c3e50] font-semibold text-sm mb-2">{{ role }}</div>
-        <p class="text-slate-600 text-sm leading-relaxed mb-4">{{ description }}</p>
+        <div class="text-[var(--color-text-primary)] font-semibold text-sm mb-2">{{ role }}</div>
+        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">{{ description }}</p>
         
         <div :class="['flex flex-wrap gap-2', isRight ? 'sm:justify-start' : 'sm:justify-end']">
           <SkillBadgeGroup :techStack="techStack" />

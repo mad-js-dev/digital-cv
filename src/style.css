@@ -1,9 +1,27 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
+@layer base {
+  :root {
+    --color-bg-page: #f1f5f9;
+    --color-bg-main: #f8fafc;
+    --color-bg-sidebar: #2c3e50;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-accent: #e67e22;
+  }
 
-body {
-  @apply bg-white text-slate-900 antialiased font-sans;
+  .dark {
+    --color-bg-page: #0f172a;
+    --color-bg-main: #1e293b;
+    --color-bg-sidebar: #0f172a;
+    --color-text-primary: #e2e8f0;
+    --color-text-secondary: #94a3b8;
+    --color-accent: #f97316;
+  }
+
+  body {
+    @apply transition-colors duration-300;
+    background-color: var(--color-bg-page);
+    color: var(--color-text-primary);
+  }
 }

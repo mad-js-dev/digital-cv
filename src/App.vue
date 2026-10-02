@@ -1,12 +1,13 @@
 <template>
-  <div class="relative flex justify-center min-h-screen">
+  <div class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300">
+    <ThemeToggle />
     <!-- Background Bleed: Fills the left half of the screen with the sidebar color -->
-    <div class="fixed top-0 left-0 h-full w-1/2 bg-[#2c3e50] z-0"></div>
+    <div class="fixed top-0 left-0 h-full w-1/2 bg-[var(--color-bg-sidebar)] z-0 transition-colors duration-300"></div>
     
     <!-- Centered Content Container -->
     <div 
       ref="contentContainer"
-      class="flex w-full mx-auto bg-white relative z-10"
+      class="flex w-full mx-auto bg-[var(--color-bg-page)] relative z-10 transition-colors duration-300"
       style="max-width: 1024px;"
     >
       <!-- Sidebar: Now integrates perfectly with the background bleed -->
@@ -27,17 +28,21 @@ import { useCvStore } from './stores/cv'
 import Header from './components/organisms/Header.vue'
 import Timeline from './components/organisms/Timeline.vue'
 import Sidebar from './components/organisms/Sidebar.vue'
+import ThemeToggle from './components/atoms/ThemeToggle.vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const cvStore = useCvStore()
-const contentContainer = ref<HTMLElement | null>(null)
+const contentContainer = ref<any>(null)
 const sidebarComponent = ref<any>(null)
 let trigger = null
 
 onMounted(() => {
+  // Initialize theme class
+  document.documentElement.classList.toggle('dark', cvStore.theme === 'dark');
+
   if (!contentContainer.value || !sidebarComponent.value) return
 
   const sidebarEl = sidebarComponent.value.asideRef
