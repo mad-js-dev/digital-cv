@@ -2,7 +2,7 @@
   <section class="max-w-[1024px] mx-auto py-12 pl-10 pr-4 pb-32" style="perspective: 1200px;">
     <div class="mb-12 text-center sm:text-left">
       <h2 class="work-experience-title text-3xl font-bold text-slate-800 mb-4">Work Experience</h2>
-      <div class="h-1 w-20 bg-accent mx-auto sm:mx-0 rounded-full"></div>
+      <div class="h-1 w-20 bg-[#e67e22] mx-auto sm:mx-0 rounded-full"></div>
     </div>
     
     <div class="relative">

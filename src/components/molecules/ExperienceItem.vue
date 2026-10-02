@@ -24,7 +24,7 @@
         <!-- The Horizontal Line -->
         <div 
           :class="[
-            'absolute top-2 h-px bg-slate-400 w-[250px] hidden sm:block', 
+            'absolute top-2 h-px bg-[#e67e22] w-[250px] hidden sm:block', 
             isRight ? 'left-2' : 'right-2'
           ]"
         ></div>
@@ -56,7 +56,7 @@
           <h3 class="font-bold text-lg text-slate-800">{{ company }}</h3>
         </div>
         
-        <div class="text-accent font-semibold text-sm mb-2">{{ role }}</div>
+        <div class="text-[#2c3e50] font-semibold text-sm mb-2">{{ role }}</div>
         <p class="text-slate-600 text-sm leading-relaxed mb-4">{{ description }}</p>
         
         <div :class="['flex flex-wrap gap-2', isRight ? 'sm:justify-start' : 'sm:justify-end']">

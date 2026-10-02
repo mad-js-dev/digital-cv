@@ -13,7 +13,7 @@ export default {
         // Adding some professional CV colors
         primary: '#2c3e50',
         secondary: '#34495e',
-        accent: '#3498db',
+        accent: '#e67e22',
       },
     },
   },

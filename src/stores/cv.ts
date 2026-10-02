@@ -17,6 +17,7 @@ export interface UserProfile {
 
 export interface SidebarSection {
   title: string;
+  icon: string;
   items: { label: string; value: string }[];
 }
 
@@ -30,6 +31,7 @@ export const useCvStore = defineStore('cv', {
     sidebar: [
       {
         title: 'Contact',
+        icon: 'mail',
         items: [
           { label: 'Email', value: 'braisva@gmail.com' },
           { label: 'LinkedIn', value: 'linkedin.com/in/braisvazquez' },
@@ -39,6 +41,7 @@ export const useCvStore = defineStore('cv', {
       },
       {
         title: 'Skills',
+        icon: 'cpu',
         items: [
           { label: 'Core', value: 'Vue 3, TypeScript, Pinia, ES6+' },
           { label: 'Styling', value: 'Tailwind CSS, SASS, BEM' },
@@ -48,6 +51,7 @@ export const useCvStore = defineStore('cv', {
       },
       {
         title: 'Education',
+        icon: 'graduation',
         items: [
           { label: 'Degree', value: 'Engineering in Computer Science' },
           { label: 'Specialization', value: 'Front-end Architecture' },
