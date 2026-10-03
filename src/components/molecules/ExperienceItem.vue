@@ -3,7 +3,7 @@
     ref="itemRef"
     :class="[
       'relative w-full',
-      index > 0 ? 'sm:-mt-[5rem]' : ''
+      index > 0 ? 'sm:mb-[-5rem]' : ''
     ]"
     style="transform-style: preserve-3d;"
   >
