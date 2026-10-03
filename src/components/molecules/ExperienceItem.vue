@@ -1,10 +1,7 @@
 <template>
   <div 
     ref="itemRef"
-    :class="[
-      'relative w-full',
-      index > 0 ? 'sm:mb-[-5rem]' : ''
-    ]"
+    class="relative w-full mb-12 sm:mb-0"
     style="transform-style: preserve-3d;"
   >
     <!-- Mobile Vertical Line -->
