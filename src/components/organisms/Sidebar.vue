@@ -1,21 +1,17 @@
 <template>
   <aside 
     ref="asideRef"
-    class="hidden lg:flex flex-col justify-start w-1/3 bg-[var(--color-bg-sidebar)] text-white transition-colors duration-300"
+    class="hidden lg:flex flex-col justify-start w-full bg-[var(--color-bg-sidebar)] text-white transition-colors duration-300"
   >
-    <!-- Grey Box Container -->
-    <div class="relative h-[75vh]">
-      <!-- Masking Wrapper: Handles the diagonal cut and the bleed -->
+    <!-- Profile Section (Scrolls away) -->
+    <div class="relative h-[75vh] shrink-0">
       <div 
         class="absolute inset-y-0 right-0 w-[1024px]" 
         style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%);"
       >
-        <!-- Gradient Background -->
         <div 
           class="absolute inset-0 bg-slate-100 dark:bg-slate-800 bg-gradient-to-t from-slate-400 via-slate-200 to-slate-100 dark:from-slate-700 dark:via-slate-800 dark:to-slate-900"
         ></div>
-        
-        <!-- Image Container: Aligned to the sidebar's width to center the image correctly -->
         <div class="absolute inset-y-0 right-0 w-full lg:w-1/3">
           <img 
             src="@/assets/profile.png" 
@@ -26,8 +22,14 @@
       </div>
     </div>
 
-    <!-- The Content Layer -->
-    <div class="relative w-full px-8 flex justify-start sticky top-0 h-screen">
+    <!-- THE STICKY CONTENT LAYER -->
+    <!-- 
+      CRITICAL FIX:
+      We use 'align-self: start' (via self-start) specifically on this child.
+      This allows the PARENT (aside) to stretch to 100% height, 
+      while the STICKY element stays compact and is able to float.
+    -->
+    <div class="sticky top-6 self-start w-full px-8">
       <div class="flex flex-col gap-9 w-full py-6">
         <div v-for="section in sections" :key="section.title" class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
@@ -66,7 +68,6 @@ const store = useCvStore()
 const sections = computed(() => store.sidebar)
 const asideRef = ref<HTMLElement | null>(null)
 
-// Expose the ref to the parent (App.vue)
 defineExpose({
   asideRef
 })
