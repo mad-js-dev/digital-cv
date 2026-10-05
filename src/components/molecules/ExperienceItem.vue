@@ -1,13 +1,23 @@
 <template>
   <div 
     ref="itemRef"
-    class="relative w-full mb-12 sm:mb-0"
+    class="relative w-full pb-12 sm:pb-0"
     style="transform-style: preserve-3d;"
   >
-    <!-- Mobile Vertical Line -->
-    <div class="absolute left-1 sm:hidden top-2 bottom-0 w-0.5 bg-slate-400 dark:bg-slate-600"></div>
+    <!-- VERTICAL LINE SEGMENT -->
+    <!-- Only render if NOT the last item. -->
+    <div 
+      v-if="!isLast"
+      class="absolute left-1/2 top-0 bottom-0 w-px bg-slate-400 dark:bg-slate-600 -translate-x-1/2 hidden sm:block"
+    ></div>
     
-    <!-- ANIMATED GROUP: Wraps both the Axis (Dot/Line) and the Content -->
+    <!-- Mobile Vertical Line -->
+    <div 
+      v-if="!isLast"
+      class="absolute left-1 sm:hidden top-2 bottom-0 w-0.5 bg-slate-400 dark:bg-slate-600"
+    ></div>
+    
+    <!-- ANIMATED GROUP -->
     <div 
       ref="groupRef"
       class="relative w-full"
@@ -15,10 +25,8 @@
     >
       <!-- TIMELINE AXIS GROUP -->
       <div class="absolute top-0 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-        <!-- The Dot -->
         <TimelineDot class="relative" />
         
-        <!-- The Horizontal Line -->
         <div 
           :class="[
             'absolute top-2 h-px bg-[var(--color-accent)] w-[250px] hidden sm:block', 
@@ -38,7 +46,6 @@
         ]"
         :style="{ top: '-17px' }"
       >
-        <!-- Date: Now floating relative to the content and the line -->
         <div 
           :class="[
             'text-sm text-slate-500 dark:text-slate-400 font-medium mb-1',
@@ -48,7 +55,6 @@
           {{ period }}
         </div>
       
-        <!-- Company -->
         <div :class="['flex flex-col gap-1', isRight ? 'sm:items-start' : 'sm:items-end']">
           <h3 class="font-bold text-lg text-[var(--color-text-primary)]">{{ company }}</h3>
         </div>
@@ -80,6 +86,7 @@ const props = defineProps<{
   role: string;
   description: string;
   techStack: string[];
+  isLast: boolean;
 }>()
 
 const isRight = computed(() => props.index % 2 === 0)
@@ -92,11 +99,10 @@ onMounted(() => {
 
   const rotationAngle = isRight.value ? 90 : -90;
 
-  // Setup initial 3D state for the entire group
   gsap.set(groupRef.value, { 
     opacity: 0, 
     rotateY: rotationAngle,
-    transformOrigin: '50% 0%', // Pivot exactly at the top-center (where the dot is)
+    transformOrigin: '50% 0%', 
     zIndex: 1
   })
 
@@ -106,8 +112,8 @@ onMounted(() => {
     duration: 1,
     scrollTrigger: {
       trigger: itemRef.value,
-      start: 'top 70%',
-      end: 'top center',
+      start: 'top 90%', 
+      end: 'top 60%',   
       scrub: 1,
     },
   })

@@ -6,14 +6,14 @@
     </div>
     
     <div class="relative">
-      <!-- Central Vertical Line -->
-      <div class="absolute left-1/2 top-0 bottom-0 w-px bg-slate-400 dark:bg-slate-600 -translate-x-1/2 hidden sm:block"></div>
+      <!-- Global line removed; now handled per item in ExperienceItem.vue -->
       
       <ExperienceItem 
         v-for="(exp, index) in experiences" 
         :key="exp.id" 
         v-bind="exp" 
         :index="index"
+        :is-last="index === experiences.length - 1"
       />
     </div>
   </section>

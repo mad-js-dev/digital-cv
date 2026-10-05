@@ -9,7 +9,10 @@
     <div class="w-full max-w-[1200px] mx-auto relative z-10">
       <!-- 
         INNER CONTAINER:
-        - Fixed starting style to prevent the "jump" during JS initialization.
+        - REMOVED 'items-start'. 
+        - By default, flex children (like the Sidebar) will 'stretch' to fill 
+          the height of the container. This ensures the sidebar background 
+          fills the whole page.
       -->
       <div 
         ref="contentContainer"
@@ -52,33 +55,37 @@ onMounted(async () => {
 
   await nextTick();
   
-  // We remove the setTimeout and initialize immediately.
-  // To prevent the flicker, we rely on the CSS styles already set in the template.
-  if (!contentContainer.value || !sidebarComponent.value) return
+  setTimeout(() => {
+    if (!contentContainer.value || !sidebarComponent.value) return
 
-  const sidebarEl = sidebarComponent.value.asideRef
+    const sidebarEl = sidebarComponent.value.asideRef
 
-  trigger = ScrollTrigger.create({
-    trigger: 'body', 
-    start: 'top top',
-    end: 'top -150px',
-    scrub: 0.6,
-    onUpdate: (self) => {
-      const progress = self.progress;
-      const currentMaxWidth = 1024 + (1200 - 1024) * progress;
-      const currentSidebarWidth = 33.33 - (33.33 - 25) * progress;
-      
-      gsap.set(contentContainer.value, { 
-        maxWidth: `${currentMaxWidth}px`,
-        x: 0 
-      });
-      gsap.set(sidebarEl, { 
-        width: `${currentSidebarWidth}%` 
-      });
-    }
-  })
+    trigger = ScrollTrigger.create({
+      trigger: 'body', 
+      start: 'top top',
+      end: 'top -150px',
+      scrub: 0.6,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const currentMaxWidth = 1024 + (1200 - 1024) * progress;
+        const currentSidebarWidth = 33.33 - (33.33 - 25) * progress;
+        
+        gsap.set(contentContainer.value, { 
+          maxWidth: `${currentMaxWidth}px`,
+          x: 0 
+        });
+        gsap.set(sidebarEl, { 
+          width: `${currentSidebarWidth}%` 
+        });
+      }
+    })
 
-  ScrollTrigger.refresh();
+    // CRITICAL: Refresh all triggers after a small delay to ensure 
+    // images/fonts are loaded and DOM heights are final.
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+  }, 150);
 })
 
 onUnmounted(() => {
