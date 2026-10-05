@@ -91,13 +91,14 @@ const props = defineProps<{
 const isRight = computed(() => props.index % 2 === 0)
 const itemRef = ref<HTMLElement | null>(null)
 const groupRef = ref<HTMLElement | null>(null)
-let trigger = null
+let trigger: gsap.core.Tween | null = null
 
 onMounted(() => {
   if (!groupRef.value) return
 
   const rotationAngle = isRight.value ? 90 : -90;
 
+  // 1. SET INITIAL STATE: Hidden and rotated
   gsap.set(groupRef.value, { 
     opacity: 0, 
     rotateY: rotationAngle,
@@ -105,18 +106,35 @@ onMounted(() => {
     zIndex: 1
   })
 
-  // FIX: Using a fixed pixel offset instead of percentages for 'start'
-  // percentages can be unstable if the item height varies or content shifts.
-  trigger = gsap.to(groupRef.value, {
-    opacity: 1,
-    rotateY: 0,
-    duration: 1,
+  // 2. LIFECYCLE TIMELINE: One trigger to rule them all
+  // This maps the item's journey from the bottom (90%) to the top (-10%)
+  trigger = gsap.timeline({
     scrollTrigger: {
       trigger: itemRef.value,
-      start: 'top bottom-=10%', // Trigger when top is 10% above the bottom of viewport
-      end: '+=300px',   // Fixed distance ensures consistent rotation speed for all items
-      scrub: 0.5,
-    },
+      start: 'top 90%',   // Tripwire at the bottom
+      end: 'top -10%',    // Tripwire at the top
+      scrub: 1,           // Links timeline progress directly to scroll position
+    }
+  })
+
+  // PHASE A: Entrance (first 20% of the journey)
+  trigger.to(groupRef.value, { 
+    opacity: 1, 
+    rotateY: 0, 
+    duration: 0.2, 
+    ease: 'power1.out' 
+  })
+
+  // PHASE B: Idle (the middle 60% - item stays visible)
+  // We add an empty tween to create a gap in the timeline
+  trigger.to({}, { duration: 0.6 })
+
+  // PHASE C: Exit (final 20% of the journey)
+  trigger.to(groupRef.value, { 
+    opacity: 0, 
+    rotateY: rotationAngle, 
+    duration: 0.2, 
+    ease: 'power1.in' 
   })
 })
 
