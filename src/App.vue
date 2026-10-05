@@ -77,11 +77,14 @@ onMounted(async () => {
         gsap.set(sidebarEl, { 
           width: `${currentSidebarWidth}%` 
         });
+      },
+      onLeave: () => {
+        // Refresh triggers exactly when the layout expansion finishes
+        ScrollTrigger.refresh();
       }
     })
 
-    // CRITICAL: Refresh all triggers after a small delay to ensure 
-    // images/fonts are loaded and DOM heights are final.
+    // CRITICAL: Refresh all triggers to fix the staggering bug (cumulative offset)
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 200);

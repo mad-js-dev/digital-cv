@@ -5,7 +5,6 @@
     style="transform-style: preserve-3d;"
   >
     <!-- VERTICAL LINE SEGMENT -->
-    <!-- Only render if NOT the last item. -->
     <div 
       v-if="!isLast"
       class="absolute left-1/2 top-0 bottom-0 w-px bg-slate-400 dark:bg-slate-600 -translate-x-1/2 hidden sm:block"
@@ -106,15 +105,17 @@ onMounted(() => {
     zIndex: 1
   })
 
+  // FIX: Using a fixed pixel offset instead of percentages for 'start'
+  // percentages can be unstable if the item height varies or content shifts.
   trigger = gsap.to(groupRef.value, {
     opacity: 1,
     rotateY: 0,
     duration: 1,
     scrollTrigger: {
       trigger: itemRef.value,
-      start: 'top 90%', 
-      end: 'top 60%',   
-      scrub: 1,
+      start: 'top bottom-=10%', // Trigger when top is 10% above the bottom of viewport
+      end: '+=300px',   // Fixed distance ensures consistent rotation speed for all items
+      scrub: 0.5,
     },
   })
 })
