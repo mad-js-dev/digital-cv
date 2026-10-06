@@ -27,7 +27,7 @@
     </div>
 
     <!-- THE STICKY CONTENT LAYER -->
-    <div class="sticky top-6 self-start w-full px-8">
+    <div class="sticky top-0 self-start w-full px-8">
       <div class="flex flex-col gap-9 w-full py-6">
         <div v-for="section in sections" :key="section.title" class="flex flex-col gap-3">
           <div class="flex items-center gap-3">
