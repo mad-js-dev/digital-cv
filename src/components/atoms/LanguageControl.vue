@@ -6,7 +6,7 @@
       @click="setLanguage(lang.code)"
       class="w-6 h-6 rounded-full overflow-hidden transition-all duration-200 flex items-center justify-center"
       :class="[
-        locale.value === lang.code 
+        locale === lang.code 
           ? 'ring-2 ring-offset-2 ring-[var(--color-accent)] scale-110' 
           : 'opacity-60 hover:opacity-100 grayscale hover:grayscale-0'
       ]"
