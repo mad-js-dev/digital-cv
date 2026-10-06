@@ -44,11 +44,11 @@
               <path v-if="section.icon === 'cpu'" stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M6.75 8.25h15M6.75 11.25h15M6.75 14.25h15M6.75 17.25h15m-15 3.75h15m-15-11.25V18m0-12V5.25m0 12v.75m0-13.5v.75" />
               <path v-if="section.icon === 'graduation'" stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147L12 15l7.74-4.853M12 15V3m0 12l-3-3m3 3l3-3" />
             </svg>
-            <h3 class="text-base uppercase tracking-widest text-[var(--color-accent)] font-bold">{{ section.title }}</h3>
+            <h3 class="text-base uppercase tracking-widest text-[var(--color-accent)] font-bold">{{ $t(section.title) }}</h3>
           </div>
           <div class="flex flex-col gap-2">
             <div v-for="item in section.items" :key="item.label" class="flex flex-col">
-              <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ item.label }}</span>
+              <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ $t(item.label) }}</span>
               <span class="text-sm text-white font-medium leading-tight">{{ item.value }}</span>
             </div>
           </div>

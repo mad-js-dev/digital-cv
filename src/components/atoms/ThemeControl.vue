@@ -3,6 +3,12 @@
     class="fixed top-6 right-6 z-50 flex items-center gap-3 p-2 rounded-full shadow-lg border transition-all duration-300"
     :class="cvStore.theme === 'light' ? 'bg-white border-slate-200 text-slate-800' : 'bg-slate-800 border-slate-700 text-slate-200'"
   >
+    <!-- Language Switcher -->
+    <LanguageControl />
+
+    <!-- Divider -->
+    <div class="w-px h-6 bg-slate-300 dark:bg-slate-600"></div>
+
     <!-- Custom Palette Selector -->
     <div class="relative">
       <button 
@@ -73,6 +79,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useCvStore, PALETTES } from '../../stores/cv'
+import LanguageControl from './LanguageControl.vue'
+
 const cvStore = useCvStore()
 const isOpen = ref(false)
 

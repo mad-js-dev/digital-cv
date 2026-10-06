@@ -58,8 +58,8 @@
           <h3 class="font-bold text-lg text-[var(--color-text-primary)]">{{ company }}</h3>
         </div>
         
-        <div class="text-[var(--color-text-primary)] font-semibold text-sm mb-2">{{ role }}</div>
-        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">{{ description }}</p>
+        <div class="text-[var(--color-text-primary)] font-semibold text-sm mb-2">{{ role[lang] }}</div>
+        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">{{ description[lang] }}</p>
         
         <div :class="['flex flex-wrap gap-2', isRight ? 'sm:justify-start' : 'sm:justify-end']">
           <SkillBadgeGroup :techStack="techStack" />
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TimelineDot from '../atoms/TimelineDot.vue'
@@ -78,12 +79,15 @@ import SkillBadgeGroup from '../molecules/SkillBadgeGroup.vue'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const { locale } = useI18n()
+const lang = computed(() => locale.value)
+
 const props = defineProps<{
   index: number;
   period: string;
   company: string;
-  role: string;
-  description: string;
+  role: { en: string; es: string; ca: string };
+  description: { en: string; es: string; ca: string };
   techStack: string[];
   isLast: boolean;
 }>()
@@ -107,17 +111,15 @@ onMounted(() => {
   })
 
   // 2. LIFECYCLE TIMELINE: One trigger to rule them all
-  // This maps the item's journey from the bottom (90%) to the top (-10%)
   trigger = gsap.timeline({
     scrollTrigger: {
       trigger: itemRef.value,
-      start: 'top 90%',   // Tripwire at the bottom
-      end: 'top -10%',    // Tripwire at the top
-      scrub: 1,           // Links timeline progress directly to scroll position
+      start: 'top 90%',
+      end: 'top -10%',
+      scrub: 1,
     }
   })
 
-  // PHASE A: Entrance (first 20% of the journey)
   trigger.to(groupRef.value, { 
     opacity: 1, 
     rotateY: 0, 
@@ -125,11 +127,8 @@ onMounted(() => {
     ease: 'power1.out' 
   })
 
-  // PHASE B: Idle (the middle 60% - item stays visible)
-  // We add an empty tween to create a gap in the timeline
   trigger.to({}, { duration: 0.6 })
 
-  // PHASE C: Exit (final 20% of the journey)
   trigger.to(groupRef.value, { 
     opacity: 0, 
     rotateY: rotationAngle, 

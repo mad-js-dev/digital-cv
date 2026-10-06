@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "label": "Perfil Profesional"
+  },
+  "timeline": {
+    "title": "Experiencia Laboral"
+  },
+  "contact": "Contacto",
+  "skills": "Habilidades",
+  "education": "Educaci\u00f3n",
+  "email": "Email",
+  "linkedin": "LinkedIn",
+  "github": "GitHub",
+  "location": "Ubicaci\u00f3n",
+  "core": "Core",
+  "styling": "Estilos",
+  "tools": "Herramientas",
+  "other": "Otros",
+  "degree": "T\u00edtulo",
+  "specialization": "Especializaci\u00f3n",
+  "common": {
+    "language": "Idioma"
+  }
+}

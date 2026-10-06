@@ -1,0 +1,39 @@
+{
+  "profile": {
+    "label": "Professional Profile"
+  },
+  "timeline": {
+    "title": "Work Experience"
+  },
+  "sidebar": {
+    "contact": "Contact",
+    "skills": "Skills",
+    "education": "Education",
+    "email": "Email",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "location": "Location",
+    "core": "Core",
+    "styling": "Styling",
+    "tools": "Tools",
+    "other": "Other",
+    "degree": "Degree",
+    "specialization": "Specialization"
+  },
+  "common": {
+    "language": "Language"
+  },
+  "contact": "Contact",
+  "skills": "Skills",
+  "education": "Education",
+  "email": "Email",
+  "linkedin": "LinkedIn",
+  "github": "GitHub",
+  "location": "Location",
+  "core": "Core",
+  "styling": "Styling",
+  "tools": "Tools",
+  "other": "Other",
+  "degree": "Degree",
+  "specialization": "Specialization"
+}
