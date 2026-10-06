@@ -45,9 +45,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const cvStore = useCvStore()
-const contentContainer = ref<any>(null)
+const contentContainer = ref<HTMLElement | null>(null)
 const sidebarComponent = ref<any>(null)
-let trigger = null
+let trigger: any = null
 
 onMounted(async () => {
   document.documentElement.classList.toggle('dark', cvStore.theme === 'dark');
@@ -79,12 +79,10 @@ onMounted(async () => {
         });
       },
       onLeave: () => {
-        // Refresh triggers exactly when the layout expansion finishes
         ScrollTrigger.refresh();
       }
     })
 
-    // CRITICAL: Refresh all triggers to fix the staggering bug (cumulative offset)
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 200);

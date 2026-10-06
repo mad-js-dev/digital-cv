@@ -1,26 +1,31 @@
 import { defineStore } from 'pinia'
 
-export type Translation = Record<string, string>;
+export type Translation = {
+  en: string;
+  es: string;
+  ca: string;
+  [key: string]: string; // Index signature to allow dynamic language keys
+};
 
 export interface Experience {
   id: string;
   period: string;
   company: string;
-  role: { en: string; es: string; ca: string };
-  description: { en: string; es: string; ca: string };
+  role: Translation;
+  description: Translation;
   techStack: string[];
 }
 
 export interface UserProfile {
   name: string;
-  title: { en: string; es: string; ca: string };
-  summary: { en: string; es: string; ca: string };
+  title: Translation;
+  summary: Translation;
 }
 
 export interface SidebarSection {
-  title: string; // These will be handled by i18n JSON files
+  title: string; 
   icon: string;
-  items: { label: string; value: string }[]; // Labels handled by i18n JSON
+  items: { label: string; value: string }[];
 }
 
 interface Palette {
@@ -79,7 +84,7 @@ export const PALETTES: Record<string, Palette> = {
       '--color-bg-main': '#2d1b2d',
       '--color-bg-sidebar': '#1a0f1a',
       '--color-text-primary': '#f5e6f5',
-      '--color-text-secondary': '#a38da3',
+      '--color-text-secondary': '#a38da1',
       '--color-accent': '#ff9a7b',
     },
   },
@@ -226,7 +231,7 @@ export const useCvStore = defineStore('cv', {
         },
         description: {
           en: 'Delivered diverse front-end solutions across multiple high-impact projects. Key achievements include contributing to a React-based MVP for a prestigious national bookselling company and developing scalable web solutions for a network of approximately 16 travel-focused websites. Additionally, analyzed and implemented comprehensive Design Systems and style guides for the Generalitat de Catalunya to ensure visual consistency across government digital services.',
-          es: 'Entrega de diversas soluciones front-end en múltiples proyectos de alto impacto. Logros clave incluyen la contribución a un MVP basado en React para una prestigiosa librería nacional y el desarrollo de soluciones web escalables para una red de aproximadamente 16 sitios web enfocados en viajes. Además, análisis e implementación de Sistemas de Diseño y guías de estilo integrales para la Generalitat de Catalunya para asegurar la consistencia visual en los servicios digitales gubernamentales.',
+          es: 'Entrega de diversas soluciones front-end en múltiples proyectos de alto impacto. Logros clave incluyen la contribución a un MVP basado en React para una prestigiosa librería nacional y el desarrollo de solucione web escalables para una red de aproximadamente 16 sitios web enfocados en viajes. Además, análisis e implementación de Sistemas de Diseño y guías de estilo integrales para la Generalitat de Catalunya para asegurar la consistencia visual en los servicios digitales gubernamentales.',
           ca: 'Lliurament de diverses solucions front-end en múltiples projectes d\'alt impacte. Logs clau inclouen la contribució a un MVP basat en React per a una prestigiosa llibreria nacional i el desenvolupment de solucions web escalables per a una xarxa d\'aproximadament 16 webs enfocades en viatges. A més, anàlisi i implementació de Sistemes de Disseny i guies d\'estil integrals per a la Generalitat de Catalunya per assegurar la consistència visual en els serveis digitals governamentals.'
         },
         techStack: ['HTML5', 'React', 'Vue 3', 'TypeScript', 'SASS', 'BEM', 'Atomic Design', 'JS', 'jQuery', 'Design Systems', 'Static Build']
@@ -275,7 +280,7 @@ export const useCvStore = defineStore('cv', {
         description: {
           en: 'Managed and optimized the digital presence of Guia Ocio magazine, implementing organic SEO strategies that doubled monthly traffic from 20K to 40K visitors. Additionally, developed and integrated an internal advertising platform to monetize site traffic and support business growth.',
           es: 'Gestión y optimización de la presencia digital de la revista Guia Ocio, implementando estrategias de SEO orgánico que duplicaron las visitas mensuales de 20K a 40K. Además, desarrollo e integración de una plataforma de anuncios interna para monetizar el tráfico del sitio y apoyar el crecimiento del negocio.',
-          ca: 'Gestió i optimització de la presència digital de la revista Guia Ocio, implementant estratègies de SEO orgànic que han duplicat les visites mensuals de 20K a 40K. A més, desenvolupment i integració d\'una plataforma d\'anuncis interna per monetitzar el trànsit del lloc i recolzar el creixement del negoci.'
+          ca: 'Gestió i optimització de la presència digital de la revista Guia Ocio, implementant estratègies de SEO orgànic que han duplicat les visites mensuals de 20K a 40K. A més, desenvolupment i integració d\'una plataforma d\'anuncis interna per monetitzar el trànsit del lloc i recolzar el creixment del negoci.'
         },
         techStack: ['HTML4', 'CSS', 'JS', 'jQuery', 'SEO', 'Google Analytics']
       },

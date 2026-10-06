@@ -4,7 +4,7 @@
     <p class="text-[2rem] font-light text-[var(--color-accent)] mb-12">{{ profile.title[lang] }}</p>
     
     <div class="max-w-2xl">
-      <h2 class="text-sm uppercase tracking-widest text-[var(--color-text-secondary)] font-bold mb-3">{{ $t('profile.label') }}</h2>
+      <h2 class="text-sm uppercase tracking-widest text-[var(--color-text-secondary)] font-bold mb-3">{{ t('profile.label') }}</h2>
       <p class="text-[var(--color-text-secondary)] leading-relaxed max-w-[560px]">
         {{ profile.summary[lang] }}
       </p>
@@ -17,7 +17,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { UserProfile } from '../../stores/cv'
 
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const lang = computed(() => locale.value)
 
 defineProps<{

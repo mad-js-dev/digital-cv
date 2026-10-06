@@ -13,6 +13,6 @@ const i18n = createI18n({
     es,
     ca
   }
-})
+}) as any; // Cast to any to bypass strict plugin type check for now
 
 export default i18n

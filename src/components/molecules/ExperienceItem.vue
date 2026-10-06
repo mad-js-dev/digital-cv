@@ -76,6 +76,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TimelineDot from '../atoms/TimelineDot.vue'
 import SkillBadgeGroup from '../molecules/SkillBadgeGroup.vue'
+import type { Experience } from '../../stores/cv'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -86,8 +87,8 @@ const props = defineProps<{
   index: number;
   period: string;
   company: string;
-  role: { en: string; es: string; ca: string };
-  description: { en: string; es: string; ca: string };
+  role: Experience['role'];
+  description: Experience['description'];
   techStack: string[];
   isLast: boolean;
 }>()
@@ -95,7 +96,7 @@ const props = defineProps<{
 const isRight = computed(() => props.index % 2 === 0)
 const itemRef = ref<HTMLElement | null>(null)
 const groupRef = ref<HTMLElement | null>(null)
-let trigger: gsap.core.Tween | null = null
+let trigger: gsap.core.Timeline | null = null
 
 onMounted(() => {
   if (!groupRef.value) return
