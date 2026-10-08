@@ -1,7 +1,7 @@
 <template>
   <div 
-    class="fixed top-6 right-6 z-50 flex items-center gap-3 p-2 rounded-full shadow-lg border transition-all duration-300"
-    :class="cvStore.theme === 'light' ? 'bg-white border-slate-200 text-slate-800' : 'bg-slate-800 border-slate-700 text-slate-200'"
+    class="flex items-center gap-3 p-2 rounded-full shadow-sm border transition-all duration-300"
+    :class="cvStore.theme === 'light' ? 'bg-white/40 border-slate-200 text-slate-800' : 'bg-slate-800/40 border-slate-700 text-slate-200'"
   >
     <!-- Language Switcher -->
     <LanguageControl />
