@@ -1,0 +1,98 @@
+<template>
+  <div class="h-screen w-full overflow-hidden flex flex-col p-8 max-w-7xl mx-auto relative">
+    <!-- HEADER: Only visible when no item is expanded -->
+    <header v-if="!activeItem" class="mb-12 text-center shrink-0 transition-all duration-500">
+      <h1 class="text-5xl font-bold text-[var(--color-text-primary)] mb-4">Portfolio</h1>
+      <p class="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto">
+        A curated collection of interactive experiments and technical demonstrations.
+      </p>
+    </header>
+
+    <!-- GRID AREA -->
+    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 relative">
+      
+      <!-- Skill Piece 1: Large Focus -->
+      <div 
+        @click="expandItem('animation')"
+        :class="[
+          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-2xl hover:shadow-[var(--color-accent)]/20',
+          activeItem === 'animation' ? 'fixed inset-0 z-50 m-0 rounded-none' : 'md:col-span-2 md:row-span-2'
+        ]"
+        v-show="!activeItem || activeItem === 'animation'"
+      >
+        <div class="absolute inset-0 p-8 flex flex-col justify-end z-10 pointer-events-none" :class="activeItem === 'animation' ? 'justify-center items-center text-center' : ''">
+          <span class="text-xs uppercase tracking-widest text-[var(--color-accent)] font-bold mb-2">GSAP & Web Animation</span>
+          <h3 class="text-3xl font-bold text-[var(--color-text-primary)] mb-2" :class="activeItem === 'animation' ? 'text-6xl' : ''">Complex Timeline Orchestration</h3>
+          <p v-if="activeItem === 'animation'" class="text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto">
+            Advanced scrub-based animations with synchronized multi-element timelines.
+          </p>
+        </div>
+        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-900">
+          <div class="w-24 h-24 rounded-full bg-[var(--color-accent)] animate-bounce shadow-lg"></div>
+        </div>
+      </div>
+
+      <!-- Skill Piece 2: Small -->
+      <div 
+        @click="expandItem('ux')"
+        :class="[
+          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-xl hover:shadow-[var(--color-accent)]/20',
+          activeItem === 'ux' ? 'fixed inset-0 z-50 m-0 rounded-none' : ''
+        ]"
+        v-show="!activeItem || activeItem === 'ux'"
+      >
+        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 pointer-events-none" :class="activeItem === 'ux' ? 'justify-center items-center text-center' : ''">
+          <span class="text-[10px] uppercase tracking-widest text-[var(--color-accent)] font-bold">UI/UX</span>
+          <h3 class="text-xl font-bold text-[var(--color-text-primary)]" :class="activeItem === 'ux' ? 'text-6xl' : ''">Micro-interactions</h3>
+        </div>
+        <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-700">
+          <div class="w-12 h-12 rounded-lg bg-white dark:bg-slate-600 rotate-45 group-hover:rotate-90 transition-transform duration-500"></div>
+        </div>
+      </div>
+
+      <!-- Skill Piece 3: Small -->
+      <div 
+        @click="expandItem('architecture')"
+        :class="[
+          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-xl hover:shadow-[var(--color-accent)]/20',
+          activeItem === 'architecture' ? 'fixed inset-0 z-50 m-0 rounded-none' : ''
+        ]"
+        v-show="!activeItem || activeItem === 'architecture'"
+      >
+        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 pointer-events-none" :class="activeItem === 'architecture' ? 'justify-center items-center text-center' : ''">
+          <span class="text-[10px] uppercase tracking-widest text-[var(--color-accent)] font-bold">Architecture</span>
+          <h3 class="text-xl font-bold text-[var(--color-text-primary)]" :class="activeItem === 'architecture' ? 'text-6xl' : ''">Atomic Design</h3>
+        </div>
+        <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-700">
+          <div class="grid grid-cols-2 gap-1">
+            <div class="w-4 h-4 bg-[var(--color-accent)] rounded-sm"></div>
+            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
+            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
+            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BACK BUTTON -->
+      <button 
+        v-if="activeItem" 
+        @click="activeItem = null"
+        class="fixed top-8 left-8 z-[60] p-3 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/40 transition-all duration-300 group"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const activeItem = ref<string | null>(null)
+
+const expandItem = (id: string) => {
+  activeItem.value = id
+}
+</script>

@@ -1,10 +1,15 @@
 <template>
   <div class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300" style="overflow-x: clip;">
-    <DownloadButton />
-    <HamburgerMenu />
+    <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
+      <DownloadButton v-if="$route.name === 'cv'" />
+      <HamburgerMenu />
+    </div>
     
-    <!-- Background Bleed: Fills the left half of the screen with the sidebar color -->
-    <div class="fixed top-0 left-0 h-full w-1/2 bg-[var(--color-bg-sidebar)] z-0 transition-colors duration-300"></div>
+    <!-- Background Bleed: Only visible when the route is 'cv' -->
+    <div 
+      v-if="$route.name === 'cv'"
+      class="fixed top-0 left-0 h-full w-1/2 bg-[var(--color-bg-sidebar)] z-0 transition-colors duration-300"
+    ></div>
     
     <!-- STABLE OUTER FRAME -->
     <div class="w-full max-w-[1200px] mx-auto relative z-10">

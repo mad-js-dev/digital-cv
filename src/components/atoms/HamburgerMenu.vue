@@ -3,7 +3,7 @@
     <!-- TRIGGER BUTTON -->
     <button 
       @click="isOpen = !isOpen"
-      class="fixed top-6 right-6 z-[60] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-md border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:scale-105 active:scale-95"
+      class="relative z-[60] w-10 h-10 flex items-center justify-center rounded-full bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-md border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:scale-105 active:scale-95"
       :title="isOpen ? 'Close Menu' : 'Open Menu'"
     >
       <svg 
@@ -45,6 +45,13 @@
               class="text-6xl font-bold hover:text-[var(--color-accent)] transition-colors duration-300"
             >
               Home
+            </router-link>
+            <router-link 
+              to="/portfolio" 
+              @click="isOpen = false"
+              class="text-6xl font-bold hover:text-[var(--color-accent)] transition-colors duration-300"
+            >
+              Portfolio
             </router-link>
             <router-link 
               to="/cv" 
