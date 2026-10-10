@@ -1,221 +1,234 @@
 <template>
   <div class="h-screen w-full overflow-hidden flex flex-col p-8 relative">
     <!-- HEADER: Only visible when no item is expanded -->
-    <header ref="headerRef" class="mb-12 text-center shrink-0 transition-all duration-500">
-      <h1 class="text-5xl font-bold text-[var(--color-text-primary)] mb-4">Portfolio</h1>
-      <p class="text-[var(--color-text-secondary)] text-lg max-w-2xl mx-auto">
-        A curated collection of interactive experiments and technical demonstrations.
-      </p>
+    <header ref="headerRef" class="mb-12 text-center transition-all duration-500" :class="activeItem ? 'opacity-0 pointer-events-none -translate-y-8' : 'opacity-100 translate-y-0'">
+      <h1 class="text-4xl font-bold tracking-tight text-white mb-4">Portfolio</h1>
+      <p class="text-slate-400 max-w-2xl mx-auto">A collection of experimental engineering and design systems.</p>
     </header>
 
-    <!-- GRID AREA -->
-    <div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 min-h-0 relative max-w-7xl mx-auto w-full">
-      
-      <!-- Skill Piece 1: Large Focus -->
-      <div 
-        ref="itemAnimation"
-        @click="handleExpand('animation')"
-        :class="[
-          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-2xl hover:shadow-[var(--color-accent)]/20',
-          activeItem === 'animation' ? 'fixed z-50 rounded-none' : 'md:col-span-2 md:row-span-2'
-        ]"
-        v-show="!activeItem || activeItem === 'animation'"
-      >
-        <!-- BACK BUTTON (Inside Box) -->
-        <button 
-          v-if="activeItem === 'animation'" 
-          @click.stop="handleCollapse"
-          class="absolute top-8 left-8 z-[100] p-3 rounded-full bg-white text-slate-900 shadow-xl border border-slate-200 hover:bg-slate-100 transition-all duration-300 group"
+    <!-- MAIN GRID AREA -->
+    <div 
+      class="relative w-full max-w-7xl mx-auto flex-1 transition-all duration-500"
+      :class="activeItem ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+        <!-- Project 1: Material Design -->
+        <div 
+          @click="handleExpand('material', $event)"
+          class="group relative overflow-hidden rounded-3xl bg-slate-900/50 border border-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer col-span-2 row-span-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
-
-        <div class="absolute inset-0 p-8 flex flex-col justify-end z-10 pointer-events-none" :class="activeItem === 'animation' ? 'justify-center items-center text-center' : ''">
-          <div :class="['transition-opacity duration-300', activeItem === 'animation' ? 'opacity-0' : 'opacity-100']">
-            <span class="text-xs uppercase tracking-widest text-[var(--color-accent)] font-bold mb-2">GSAP & Web Animation</span>
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div class="relative p-8 h-full flex flex-col justify-between">
+            <div>
+              <span class="text-xs font-mono text-blue-400 uppercase tracking-widest mb-2 block">Design System</span>
+              <h2 class="text-3xl font-bold text-white mb-4">Material Design 3</h2>
+              <p class="text-slate-400 max-w-md">A deep dive into the M3 shape system, tokenization, and organic morphing logic.</p>
+            </div>
+            <div class="flex gap-4">
+              <M3Shape shape="square" :size="40" color="slate" />
+              <M3Shape shape="rounded" :size="40" color="accent" />
+              <M3Shape shape="pill" :size="40" color="slate" />
+              <M3Shape shape="blob" :size="40" color="accent" />
+            </div>
           </div>
-          <h3 class="text-3xl font-bold text-[var(--color-text-primary)] mb-2 transition-all duration-500" :class="activeItem === 'animation' ? 'text-6xl' : ''">Complex Timeline Orchestration</h3>
-          <p v-if="activeItem === 'animation'" class="text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto opacity-0 expanded-text transition-opacity duration-500 delay-300">
-            Advanced scrub-based animations with synchronized multi-element timelines.
-          </p>
         </div>
-        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-900">
-          <div class="w-24 h-24 rounded-full bg-[var(--color-accent)] animate-bounce shadow-lg"></div>
+
+        <!-- Other projects placeholders -->
+        <div @click="handleExpand('uiux', $event)" class="group relative overflow-hidden rounded-3xl bg-slate-900/50 border border-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer">
+          <div class="p-8 h-full">
+            <span class="text-xs font-mono text-purple-400 uppercase tracking-widest mb-2 block">UI/UX</span>
+            <h2 class="text-2xl font-bold text-white">Inclusive Design</h2>
+            <p class="text-slate-400 mt-2">Accessibility-first interaction patterns.</p>
+          </div>
+        </div>
+
+        <div @click="handleExpand('arch', $event)" class="group relative overflow-hidden rounded-3xl bg-slate-900/50 border border-white/10 hover:border-white/20 transition-all duration-500 cursor-pointer">
+          <div class="p-8 h-full">
+            <span class="text-xs font-mono text-emerald-400 uppercase tracking-widest mb-2 block">Architecture</span>
+            <h2 class="text-2xl font-bold text-white">Scalable Systems</h2>
+            <p class="text-slate-400 mt-2">Enterprise-grade Vue foundations.</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Skill Piece 2: Small -->
-      <div 
-        ref="itemUx"
-        @click="handleExpand('ux')"
-        :class="[
-          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-xl hover:shadow-[var(--color-accent)]/20',
-          activeItem === 'ux' ? 'fixed z-50 rounded-none' : ''
-        ]"
-        v-show="!activeItem || activeItem === 'ux'"
-      >
-        <!-- BACK BUTTON (Inside Box) -->
+    <!-- EXPANDED VIEW: The "Project Site" -->
+    <div 
+      v-if="activeItem" 
+      class="absolute inset-0 z-50 pointer-events-auto"
+      :style="expandedStyle"
+    >
+      <div class="relative w-full h-full bg-slate-950 rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+        <!-- Back Button -->
         <button 
-          v-if="activeItem === 'ux'" 
-          @click.stop="handleCollapse"
-          class="absolute top-8 left-8 z-[100] p-3 rounded-full bg-white text-slate-900 shadow-xl border border-slate-200 hover:bg-slate-100 transition-all duration-300 group"
+          @click="handleCollapse"
+          class="absolute top-8 left-8 z-[100] px-4 py-2 rounded-full bg-white text-slate-900 font-bold text-sm hover:bg-slate-200 transition-colors shadow-xl flex items-center gap-2"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
+          <span>← Back to Portfolio</span>
         </button>
 
-        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 pointer-events-none" :class="activeItem === 'ux' ? 'justify-center items-center text-center' : ''">
-          <div :class="['transition-opacity duration-300', activeItem === 'ux' ? 'opacity-0' : 'opacity-100']">
-            <span class="text-[10px] uppercase tracking-widest text-[var(--color-accent)] font-bold">UI/UX</span>
-          </div>
-          <h3 class="text-xl font-bold text-[var(--color-text-primary)] transition-all duration-500" :class="activeItem === 'ux' ? 'text-6xl' : ''">Micro-interactions</h3>
-        </div>
-        <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-700">
-          <div class="w-12 h-12 rounded-lg bg-white dark:bg-slate-600 rotate-45 group-hover:rotate-90 transition-transform duration-500"></div>
-        </div>
-      </div>
+        <!-- PROJECT CONTENT: Material Design -->
+        <template v-if="activeItem === 'material'">
+          <PortfolioItemContent 
+            tag="Material Design" 
+            title="Systematic Visual Language" 
+            description="Implementation of a comprehensive design system with depth, elevation, and adaptive layouts."
+            :is-expanded="true"
+          >
+            <template #default="{ currentPage, setPage }">
+              <!-- Page 1: Shapes Intro -->
+              <div v-if="currentPage === 1" class="h-full w-full p-12 flex flex-col items-center">
+                <header class="mb-12 text-center">
+                  <h2 class="text-5xl font-bold text-white mb-4">Shapes</h2>
+                  <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                    The M3 shape system includes original shapes, a corner radius scale, and built-in shape morphing.
+                  </p>
+                </header>
 
-      <!-- Skill Piece 3: Small -->
-      <div 
-        ref="itemArchitecture"
-        @click="handleExpand('architecture')"
-        :class="[
-          'group relative transition-all duration-700 ease-in-out cursor-pointer rounded-3xl overflow-hidden border border-white/10 bg-slate-100 dark:bg-slate-800 hover:shadow-xl hover:shadow-[var(--color-accent)]/20',
-          activeItem === 'architecture' ? 'fixed z-50 rounded-none' : ''
-        ]"
-        v-show="!activeItem || activeItem === 'architecture'"
-      >
-        <!-- BACK BUTTON (Inside Box) -->
-        <button 
-          v-if="activeItem === 'architecture'" 
-          @click.stop="handleCollapse"
-          class="absolute top-8 left-8 z-[100] p-3 rounded-full bg-white text-slate-900 shadow-xl border border-slate-200 hover:bg-slate-100 transition-all duration-300 group"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-          </svg>
-        </button>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+                  <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
+                    <M3Shape shape="blob" :size="80" color="accent" class="mb-6" />
+                    <h3 class="text-xl font-bold text-white mb-2">Original Shapes</h3>
+                    <p class="text-slate-400 text-sm">The foundation of every component, from rectangles to organic blobs.</p>
+                  </div>
+                  <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
+                    <div class="flex items-end gap-2 mb-6">
+                      <M3Shape shape="square" :radius="4" :size="30" color="slate" />
+                      <M3Shape shape="square" :radius="12" :size="40" color="slate" />
+                      <M3Shape shape="square" :radius="24" :size="50" color="accent" />
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Radius Scale</h3>
+                    <p class="text-slate-400 text-sm">A consistent scale from 4px to fully rounded for clear visual hierarchy.</p>
+                  </div>
+                  <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
+                    <M3Shape shape="pill" :size="80" color="accent" class="mb-6" />
+                    <h3 class="text-xl font-bold text-white mb-2">Shape Morphing</h3>
+                    <p class="text-slate-400 text-sm">Fluid transitions between shapes to guide user focus during interactions.</p>
+                  </div>
+                </div>
 
-        <div class="absolute inset-0 p-6 flex flex-col justify-between z-10 pointer-events-none" :class="activeItem === 'architecture' ? 'justify-center items-center text-center' : ''">
-          <div :class="['transition-opacity duration-300', activeItem === 'architecture' ? 'opacity-0' : 'opacity-100']">
-            <span class="text-[10px] uppercase tracking-widest text-[var(--color-accent)] font-bold">Architecture</span>
-          </div>
-          <h3 class="text-xl font-bold text-[var(--color-text-primary)] transition-all duration-500" :class="activeItem === 'architecture' ? 'text-6xl' : ''">Atomic Design</h3>
-        </div>
-        <div class="w-full h-full flex items-center justify-center bg-slate-200 dark:bg-slate-700">
-          <div class="grid grid-cols-2 gap-1">
-            <div class="w-4 h-4 bg-[var(--color-accent)] rounded-sm"></div>
-            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
-            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
-            <div class="w-4 h-4 bg-slate-400 rounded-sm"></div>
-          </div>
-        </div>
+                <button 
+                  @click="setPage(2)" 
+                  class="mt-12 px-8 py-3 rounded-full bg-accent text-white font-bold hover:scale-105 transition-all shadow-lg shadow-accent/20"
+                >
+                  Explore Shape Library $\rightarrow$
+                </button>
+              </div>
+
+              <!-- Page 2: Shape Library Matrix -->
+              <div v-if="currentPage === 2" class="h-full w-full p-4 md:p-8 overflow-y-auto">
+                <header class="mb-12 text-center">
+                  <h2 class="text-5xl font-bold text-white mb-4">Shape Library</h2>
+                  <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                    Mapping the 36 core shape tokens of the Material 3 design system.
+                  </p>
+                </header>
+
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 w-full max-w-7xl mx-auto">
+                  <div 
+                    v-for="shapeName in shapeTokens" 
+                    :key="shapeName"
+                    class="group p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex flex-col items-center gap-3"
+                  >
+                    <M3Shape 
+                      :shape="shapeName" 
+                      color="slate"
+                      class="group-hover:text-accent transition-colors"
+                    />
+                    <span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-300 uppercase">{{ shapeName }}</span>
+                  </div>
+                </div>
+
+                <div class="mt-16 p-8 rounded-3xl bg-accent/10 border border-accent/20 max-w-3xl mx-auto text-center">
+                  <h3 class="text-2xl font-bold text-white mb-4">The Morphing Logic</h3>
+                  <p class="text-slate-400 mb-8">
+                    We use a consistent SVG path coordinate system to enable seamless transitions between any two tokens in the library.
+                  </p>
+                  <div class="flex justify-center items-center gap-12">
+                    <M3Shape shape="square" :size="60" color="slate" />
+                    <span class="text-3xl text-slate-600">→</span>
+                    <M3Shape shape="pill" :size="60" color="accent" />
+                  </div>
+                </div>
+                
+                <button 
+                  @click="setPage(3)" 
+                  class="mt-12 block mx-auto px-8 py-3 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-200 transition-all"
+                >
+                  Final Overview $\rightarrow$
+                </button>
+              </div>
+
+              <!-- Page 3: Summary -->
+              <div v-if="currentPage === 3" class="h-full w-full p-12 flex flex-col items-center justify-center text-center">
+                <M3Shape shape="blob" :size="120" color="accent" class="mb-8 animate-pulse" />
+                <h2 class="text-4xl font-bold text-white mb-4">System Complete</h2>
+                <p class="text-slate-400 max-w-lg mx-auto mb-8">
+                  The shape system provides the visual grammar for the entire product, ensuring consistency across every pixel.
+                </p>
+                <button @click="handleCollapse" class="px-8 py-3 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-200 transition-all">
+                  Return to Portfolio
+                </button>
+              </div>
+            </template>
+          </PortfolioItemContent>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import gsap from 'gsap'
+import PortfolioItemContent from '@/components/atoms/PortfolioItemContent.vue'
+import M3Shape from '@/components/atoms/M3Shape.vue'
 
 const activeItem = ref<string | null>(null)
-const headerRef = ref<HTMLElement | null>(null)
 
-const itemAnimation = ref<HTMLElement | null>(null)
-const itemUx = ref<HTMLElement | null>(null)
-const itemArchitecture = ref<HTMLElement | null>(null)
+const shapeTokens = [
+  'circle', 'square', 'slanted', 'arch', 'semicircle', 'oval', 'pill', 'triangle', 'arrow', 
+  'fan', 'diamond', 'clamshell', 'pentagon', 'gem', 'very-sunny', 'sunny', '4-sided-cookie', 
+  '6-sided-cookie', '7-sided-cookie', '9-sided-cookie', '12-sided-cookie', '4-leaf-clover-8-leaf-clover', 
+  'burst', 'soft-burst', 'boom', 'soft-boom', 'flower', 'puffy', 'puffy-diamond', 
+  'ghost-ish', 'pixel-circle', 'pixel-triangle', 'bun', 'heart'
+]
 
-// Store starting positions to enable perfect reverse animation
-const startingPositions = new Map<string, { top: number, left: number, width: number, height: number }>()
+const expandedStyle = reactive({
+  left: '0px',
+  top: '0px',
+  width: '0px',
+  height: '0px',
+  opacity: 0,
+  zIndex: 50
+})
 
-const handleExpand = async (id: string) => {
-  const element = id === 'animation' ? itemAnimation.value : id === 'ux' ? itemUx.value : itemArchitecture.value
-  if (!element) return
-
+const handleExpand = (id: string, event: MouseEvent) => {
+  const element = event.currentTarget as HTMLElement
   const rect = element.getBoundingClientRect()
   
-  // Save original position for the reverse animation
-  startingPositions.set(id, {
-    top: rect.top,
-    left: rect.left,
-    width: rect.width,
-    height: rect.height
-  })
-
+  const targetHeight = Math.min(700, window.innerHeight * 0.8);
+  const targetWidth = Math.min(1200, window.innerWidth * 0.9);
+  
   activeItem.value = id
+  
+  expandedStyle.left = `${rect.left}px`
+  expandedStyle.top = `${rect.top}px`
+  expandedStyle.width = `${rect.width}px`
+  expandedStyle.height = `${rect.height}px`
+  expandedStyle.opacity = 1
 
-  gsap.to(headerRef.value, { 
-    opacity: 0, 
-    y: -20, 
-    duration: 0.3, 
-    onComplete: () => {
-      if (headerRef.value) headerRef.value.style.display = 'none'
-    }
+  gsap.to(expandedStyle, {
+    left: (window.innerWidth - targetWidth) / 2 + 'px',
+    top: (window.innerHeight - targetHeight) / 2 + 'px',
+    width: targetWidth + 'px',
+    height: targetHeight + 'px',
+    duration: 0.6,
+    ease: 'expo.out'
   })
-
-  const centerX = window.innerWidth / 2
-  const targetLeft = centerX - 600
-
-  gsap.fromTo(element, 
-    { 
-      position: 'fixed',
-      top: rect.top, 
-      left: rect.left, 
-      width: rect.width, 
-      height: rect.height 
-    }, 
-    { 
-      top: 0, 
-      left: targetLeft, 
-      width: 1200, 
-      height: '100vh', 
-      duration: 0.7, 
-      ease: 'expo.out' 
-    }
-  )
 }
 
-const handleCollapse = async () => {
-  const id = activeItem.value
-  if (!id) return
-  
-  const element = id === 'animation' ? itemAnimation.value : id === 'ux' ? itemUx.value : itemArchitecture.value
-  if (!element) return
-
-  const start = startingPositions.get(id)
-  if (!start) return
-
-  // 1. Animate back to EXACT grid coordinates
-  gsap.to(element, {
-    top: start.top, 
-    left: start.left, 
-    width: start.width, 
-    height: start.height, 
-    duration: 0.6, 
-    ease: 'expo.in',
-    onComplete: () => {
-      // 2. Once back in position, release fixed positioning and reset active state
-      activeItem.value = null
-      
-      // Clear inline styles to return control to CSS Grid
-      element.style.position = ''
-      element.style.top = ''
-      element.style.left = ''
-      element.style.width = ''
-      element.style.height = ''
-      
-      // Force reflow
-      void element.offsetHeight
-    }
-  })
-
-  if (headerRef.value) {
-    headerRef.value.style.display = 'block'
-  }
-  gsap.to(headerRef.value, { opacity: 1, y: 0, duration: 0.4 })
+const handleCollapse = () => {
+  activeItem.value = null
 }
 </script>
