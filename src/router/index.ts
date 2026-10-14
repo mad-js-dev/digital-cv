@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import CVView from '../views/CVView.vue'
 import PortfolioView from '../views/PortfolioView.vue'
+import ShapeScaleView from '../views/ShapeScaleView.vue'
+import ShapeTestView from '../views/ShapeTestView.vue'
 
 const routes = [
   {
@@ -18,6 +20,16 @@ const routes = [
     path: '/portfolio',
     name: 'portfolio',
     component: PortfolioView
+  },
+  {
+    path: '/scale',
+    name: 'scale',
+    component: ShapeScaleView
+  },
+  {
+    path: '/test-shape',
+    name: 'test-shape',
+    component: ShapeTestView
   }
 ]
 

@@ -139,6 +139,16 @@
                   </div>
                 </div>
 
+                <div class="mt-12 flex justify-center">
+                  <button
+                    @click="router.push('/scale')"
+                    class="px-8 py-3 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-200 transition-all"
+                  >
+                    Corner Radius Overview $
+ightarrow$
+                  </button>
+                </div>
+
                 <div class="mt-16 p-8 rounded-3xl bg-accent/10 border border-accent/20 max-w-3xl mx-auto text-center">
                   <h3 class="text-2xl font-bold text-white mb-4">The Morphing Logic</h3>
                   <p class="text-slate-400 mb-8">
@@ -151,12 +161,6 @@
                   </div>
                 </div>
                 
-                <button 
-                  @click="setPage(3)" 
-                  class="mt-12 block mx-auto px-8 py-3 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-200 transition-all"
-                >
-                  Final Overview $\rightarrow$
-                </button>
               </div>
 
               <!-- Page 3: Summary -->
@@ -180,9 +184,12 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import gsap from 'gsap'
 import PortfolioItemContent from '@/components/atoms/PortfolioItemContent.vue'
 import M3Shape from '@/components/atoms/M3Shape.vue'
+
+const router = useRouter()
 
 const activeItem = ref<string | null>(null)
 

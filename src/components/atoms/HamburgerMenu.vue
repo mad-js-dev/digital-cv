@@ -54,6 +54,13 @@
               Portfolio
             </router-link>
             <router-link 
+              to="/scale" 
+              @click="isOpen = false"
+              class="text-6xl font-bold hover:text-[var(--color-accent)] transition-colors duration-300"
+            >
+              Radius Scale
+            </router-link>
+            <router-link 
               to="/cv" 
               @click="isOpen = false"
               class="text-6xl font-bold hover:text-[var(--color-accent)] transition-colors duration-300"
