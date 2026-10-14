@@ -294,12 +294,60 @@
           </table>
         </div>
       </section>
+
+      <!-- SECTION 6: Morphing (Resize) -->
+      <section class="flex flex-col gap-6">
+        <div class="flex w-full justify-start">
+          <h2 class="text-sm text-slate-400 uppercase tracking-widest text-left">Morphing (Resize)</h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <!-- LEFT: Description + controls (1/3 width) -->
+          <div class="lg:col-span-1 flex flex-col justify-start gap-6">
+            <p class="text-xl text-slate-300 leading-relaxed">
+              When a container resizes, shapes animate to their new size instead of jumping.
+            </p>
+            <p class="text-lg text-slate-400 leading-relaxed">
+              Both the corner-radius surface and 9-slice shapes morph smoothly — corners stay fixed while the edges and center stretch.
+            </p>
+            <div class="flex flex-col gap-5 p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+              <label class="flex flex-col gap-2 text-sm text-slate-400">
+                <span>Width <span class="font-mono text-slate-200">{{ demoW }}px</span></span>
+                <input v-model.number="demoW" type="range" min="80" max="400" step="10" class="accent-cyan-400" />
+              </label>
+              <label class="flex flex-col gap-2 text-sm text-slate-400">
+                <span>Height <span class="font-mono text-slate-200">{{ demoH }}px</span></span>
+                <input v-model.number="demoH" type="range" min="40" max="200" step="10" class="accent-cyan-400" />
+              </label>
+            </div>
+          </div>
+
+          <!-- RIGHT: Live examples (2/3 width) -->
+          <div class="lg:col-span-2 flex flex-col gap-6">
+            <div class="flex flex-col gap-2 p-4 bg-slate-800/30 rounded-2xl border border-slate-700/30">
+              <p class="text-[10px] text-slate-400 italic">Corner radius — :radius="'FULL'" :stretch="true"</p>
+              <div class="flex items-center justify-center bg-slate-900/50 rounded-xl p-10">
+                <div :style="{ width: demoW + 'px', height: demoH + 'px' }">
+                  <SimpleSquare :radius="'FULL'" color="accent" :stretch="true" />
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2 p-4 bg-slate-800/30 rounded-2xl border border-slate-700/30">
+              <p class="text-[10px] text-slate-400 italic">9-slice shape — shape="circle" :stretch="true"</p>
+              <div class="flex items-center justify-center bg-slate-900/50 rounded-xl p-10">
+                <div :style="{ width: demoW + 'px', height: demoH + 'px' }">
+                  <SimpleSquare shape="circle" color="accent" :stretch="true" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import SimpleSquare from '@/components/atoms/SimpleSquare.vue'
 import M3Shape from '@/components/atoms/M3Shape.vue'
 import { CORNER_RADIUS, CORNER_RADIUS_LABELS } from '@/constants/corners'
@@ -313,4 +361,7 @@ const allShapes = computed(() => {
 });
 
 const sliceShapes = computed(() => ['circle', 'slanted', 'square', 'arch', 'semicircle', 'oval', 'pill'].filter((id) => SHAPE_LIBRARY[id]?.slice));
+
+const demoW = ref(200);
+const demoH = ref(100);
 </script>

@@ -1,10 +1,12 @@
 <template>
   <div ref="containerRef" class="relative w-full h-full">
+    <div class="absolute inset-0 flex items-center justify-center">
     <!-- 9-slice mode: shape has a `slice` field + stretch -->
     <svg
       v-if="sliceRegions.length"
       :viewBox="sliceViewBox"
-      class="absolute inset-0 w-full h-full"
+      :width="size.w"
+      :height="size.h"
       preserveAspectRatio="none"
       style="overflow: hidden"
     >
@@ -37,7 +39,8 @@
     <svg
       v-else
       :viewBox="dynamicViewBox"
-      class="absolute inset-0 w-full h-full"
+      :width="size.w"
+      :height="size.h"
       :preserve-aspect-ratio="props.stretch ? 'none' : 'xMidYMid meet'"
       style="overflow: visible"
     >
@@ -48,6 +51,7 @@
         :class="colorClass"
       />
     </svg>
+    </div>
     <div class="relative z-10 w-full h-full flex items-center justify-center">
       <slot />
     </div>
@@ -55,9 +59,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { CORNER_RADIUS, type CornerRadius } from '@/constants/corners'
 import { SHAPE_LIBRARY } from '@/constants/shapes'
+import { useResizeMorph } from '@/composables/useResizeMorph'
 import gsap from 'gsap'
 
 type RadiusInput = CornerRadius | number | string;
@@ -83,31 +88,11 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const containerRef = ref<HTMLElement | null>(null);
-const widthRef = ref(0);
-const heightRef = ref(0);
 const shapePath = ref<SVGPathElement | null>(null);
 
-let observer: ResizeObserver | null = null;
-
-onMounted(() => {
-  const measure = () => {
-    if (!containerRef.value) return;
-    const rect = containerRef.value.getBoundingClientRect();
-    widthRef.value = rect.width;
-    heightRef.value = rect.height;
-  };
-  // Read size synchronously on mount — ResizeObserver callbacks can be
-  // unreliable in some environments, so don't rely on them for the first size.
-  measure();
-  if (typeof ResizeObserver !== 'undefined') {
-    observer = new ResizeObserver(measure);
-    observer.observe(containerRef.value);
-  }
-});
-
-onUnmounted(() => {
-  if (observer) observer.disconnect();
-});
+// Animated container size — snaps on mount, tweens on resize so the shape
+// morphs to its new size instead of jumping.
+const { size } = useResizeMorph(containerRef);
 
 const colorClass = computed(() => {
   switch (props.color) {
@@ -137,7 +122,7 @@ const dynamicViewBox = computed(() => {
   }
 
   if (!props.stretch) return '0 0 100 100';
-  return `0 0 ${widthRef.value} ${heightRef.value}`;
+  return `0 0 ${size.w} ${size.h}`;
 });
 
 const pathData = computed(() => {
@@ -147,8 +132,8 @@ const pathData = computed(() => {
   }
 
   // MODE 2: Regular Surface (M3 Radius System)
-  const w = props.stretch ? widthRef.value : (props.width || props.size);
-  const h = props.stretch ? heightRef.value : (props.height || props.size);
+  const w = props.stretch ? size.w : (props.width || props.size);
+  const h = props.stretch ? size.h : (props.height || props.size);
   const minDim = Math.min(w, h);
 
   let radii: number[];
@@ -213,8 +198,8 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   const top = insets.top * h;
   const bottom = insets.bottom * h;
 
-  const W = widthRef.value;
-  const H = heightRef.value;
+  const W = size.w;
+  const H = size.h;
   if (!W || !H) return [];
 
   // Cap corner insets so they never overflow the container: scale them down
@@ -259,7 +244,7 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   return regions;
 });
 
-const sliceViewBox = computed(() => `0 0 ${widthRef.value} ${heightRef.value}`);
+const sliceViewBox = computed(() => `0 0 ${size.w} ${size.h}`);
 
 // Watch for prop changes to trigger morphing animation (non-9-slice only)
 watch(() => [props.shape, props.radius], () => {
