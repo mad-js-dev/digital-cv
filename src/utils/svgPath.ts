@@ -1,5 +1,6 @@
-// Translate an SVG path `d` string by (dx, dy). Only absolute coordinates are
-// shifted; relative commands (lowercase) keep their offsets. Handles the full
+// Transform an SVG path `d` string. Absolute coordinates are scaled by `s` and
+// translated by (tx, ty); relative commands (lowercase) are scaled but not
+// translated (their offsets live in the same scaled space). Handles the full
 // set of SVG path commands.
 
 const ARGC: Record<string, number> = {
@@ -10,34 +11,39 @@ const ARGC: Record<string, number> = {
 
 const TOKEN_RE = /[a-zA-Z]|-?\d*\.?\d+(?:e[-+]?\d+)?/g;
 
-function shiftArgs(cmd: string, args: number[], dx: number, dy: number): number[] {
-  if (cmd !== cmd.toUpperCase()) return args; // relative → no shift
-  const s = args.slice();
+function transformArgs(cmd: string, args: number[], s: number, tx: number, ty: number): number[] {
+  const abs = cmd === cmd.toUpperCase();
+  const px = abs ? tx : 0;
+  const py = abs ? ty : 0;
+  const r = args.slice();
   switch (cmd.toLowerCase()) {
     case 'm': case 'l': case 't':
-      s[0] += dx; s[1] += dy;
+      r[0] = r[0] * s + px; r[1] = r[1] * s + py;
       break;
     case 'h':
-      s[0] += dx;
+      r[0] = r[0] * s + px;
       break;
     case 'v':
-      s[0] += dy;
+      r[0] = r[0] * s + py;
       break;
     case 'c':
-      s[0] += dx; s[1] += dy; s[2] += dx; s[3] += dy; s[4] += dx; s[5] += dy;
+      r[0] = r[0] * s + px; r[1] = r[1] * s + py;
+      r[2] = r[2] * s + px; r[3] = r[3] * s + py;
+      r[4] = r[4] * s + px; r[5] = r[5] * s + py;
       break;
     case 's': case 'q':
-      s[0] += dx; s[1] += dy; s[2] += dx; s[3] += dy;
+      r[0] = r[0] * s + px; r[1] = r[1] * s + py;
+      r[2] = r[2] * s + px; r[3] = r[3] * s + py;
       break;
     case 'a':
-      // rx ry x-axis-rotation large-arc-flag sweep-flag x y → shift only x,y
-      s[5] += dx; s[6] += dy;
+      r[0] *= s; r[1] *= s; // rx, ry
+      r[5] = r[5] * s + px; r[6] = r[6] * s + py; // x, y
       break;
   }
-  return s;
+  return r;
 }
 
-export function translatePath(d: string, dx: number, dy: number): string {
+export function transformPath(d: string, s: number, tx: number, ty: number): string {
   const tokens = d.match(TOKEN_RE);
   if (!tokens) return d;
 
@@ -63,11 +69,14 @@ export function translatePath(d: string, dx: number, dy: number): string {
       i++;
     }
 
-    const shifted = shiftArgs(cmd, args, dx, dy);
-    const parts = shifted.map((v) => Number(v.toFixed(4)));
+    const parts = transformArgs(cmd, args, s, tx, ty).map((v) => Number(v.toFixed(4)));
     out += parts.join(' ');
     out += ' ';
   }
 
   return out.trim();
+}
+
+export function translatePath(d: string, dx: number, dy: number): string {
+  return transformPath(d, 1, dx, dy);
 }

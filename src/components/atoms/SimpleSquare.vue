@@ -63,7 +63,7 @@ import { CORNER_RADIUS, type CornerRadius } from '@/constants/corners'
 import { SHAPE_LIBRARY } from '@/constants/shapes'
 import { useResizeMorph } from '@/composables/useResizeMorph'
 import { interpolate } from 'flubber'
-import { translatePath } from '@/utils/svgPath'
+import { transformPath } from '@/utils/svgPath'
 import gsap from 'gsap'
 
 type RadiusInput = CornerRadius | number | string;
@@ -115,13 +115,13 @@ const resolveRadiusValue = (val: RadiusInput): number => {
   return isNaN(n) ? 0 : n;
 };
 
-// Shapes in SHAPE_LIBRARY are drawn at absolute positions on a shared canvas,
-// so their bboxes differ. Normalize each so its bbox CENTER is at (0,0) — this
-// keeps shapes centered on each other so morphing changes only the form, not
-// the position (no left/right drift between different-sized shapes).
+// Shapes in SHAPE_LIBRARY are drawn at absolute positions and varying sizes on
+// a shared canvas. Normalize each into a fixed 100x100 box (larger dimension
+// = 100, centered at 50,50) so every shape shares the same viewBox and morphing
+// changes only the form — no position drift or scale jump.
 interface NormalizedShape {
   path: string;
-  bbox: [number, number, number, number]; // [-w/2, -h/2, w, h]
+  bbox: [number, number, number, number]; // [x, y, w, h] within 0..100
 }
 
 const normalizedShapes = new Map<string, NormalizedShape>();
@@ -131,22 +131,21 @@ const getNormalizedShape = (id: string): NormalizedShape | null => {
   if (!data) return null;
   if (!normalizedShapes.has(id)) {
     const [x, y, w, h] = data.bbox;
+    const s = 100 / Math.max(w, h);
     const cx = x + w / 2;
     const cy = y + h / 2;
     normalizedShapes.set(id, {
-      path: translatePath(data.path, -cx, -cy),
-      bbox: [-w / 2, -h / 2, w, h],
+      path: transformPath(data.path, s, 50 - cx * s, 50 - cy * s),
+      bbox: [50 - (w / 2) * s, 50 - (h / 2) * s, w * s, h * s],
     });
   }
   return normalizedShapes.get(id)!;
 };
 
 const dynamicViewBox = computed(() => {
-  // Shape mode: use the normalized (centered) bbox
-  const norm = props.shape ? getNormalizedShape(props.shape) : null;
-  if (norm) {
-    const [bx, by, w, h] = norm.bbox;
-    return `${bx} ${by} ${w} ${h}`;
+  // Shape mode: fixed 100x100 viewBox — every shape is normalized into it
+  if (props.shape && SHAPE_LIBRARY[props.shape]) {
+    return '0 0 100 100';
   }
 
   if (!props.stretch) return '0 0 100 100';
