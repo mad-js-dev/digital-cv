@@ -395,10 +395,10 @@ const morphIndex = ref(0);
 const morphShape = computed(() => morphShapes[morphIndex.value]);
 let morphTimer: ReturnType<typeof setInterval> | null = null;
 onMounted(() => {
-  // 1s hold as each shape + 0.6s morph (matching SimpleSquare's morph duration)
+  // 2s hold per shape + 0.6s morph (matching SimpleSquare's morph duration)
   morphTimer = setInterval(() => {
     morphIndex.value = (morphIndex.value + 1) % morphShapes.length;
-  }, 1600);
+  }, 2600);
 });
 onUnmounted(() => {
   if (morphTimer) clearInterval(morphTimer);
