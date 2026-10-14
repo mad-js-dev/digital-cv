@@ -26,10 +26,10 @@
         />
         <svg
           v-else
-          :x="region.x"
-          :y="region.y"
-          :width="region.width"
-          :height="region.height"
+          :x="region.x - SLICE_OVERLAP"
+          :y="region.y - SLICE_OVERLAP"
+          :width="region.width + 2 * SLICE_OVERLAP"
+          :height="region.height + 2 * SLICE_OVERLAP"
           :viewBox="region.viewBox"
           preserveAspectRatio="none"
           style="overflow: hidden"
