@@ -171,7 +171,7 @@
           <!-- RIGHT: Visual Examples (2/3 width) -->
           <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-6">
             <div class="flex flex-col items-center gap-2 p-4 bg-slate-800/30 rounded-2xl border border-slate-700/30">
-              <div class="w-[120px] h-[240px] flex items-center justify-center">
+              <div class="w-[120px] h-[120px] flex items-center justify-center">
                 <SimpleSquare :shape="'circle'" color="accent" :stretch="true"/>
               </div>
               <p class="text-xs text-slate-400 font-mono">shape="circle"</p>
@@ -342,12 +342,37 @@
           </div>
         </div>
       </section>
+
+      <!-- SECTION 7: Shape Morphing -->
+      <section class="flex flex-col gap-6">
+        <div class="flex w-full justify-start">
+          <h2 class="text-sm text-slate-400 uppercase tracking-widest text-left">Shape Morphing</h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div class="lg:col-span-1 flex flex-col justify-start gap-6">
+            <p class="text-xl text-slate-300 leading-relaxed">
+              Shapes morph into one another when the <span class="font-mono text-slate-200">shape</span> prop changes.
+            </p>
+            <p class="text-lg text-slate-400 leading-relaxed">
+              This loops <span class="font-mono text-slate-200">soft-boom → boom → soft-boom</span> every second using the same GSAP path morph that drives radius changes.
+            </p>
+            <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700">
+              <p class="text-xs font-mono text-slate-400">Current: shape="{{ morphShape }}"</p>
+            </div>
+          </div>
+          <div class="lg:col-span-2 flex items-center justify-center p-8 bg-slate-800/30 rounded-2xl border border-slate-700/30">
+            <div class="w-[160px] h-[160px]">
+              <SimpleSquare :shape="morphShape" color="accent" :stretch="false" />
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import SimpleSquare from '@/components/atoms/SimpleSquare.vue'
 import M3Shape from '@/components/atoms/M3Shape.vue'
 import { CORNER_RADIUS, CORNER_RADIUS_LABELS } from '@/constants/corners'
@@ -364,4 +389,17 @@ const sliceShapes = computed(() => ['circle', 'slanted', 'square', 'arch', 'semi
 
 const demoW = ref(200);
 const demoH = ref(100);
+
+const morphShapes = ['soft-boom', 'boom'] as const;
+const morphIndex = ref(0);
+const morphShape = computed(() => morphShapes[morphIndex.value]);
+let morphTimer: ReturnType<typeof setInterval> | null = null;
+onMounted(() => {
+  morphTimer = setInterval(() => {
+    morphIndex.value = (morphIndex.value + 1) % morphShapes.length;
+  }, 1000);
+});
+onUnmounted(() => {
+  if (morphTimer) clearInterval(morphTimer);
+});
 </script>

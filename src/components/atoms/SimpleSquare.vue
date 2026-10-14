@@ -46,7 +46,6 @@
     >
       <path
         ref="shapePath"
-        :d="pathData"
         fill="currentColor"
         :class="colorClass"
       />
@@ -59,10 +58,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, ref, onMounted, watch } from 'vue'
 import { CORNER_RADIUS, type CornerRadius } from '@/constants/corners'
 import { SHAPE_LIBRARY } from '@/constants/shapes'
 import { useResizeMorph } from '@/composables/useResizeMorph'
+import { interpolate } from 'flubber'
+import { translatePath } from '@/utils/svgPath'
 import gsap from 'gsap'
 
 type RadiusInput = CornerRadius | number | string;
@@ -114,11 +115,35 @@ const resolveRadiusValue = (val: RadiusInput): number => {
   return isNaN(n) ? 0 : n;
 };
 
+// Shapes in SHAPE_LIBRARY are drawn at absolute positions on a shared canvas,
+// so their bboxes differ. Normalize each to origin (0,0) so shapes render
+// centered and morph between each other in place (no position jump).
+interface NormalizedShape {
+  path: string;
+  bbox: [number, number, number, number]; // [0, 0, w, h]
+}
+
+const normalizedShapes = new Map<string, NormalizedShape>();
+
+const getNormalizedShape = (id: string): NormalizedShape | null => {
+  const data = SHAPE_LIBRARY[id];
+  if (!data) return null;
+  if (!normalizedShapes.has(id)) {
+    const [x, y, w, h] = data.bbox;
+    normalizedShapes.set(id, {
+      path: translatePath(data.path, -x, -y),
+      bbox: [0, 0, w, h],
+    });
+  }
+  return normalizedShapes.get(id)!;
+};
+
 const dynamicViewBox = computed(() => {
-  // If we are in shape mode, use the shape's bbox
-  if (props.shape && SHAPE_LIBRARY[props.shape]) {
-    const [x, y, w, h] = SHAPE_LIBRARY[props.shape].bbox;
-    return `${x} ${y} ${w} ${h}`;
+  // Shape mode: use the normalized bbox (0 0 w h)
+  const norm = props.shape ? getNormalizedShape(props.shape) : null;
+  if (norm) {
+    const [, , w, h] = norm.bbox;
+    return `0 0 ${w} ${h}`;
   }
 
   if (!props.stretch) return '0 0 100 100';
@@ -128,7 +153,7 @@ const dynamicViewBox = computed(() => {
 const pathData = computed(() => {
   // MODE 1: Artistic Shape
   if (props.shape && SHAPE_LIBRARY[props.shape]) {
-    return SHAPE_LIBRARY[props.shape].path;
+    return getNormalizedShape(props.shape)!.path;
   }
 
   // MODE 2: Regular Surface (M3 Radius System)
@@ -192,7 +217,7 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   const insets = shapeData.slice;
   if (!insets) return [];
 
-  const [bx, by, w, h] = shapeData.bbox;
+  const [, , w, h] = getNormalizedShape(props.shape)!.bbox;
   const left = insets.left * w;
   const right = insets.right * w;
   const top = insets.top * h;
@@ -218,9 +243,9 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   // target column/row boundaries (container coordinate space)
   const tCols = [0, tLeft, W - tRight, W];
   const tRows = [0, tTop, H - tBottom, H];
-  // source column/row boundaries (absolute path coordinate space)
-  const sCols = [bx, bx + left, bx + w - right, bx + w];
-  const sRows = [by, by + top, by + h - bottom, by + h];
+  // source column/row boundaries (normalized origin-0 coordinate space)
+  const sCols = [0, left, w - right, w];
+  const sRows = [0, top, h - bottom, h];
 
   const regions: SliceRegion[] = [];
   for (let r = 0; r < 3; r++) {
@@ -246,13 +271,41 @@ const sliceRegions = computed<SliceRegion[]>(() => {
 
 const sliceViewBox = computed(() => `0 0 ${size.w} ${size.h}`);
 
+// The `d` attribute is driven exclusively by GSAP so the `:d` binding can't
+// clobber an in-flight morph (a reactive `:d` would snap to the new path
+// before the tween runs). Set the initial path on mount, tween on change.
+let morphTween: gsap.core.Tween | null = null;
+
+const applyPath = (d: string, animate: boolean) => {
+  const el = shapePath.value;
+  if (!el) return;
+  morphTween?.kill();
+  morphTween = null;
+  if (!animate) {
+    el.setAttribute('d', d);
+    return;
+  }
+  const from = el.getAttribute('d') || '';
+  // flubber aligns points between arbitrary paths so morphs stay smooth even
+  // when the two shapes have different numbers of anchor points (GSAP's own
+  // attr:{d} morph only works when the point counts already match).
+  const morph = interpolate(from, d, { maxSegmentLength: 5 });
+  const progress = { t: 0 };
+  morphTween = gsap.to(progress, {
+    t: 1,
+    duration: 0.6,
+    ease: 'expo.inOut',
+    onUpdate: () => el.setAttribute('d', morph(progress.t)),
+    // restore the exact (clean) target path once the morph lands
+    onComplete: () => el.setAttribute('d', d),
+  });
+};
+
+onMounted(() => applyPath(pathData.value, false));
+
 // Watch for prop changes to trigger morphing animation (non-9-slice only)
 watch(() => [props.shape, props.radius], () => {
-  if (!shapePath.value || sliceRegions.value.length) return;
-  gsap.to(shapePath.value, {
-    attr: { d: pathData.value },
-    duration: 0.6,
-    ease: "expo.inOut"
-  });
+  if (sliceRegions.value.length) return;
+  applyPath(pathData.value, true);
 }, { deep: true });
 </script>
