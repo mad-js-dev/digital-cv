@@ -354,7 +354,7 @@
               Shapes morph into one another when the <span class="font-mono text-slate-200">shape</span> prop changes.
             </p>
             <p class="text-lg text-slate-400 leading-relaxed">
-              This loops <span class="font-mono text-slate-200">soft-boom → boom → soft-boom</span> every second using the same GSAP path morph that drives radius changes.
+              This cycles through <span class="font-mono text-slate-200">every shape in the library</span> one after another, morphing between each pair, then repeats.
             </p>
             <div class="p-4 bg-slate-900/50 rounded-xl border border-slate-700">
               <p class="text-xs font-mono text-slate-400">Current: shape="{{ morphShape }}"</p>
@@ -390,7 +390,7 @@ const sliceShapes = computed(() => ['circle', 'slanted', 'square', 'arch', 'semi
 const demoW = ref(200);
 const demoH = ref(100);
 
-const morphShapes = ['soft-boom', 'boom'] as const;
+const morphShapes = Object.keys(SHAPE_LIBRARY);
 const morphIndex = ref(0);
 const morphShape = computed(() => morphShapes[morphIndex.value]);
 let morphTimer: ReturnType<typeof setInterval> | null = null;

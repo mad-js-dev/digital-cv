@@ -116,11 +116,12 @@ const resolveRadiusValue = (val: RadiusInput): number => {
 };
 
 // Shapes in SHAPE_LIBRARY are drawn at absolute positions on a shared canvas,
-// so their bboxes differ. Normalize each to origin (0,0) so shapes render
-// centered and morph between each other in place (no position jump).
+// so their bboxes differ. Normalize each so its bbox CENTER is at (0,0) — this
+// keeps shapes centered on each other so morphing changes only the form, not
+// the position (no left/right drift between different-sized shapes).
 interface NormalizedShape {
   path: string;
-  bbox: [number, number, number, number]; // [0, 0, w, h]
+  bbox: [number, number, number, number]; // [-w/2, -h/2, w, h]
 }
 
 const normalizedShapes = new Map<string, NormalizedShape>();
@@ -130,20 +131,22 @@ const getNormalizedShape = (id: string): NormalizedShape | null => {
   if (!data) return null;
   if (!normalizedShapes.has(id)) {
     const [x, y, w, h] = data.bbox;
+    const cx = x + w / 2;
+    const cy = y + h / 2;
     normalizedShapes.set(id, {
-      path: translatePath(data.path, -x, -y),
-      bbox: [0, 0, w, h],
+      path: translatePath(data.path, -cx, -cy),
+      bbox: [-w / 2, -h / 2, w, h],
     });
   }
   return normalizedShapes.get(id)!;
 };
 
 const dynamicViewBox = computed(() => {
-  // Shape mode: use the normalized bbox (0 0 w h)
+  // Shape mode: use the normalized (centered) bbox
   const norm = props.shape ? getNormalizedShape(props.shape) : null;
   if (norm) {
-    const [, , w, h] = norm.bbox;
-    return `0 0 ${w} ${h}`;
+    const [bx, by, w, h] = norm.bbox;
+    return `${bx} ${by} ${w} ${h}`;
   }
 
   if (!props.stretch) return '0 0 100 100';
@@ -217,7 +220,7 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   const insets = shapeData.slice;
   if (!insets) return [];
 
-  const [, , w, h] = getNormalizedShape(props.shape)!.bbox;
+  const [bx, by, w, h] = getNormalizedShape(props.shape)!.bbox;
   const left = insets.left * w;
   const right = insets.right * w;
   const top = insets.top * h;
@@ -243,9 +246,9 @@ const sliceRegions = computed<SliceRegion[]>(() => {
   // target column/row boundaries (container coordinate space)
   const tCols = [0, tLeft, W - tRight, W];
   const tRows = [0, tTop, H - tBottom, H];
-  // source column/row boundaries (normalized origin-0 coordinate space)
-  const sCols = [0, left, w - right, w];
-  const sRows = [0, top, h - bottom, h];
+  // source column/row boundaries (normalized centered coordinate space)
+  const sCols = [bx, bx + left, bx + w - right, bx + w];
+  const sRows = [by, by + top, by + h - bottom, by + h];
 
   const regions: SliceRegion[] = [];
   for (let r = 0; r < 3; r++) {
