@@ -417,33 +417,32 @@ const sliceRegions = computed<SliceRegion[]>(() => {
     
     const regions: SliceRegion[] = [];
 
-    // 1. The "Belly" - Cross-fill strategy to ensure no gaps regardless of dimensions
+    // 1. The "Belly" - Overfill strategy: extend solid regions by 1px to hide sub-pixel gaps
     // Vertical strip (covers center column)
     if (W - 2 * r > 0) {
       regions.push({
-        x: r, y: 0, width: W - 2 * r, height: H,
+        x: r - 1, y: 0, width: W - 2 * r + 2, height: H,
         viewBox: `50 0 0 100`, solid: true
       });
     }
     // Horizontal strip (covers center row)
     if (H - 2 * r > 0) {
       regions.push({
-        x: 0, y: r, width: W, height: H - 2 * r,
+        x: 0, y: r - 1, width: W, height: H - 2 * r + 2,
         viewBox: `0 50 100 0`, solid: true
       });
     }
 
-    // 2. The Corners - We use a small offset for corner positioning to ensure 
-    // they sit exactly on the boundary without floating point gaps.
-    const offset = 0.01;
+    // 2. The Corners - Use a 1px bleed to overlap the belly and hide sub-pixel gaps
+    const bleed = 1;
     // TL
-    regions.push({ x: 0, y: 0, width: r + offset, height: r + offset, viewBox: `0 0 ${maxR} ${maxR}`, solid: false });
+    regions.push({ x: 0, y: 0, width: r + bleed, height: r + bleed, viewBox: `0 0 ${maxR} ${maxR}`, solid: false });
     // TR
-    regions.push({ x: W - r - offset, y: 0, width: r + offset, height: r + offset, viewBox: `${100 - maxR} 0 ${maxR} ${maxR}`, solid: false });
+    regions.push({ x: W - r - bleed, y: 0, width: r + bleed, height: r + bleed, viewBox: `${100 - maxR} 0 ${maxR} ${maxR}`, solid: false });
     // BR
-    regions.push({ x: W - r - offset, y: H - r - offset, width: r + offset, height: r + offset, viewBox: `${100 - maxR} ${100 - maxR} ${maxR} ${maxR}`, solid: false });
+    regions.push({ x: W - r - bleed, y: H - r - bleed, width: r + bleed, height: r + bleed, viewBox: `${100 - maxR} ${100 - maxR} ${maxR} ${maxR}`, solid: false });
     // BL
-    regions.push({ x: 0, y: H - r - offset, width: r + offset, height: r + offset, viewBox: `0 ${100 - maxR} ${maxR} ${maxR}`, solid: false });
+    regions.push({ x: 0, y: H - r - bleed, width: r + bleed, height: r + bleed, viewBox: `0 ${100 - maxR} ${maxR} ${maxR}`, solid: false });
 
     return regions;
   }
