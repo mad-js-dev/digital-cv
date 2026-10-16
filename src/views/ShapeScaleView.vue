@@ -44,7 +44,7 @@
         </div>
 
         <div class="bg-slate-100 dark:bg-slate-900 rounded-3xl p-8 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-800">
-          <M3Shape shape="square" :radius="18" size="200" color="accent" />
+          <Shape shape="square" :radius="18" size="200" color="accent" />
           <p class="mt-6 font-mono text-xs text-slate-400">RADIUS_SCALE: MEDIUM</p>
         </div>
       </section>
@@ -67,11 +67,11 @@
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
               <tr>
                 <td class="p-4 font-medium capitalize">square</td>
-                <td class="p-4"><M3Shape shape="square" :radius="0" size="40" /></td>
-                <td class="p-4"><M3Shape shape="square" :radius="8" size="40" /></td>
-                <td class="p-4"><M3Shape shape="square" :radius="18" size="40" /></td>
-                <td class="p-4"><M3Shape shape="square" :radius="32" size="40" /></td>
-                <td class="p-4"><M3Shape shape="square" :radius="50" size="40" /></td>
+                <td class="p-4"><Shape shape="square" :radius="0" size="40" /></td>
+                <td class="p-4"><Shape shape="square" :radius="8" size="40" /></td>
+                <td class="p-4"><Shape shape="square" :radius="18" size="40" /></td>
+                <td class="p-4"><Shape shape="square" :radius="32" size="40" /></td>
+                <td class="p-4"><Shape shape="square" :radius="50" size="40" /></td>
               </tr>
             </tbody>
           </table>
@@ -93,21 +93,20 @@
             <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-4">Symmetric</p>
             <div class="flex items-center justify-center gap-4">
               <div class="flex-1">
-                <M3Shape 
+                <Shape 
                   shape="rounded" 
                   :radius="12" 
                   width="100%" 
                   height="32" 
                   :stretch="true" 
-                ><div class="mx-6">Button</div></M3Shape>
-
+                ><div class="mx-6">Button</div></Shape>
               </div>
 
               <div class="flex-1">
-                <M3Shape shape="square" :radius="8" :size="32" color="accent"> Pill </M3Shape>
+                <Shape shape="square" :radius="8" :size="32" color="accent"> Pill </Shape>
               </div>
               <div class="flex-1">
-                <M3Shape shape="square" :radius="32" :size="72" color="accent" />
+                <Shape shape="square" :radius="32" :size="72" color="accent" />
               </div>
             </div>
           </div>
@@ -115,9 +114,9 @@
           <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-6">
             <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-4">Asymmetric</p>
             <div class="flex items-center justify-center gap-4">
-              <M3Shape :corners="[0, 18, 18, 0]" shape="square" :size="72" color="slate" />
-              <M3Shape :corners="[18, 18, 0, 0]" shape="square" :size="72" color="accent" />
-              <M3Shape :corners="[0, 0, 18, 18]" shape="square" :size="72" color="slate" />
+              <Shape :radius="[0, 18, 18, 0]" shape="square" :size="72" color="slate" />
+              <Shape :radius="[18, 18, 0, 0]" shape="square" :size="72" color="accent" />
+              <Shape :radius="[0, 0, 18, 18]" shape="square" :size="72" color="slate" />
             </div>
           </div>
         </div>
@@ -130,7 +129,7 @@
         <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
           <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-5">Single button</p>
           <div class="flex items-center justify-center">
-            <M3Shape shape="square" :width="300" :height="86" :radius="20" color="accent" />
+            <Shape shape="square" :width="300" :height="86" :radius="20" color="accent" />
           </div>
         </div>
 
@@ -138,17 +137,17 @@
           <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6">
             <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-5">Split button</p>
             <div class="flex items-center justify-center gap-1">
-              <M3Shape shape="square" :width="140" :height="82" :corners="[50, 8, 50, 8]" color="accent" />
-              <M3Shape shape="square" :width="140" :height="82" :corners="[8, 50, 8, 50]" color="slate" />
+              <Shape shape="square" :width="140" :height="82" :radius="[50, 8, 50, 8]" color="accent" />
+              <Shape shape="square" :width="140" :height="82" :radius="[8, 50, 8, 50]" color="slate" />
             </div>
           </div>
 
           <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 p-6">
             <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-5">Vertical buttons</p>
             <div class="flex flex-col items-center justify-center gap-1">
-              <M3Shape shape="square" :width="170" :height="56" :corners="[50, 50, 8, 8]" color="accent" />
-              <M3Shape shape="square" :width="170" :height="56" :corners="[8, 8, 8, 8]" color="slate" />
-              <M3Shape shape="square" :width="170" :height="56" :corners="[8, 8, 50, 50]" color="accent" />
+              <Shape shape="square" :width="170" :height="56" :radius="[50, 50, 8, 8]" color="accent" />
+              <Shape shape="square" :width="170" :height="56" :radius="[8, 8, 8, 8]" color="slate" />
+              <Shape shape="square" :width="170" :height="56" :radius="[8, 8, 50, 50]" color="accent" />
             </div>
           </div>
         </div>
@@ -181,5 +180,5 @@
 </template>
 
 <script setup lang="ts">
-import M3Shape from '@/components/atoms/M3Shape.vue'
+import Shape from '@/components/atoms/M3Shape/Shape.vue'
 </script>

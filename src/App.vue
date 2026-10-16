@@ -19,6 +19,15 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import DownloadButton from './components/atoms/DownloadButton.vue'
 import HamburgerMenu from './components/atoms/HamburgerMenu.vue'
+import { useTheme } from '@/composables/useTheme'
+
+const { applyTheme } = useTheme()
+
+onMounted(() => {
+  // Initialize the M3 color system variables on mount
+  applyTheme('light') 
+})
 </script>

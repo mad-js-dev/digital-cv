@@ -25,10 +25,10 @@
               <p class="text-slate-400 max-w-md">A deep dive into the M3 shape system, tokenization, and organic morphing logic.</p>
             </div>
             <div class="flex gap-4">
-              <M3Shape shape="square" :size="40" color="slate" />
-              <M3Shape shape="rounded" :size="40" color="accent" />
-              <M3Shape shape="pill" :size="40" color="slate" />
-              <M3Shape shape="blob" :size="40" color="accent" />
+              <Shape shape="square" :size="40" color="slate" />
+              <Shape shape="rounded" :size="40" color="accent" />
+              <Shape shape="pill" :size="40" color="slate" />
+              <Shape shape="blob" :size="40" color="accent" />
             </div>
           </div>
         </div>
@@ -52,7 +52,7 @@
       </div>
     </div>
 
-    <!-- EXPANDED VIEW: The "Project Site" -->
+    <!-- EXPANDED VIEW: The \"Project Site\" -->
     <div 
       v-if="activeItem" 
       class="absolute inset-0 z-50 pointer-events-auto"
@@ -87,21 +87,21 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                    <M3Shape shape="blob" :size="80" color="accent" class="mb-6" />
+                    <Shape shape="blob" :size="80" color="accent" class="mb-6" />
                     <h3 class="text-xl font-bold text-white mb-2">Original Shapes</h3>
                     <p class="text-slate-400 text-sm">The foundation of every component, from rectangles to organic blobs.</p>
                   </div>
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
                     <div class="flex items-end gap-2 mb-6">
-                      <M3Shape shape="square" :radius="4" :size="30" color="slate" />
-                      <M3Shape shape="square" :radius="12" :size="40" color="slate" />
-                      <M3Shape shape="square" :radius="24" :size="50" color="accent" />
+                      <Shape shape="square" :radius="4" :size="30" color="slate" />
+                      <Shape shape="square" :radius="12" :size="40" color="slate" />
+                      <Shape shape="square" :radius="24" :size="50" color="accent" />
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Radius Scale</h3>
                     <p class="text-slate-400 text-sm">A consistent scale from 4px to fully rounded for clear visual hierarchy.</p>
                   </div>
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                    <M3Shape shape="pill" :size="80" color="accent" class="mb-6" />
+                    <Shape shape="pill" :size="80" color="accent" class="mb-6" />
                     <h3 class="text-xl font-bold text-white mb-2">Shape Morphing</h3>
                     <p class="text-slate-400 text-sm">Fluid transitions between shapes to guide user focus during interactions.</p>
                   </div>
@@ -111,7 +111,7 @@
                   @click="setPage(2)" 
                   class="mt-12 px-8 py-3 rounded-full bg-accent text-white font-bold hover:scale-105 transition-all shadow-lg shadow-accent/20"
                 >
-                  Explore Shape Library $\rightarrow$
+                  Explore Shape Library →
                 </button>
               </div>
 
@@ -130,7 +130,7 @@
                     :key="shapeName"
                     class="group p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex flex-col items-center gap-3"
                   >
-                    <M3Shape 
+                    <Shape 
                       :shape="shapeName" 
                       color="slate"
                       class="group-hover:text-accent transition-colors"
@@ -144,8 +144,7 @@
                     @click="router.push('/scale')"
                     class="px-8 py-3 rounded-full bg-white text-slate-900 font-bold hover:bg-slate-200 transition-all"
                   >
-                    Corner Radius Overview $
-ightarrow$
+                    Corner Radius Overview →
                   </button>
                 </div>
 
@@ -155,9 +154,9 @@ ightarrow$
                     We use a consistent SVG path coordinate system to enable seamless transitions between any two tokens in the library.
                   </p>
                   <div class="flex justify-center items-center gap-12">
-                    <M3Shape shape="square" :size="60" color="slate" />
+                    <Shape shape="square" :size="60" color="slate" />
                     <span class="text-3xl text-slate-600">→</span>
-                    <M3Shape shape="pill" :size="60" color="accent" />
+                    <Shape shape="pill" :size="60" color="accent" />
                   </div>
                 </div>
                 
@@ -165,7 +164,7 @@ ightarrow$
 
               <!-- Page 3: Summary -->
               <div v-if="currentPage === 3" class="h-full w-full p-12 flex flex-col items-center justify-center text-center">
-                <M3Shape shape="blob" :size="120" color="accent" class="mb-8 animate-pulse" />
+                <Shape shape="blob" :size="120" color="accent" class="mb-8 animate-pulse" />
                 <h2 class="text-4xl font-bold text-white mb-4">System Complete</h2>
                 <p class="text-slate-400 max-w-lg mx-auto mb-8">
                   The shape system provides the visual grammar for the entire product, ensuring consistency across every pixel.
@@ -187,7 +186,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import gsap from 'gsap'
 import PortfolioItemContent from '@/components/atoms/PortfolioItemContent.vue'
-import M3Shape from '@/components/atoms/M3Shape.vue'
+import Shape from '@/components/atoms/M3Shape/Shape.vue'
 
 const router = useRouter()
 
@@ -224,7 +223,7 @@ const handleExpand = (id: string, event: MouseEvent) => {
   expandedStyle.width = `${rect.width}px`
   expandedStyle.height = `${rect.height}px`
   expandedStyle.opacity = 1
-
+  
   gsap.to(expandedStyle, {
     left: (window.innerWidth - targetWidth) / 2 + 'px',
     top: (window.innerHeight - targetHeight) / 2 + 'px',

@@ -28,7 +28,7 @@
           @click="currentPage++" 
           class="mt-12 px-6 py-3 rounded-full bg-[var(--color-accent)] text-white font-medium hover:scale-105 transition-transform duration-300"
         >
-          Explore Principles $\rightarrow$
+          Explore Principles →
         </button>
       </div>
 

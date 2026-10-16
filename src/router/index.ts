@@ -4,6 +4,12 @@ import CVView from '../views/CVView.vue'
 import PortfolioView from '../views/PortfolioView.vue'
 import ShapeScaleView from '../views/ShapeScaleView.vue'
 import ShapeTestView from '../views/ShapeTestView.vue'
+import TypographyTestView from '../views/TypographyTestView.vue'
+import IconsTestView from '../views/IconsTestView.vue'
+import SpacingTestView from '../views/SpacingTestView.vue'
+import ElevationTestView from '../views/ElevationTestView.vue'
+import ColorTestView from '../views/ColorTestView.vue'
+import M3ButtonsView from '../views/M3ButtonsView.vue'
 
 const routes = [
   {
@@ -30,6 +36,36 @@ const routes = [
     path: '/test-shape',
     name: 'test-shape',
     component: ShapeTestView
+  },
+  {
+    path: '/test-typography',
+    name: 'test-typography',
+    component: TypographyTestView
+  },
+  {
+    path: '/test-icons',
+    name: 'test-icons',
+    component: IconsTestView
+  },
+  {
+    path: '/test-spacing',
+    name: 'test-spacing',
+    component: SpacingTestView
+  },
+  {
+    path: '/test-elevation',
+    name: 'test-elevation',
+    component: ElevationTestView
+  },
+  {
+    path: '/test-color',
+    name: 'test-color',
+    component: ColorTestView
+  },
+  {
+    path: '/test-buttons',
+    name: 'test-buttons',
+    component: M3ButtonsView
   }
 ]
 
