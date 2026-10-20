@@ -87,61 +87,6 @@
         </defs>
       </svg>
 
-      <!-- 9-slice mode: shape has a `slice` field + stretch -->
-      <svg
-        v-if="sliceRegions.length"
-        :viewBox="sliceViewBox"
-        class="absolute inset-0 w-full h-full"
-        preserveAspectRatio="none"
-        style="overflow: visible"
-      >
-        <template v-for="(region, i) in sliceRegions" :key="i">
-          <rect
-            v-if="region.solid"
-            :x="region.x - SLICE_OVERLAP"
-            :y="region.y - SLICE_OVERLAP"
-            :width="region.width + 2 * SLICE_OVERLAP"
-            :height="region.height + 2 * SLICE_OVERLAP"
-            :fill="resolvedSurfaceColor"
-            :stroke="props.stroke"
-            :stroke-width="props.strokeWidth"
-          />
-          <svg
-            v-else
-            :x="region.x - SLICE_OVERLAP"
-            :y="region.y - SLICE_OVERLAP"
-            :width="region.width + 2 * SLICE_OVERLAP"
-            :height="region.height + 2 * SLICE_OVERLAP"
-            :viewBox="region.viewBox"
-            preserveAspectRatio="none"
-            style="overflow: hidden"
-          >
-            <path 
-              :d="pathData" 
-              :fill="resolvedSurfaceColor" 
-              :stroke="props.stroke" 
-              :stroke-width="props.strokeWidth" 
-            />
-          </svg>
-        </template>
-      </svg>
-
-      <!-- normal mode: single path -->
-      <svg
-        v-else
-        :viewBox="dynamicViewBox"
-        class="absolute inset-0 w-full h-full"
-        :preserveAspectRatio="props.stretch ? 'none' : 'xMidYMid meet'"
-        style="overflow: visible"
-      >
-        <path
-          ref="shapePath"
-          :fill="resolvedSurfaceColor"
-          :stroke="props.stroke"
-          :stroke-width="props.strokeWidth"
-        />
-      </svg>
-
       <!-- State Layer: Overlay for hover/active/focused states -->
       <div 
         v-if="stateLayerColor" 
@@ -302,7 +247,6 @@ const pathData = computed(() => {
   
   const w = 100;
   const h = 100;
-  const minDim = 50;
   
   let radii: number[];
   if (Array.isArray(props.radius)) {
@@ -334,12 +278,12 @@ const pathData = computed(() => {
   `.replace(/\\s+/g, ' ').trim();
 });
 
-const SLICE_OVERLAP = 0; // Removed overlap to prevent "belly" artifacts in asymmetric shapes
+const SLICE_OVERLAP = 0;
 
 const sliceRegions = computed<SliceRegion[]>(() => {
   if (!props.stretch) return [];
 
-  // Case 1: Library shape with defined slices
+  // 1. Library shapes with defined slices always use 9-slice
   if (props.shape && SHAPE_LIBRARY[props.shape]?.slice) {
     const shapeData = SHAPE_LIBRARY[props.shape];
     const insets = shapeData.slice;
@@ -379,74 +323,10 @@ const sliceRegions = computed<SliceRegion[]>(() => {
     return regions;
   }
 
-  // Case 2: Dynamic Radius-based 9-slice
-  const resolveRadii = () => {
-    let res: number[];
-    if (Array.isArray(props.radius)) {
-      res = props.radius.map(r => resolveRadiusValue(r));
-      while (res.length < 4) res.push(0);
-      res = res.slice(0, 4);
-    } else {
-      const r = resolveRadiusValue(props.radius);
-      res = [r, r, r, r];
-    }
-    return res;
-  };
-
-  const radii = resolveRadii();
-  const maxR = Math.max(...radii.map(r => r === -1 ? 50 : r));
-
-  if (maxR > 0) {
-    const W = size.w;
-    const H = size.h;
-    if (!W || !H) return [];
-    
-    // Special case for FULL radius capsule
-    if (radii.every(r => r === -1)) {
-      const R = Math.min(W / 2, H / 2);
-      return [
-        { x: 0, y: 0, width: R, height: H, viewBox: `0 0 50 100`, solid: false },
-        { x: R, y: 0, width: Math.max(0, W - 2 * R), height: H, viewBox: `50 0 0 100`, solid: true },
-        { x: W - R, y: 0, width: R, height: H, viewBox: `50 0 50 100`, solid: false },
-      ];
-    }
-
-    // For uneven corners, we use the largest radius to define the slice boundaries.
-    // This ensures we capture the largest arc without distorting the edges.
-    const r = Math.min(maxR, W / 2, H / 2);
-    
-    const regions: SliceRegion[] = [];
-
-    // 1. The "Belly" - Overfill strategy: extend solid regions by 1px to hide sub-pixel gaps
-    // Vertical strip (covers center column)
-    if (W - 2 * r > 0) {
-      regions.push({
-        x: r - 1, y: 0, width: W - 2 * r + 2, height: H,
-        viewBox: `50 0 0 100`, solid: true
-      });
-    }
-    // Horizontal strip (covers center row)
-    if (H - 2 * r > 0) {
-      regions.push({
-        x: 0, y: r - 1, width: W, height: H - 2 * r + 2,
-        viewBox: `0 50 100 0`, solid: true
-      });
-    }
-
-    // 2. The Corners - Use a 1px bleed to overlap the belly and hide sub-pixel gaps
-    const bleed = 1;
-    // TL
-    regions.push({ x: 0, y: 0, width: r + bleed, height: r + bleed, viewBox: `0 0 ${maxR} ${maxR}`, solid: false });
-    // TR
-    regions.push({ x: W - r - bleed, y: 0, width: r + bleed, height: r + bleed, viewBox: `${100 - maxR} 0 ${maxR} ${maxR}`, solid: false });
-    // BR
-    regions.push({ x: W - r - bleed, y: H - r - bleed, width: r + bleed, height: r + bleed, viewBox: `${100 - maxR} ${100 - maxR} ${maxR} ${maxR}`, solid: false });
-    // BL
-    regions.push({ x: 0, y: H - r - bleed, width: r + bleed, height: r + bleed, viewBox: `0 ${100 - maxR} ${maxR} ${maxR}`, solid: false });
-
-    return regions;
-  }
-
+  // 2. Dynamic Radius shapes:’
+  // To support morphing, we MUST return an empty array here.
+  // If sliceRegions.length > 0, the component uses 9-slice (no morphing).
+  // By returning [], we force it into "normal mode" (single path) which morphs.
   return [];
 });
 
@@ -477,10 +357,23 @@ const applyPath = (d: string, animate: boolean) => {
 
 onMounted(() => applyPath(pathData.value, false));
 
-watch(() => [props.shape, props.radius], () => {
-  if (sliceRegions.value.length) return;
-  applyPath(pathData.value, true);
-}, { deep: true });
+watch(
+  () => [props.shape, props.radius], 
+  () => {
+    if (sliceRegions.value.length) return;
+    applyPath(pathData.value, true);
+  }, 
+  { deep: true }
+);
+
+watch(
+  () => props.radius,
+  () => {
+    if (sliceRegions.value.length) return;
+    applyPath(pathData.value, true);
+  },
+  { deep: true }
+);
 
 interface SliceRegion {
   x: number;

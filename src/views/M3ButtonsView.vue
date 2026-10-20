@@ -71,11 +71,35 @@
           </div>
         </div>
       </section>
+
+      <!-- TOGGLE STATE SHOWCASE -->
+      <section class="flex flex-col gap-6">
+        <h2 class="text-sm text-[var(--md-sys-color-on-surface-variant)] uppercase tracking-widest text-left">Toggle State</h2>
+        <div class="flex flex-col items-center gap-8 p-12 bg-[var(--md-sys-color-surface-variant)] rounded-3xl border border-[var(--md-sys-color-outline-variant)]">
+          <div class="flex items-center justify-center">
+            <M3Button 
+              :toggled="isToggled" 
+              @click="isToggled = !isToggled"
+              variant="filled" 
+              size="lg"
+              class="w-64 h-16"
+            >
+              {{ isToggled ? 'Toggled (Medium)' : 'Default (Full)' }}
+            </M3Button>
+          </div>
+          <div class="text-center">
+            <p class="text-xs font-mono text-[var(--md-sys-color-on-surface-variant)]">
+              Click the button to toggle its shape state.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import M3Button from '@/components/molecules/M3Button/M3Button.vue';
 import { M3_BUTTON_SPECS } from '@/components/molecules/M3Button/specs';
 
@@ -100,4 +124,21 @@ const shapes = Object.entries(M3_BUTTON_SPECS.shapes).map(([key, value]) => ({
   type: key,
   label: value.label,
 }));
+
+const elevations = [
+  { name: 'Level 0', level: 'level0', label: 'No Elevation' },
+  { name: 'Level 1', level: 'level1', label: 'Level 1' },
+  { name: 'Level 2', level: 'level2', label: 'Level 2' },
+  { name: 'Level 3', level: 'level3', label: 'Level 3' },
+  { name: 'Level 4', level: 'level4', label: 'Level 4' },
+  { name: 'Level 5', level: 'level5', label: 'Level 5' },
+];
+
+const currentMorphRadius = ref('S');
+const isToggled = ref(false);
+const toggleMorph = () => {
+  currentMorphRadius.value = currentMorphRadius.value === 'S' 
+    ? ['FULL', 'XS', 'XS', 'FULL'] 
+    : 'S';
+};
 </script>

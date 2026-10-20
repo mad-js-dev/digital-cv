@@ -10,6 +10,7 @@ import SpacingTestView from '../views/SpacingTestView.vue'
 import ElevationTestView from '../views/ElevationTestView.vue'
 import ColorTestView from '../views/ColorTestView.vue'
 import M3ButtonsView from '../views/M3ButtonsView.vue'
+import M3SurfaceView from '../views/M3SurfaceView.vue'
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     path: '/test-buttons',
     name: 'test-buttons',
     component: M3ButtonsView
+  },
+  {
+    path: '/test-surface',
+    name: 'test-surface',
+    component: M3SurfaceView
   }
 ]
 

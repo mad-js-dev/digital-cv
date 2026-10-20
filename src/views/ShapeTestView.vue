@@ -96,55 +96,43 @@
           </div>
 
           <!-- RIGHT: Visual Examples (2/3 width) -->
-          <div class="lg:col-span-2 flex flex-col gap-4">
-            <div class="flex flex-col items-start gap-2 p-4">
-              <p class="text-[10px] text-slate-500 italic mb-1">Stand alone element should use symetric corner shapes.</p>
-              <div class="w-[150px] h-[80px]">
-                <Shape :radius="'FULL'" color="primary" :stretch="true">
-                  <span class="text-black font-bold text-xs text-center px-2">Simple Button</span>
-                </Shape>
+          <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Square Case (1:1) -->
+            <div class="flex flex-col gap-4 p-6 bg-slate-200/30 rounded-2xl border border-slate-300/30">
+              <p class="text-xs font-bold text-slate-600 uppercase mb-2">Square (1:1)</p>
+              <div class="flex flex-col gap-6">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-[100px] h-[100px]">
+                    <Shape :radius="'S'" color="primary" :stretch="true" />
+                  </div>
+                  <p class="text-[10px] font-mono text-slate-500">Symmetric ('S')</p>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-[100px] h-[100px]">
+                    <Shape :radius="['S', 'NONE', 'S', 'NONE']" color="primary" :stretch="true" />
+                  </div>
+                  <p class="text-[10px] font-mono text-slate-500">Asymmetric (S, NONE, S, NONE)</p>
+                </div>
               </div>
-              <p class="text-[10px] text-slate-600 font-mono">'FULL' (Symmetric)</p>
             </div>
-            <div class="flex flex-col items-start gap-2 p-4">
-              <p class="text-[10px] text-slate-500 italic mb-1">Use asymmetry to give relation to shapes.</p>
-              <div class="flex gap-1">
-                <div class="w-[225px] h-[80px]">
-                  <Shape :radius="['FULL', 'XS', 'XS', 'FULL']" color="primary" :stretch="true">
-                    <span class="text-black font-bold text-[10px] text-center px-1 leading-tight">Dropdown button</span>
-                  </Shape>
+
+            <!-- Rectangle Case (2:1) -->
+            <div class="flex flex-col gap-4 p-6 bg-slate-200/30 rounded-2xl border border-slate-300/30">
+              <p class="text-xs font-bold text-slate-600 uppercase mb-2">Rectangle (2:1)</p>
+              <div class="flex flex-col gap-6">
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-[200px] h-[100px]">
+                    <Shape :radius="'S'" color="primary" :stretch="true" />
+                  </div>
+                  <p class="text-[10px] font-mono text-slate-500">Symmetric ('S')</p>
                 </div>
-                <div class="w-[75px] h-[80px]">
-                  <Shape :radius="['XS', 'FULL', 'FULL', 'XS']" color="primary" :stretch="true" />
-                </div>
-              </div>
-              <p class="text-[10px] text-slate-600 font-mono">['FULL', 'XS', 'XS', 'FULL'] + ['XS', 'FULL', 'FULL', 'XS']</p>
-            </div>
-            <div class="flex flex-col items-start gap-2 p-4">
-              <p class="text-[10px] text-slate-500 italic mb-1">Asymmetry can also be use to exclude relationship between shapes. The first and the last outer corners exclude this group of buttons from other elements that might be on the page, while the inner corners provide relationship between items.</p>
-              <div class="flex flex-col gap-1">
-                <div class="w-[300px] h-[40px]">
-                  <Shape :radius="['FULL', 'FULL', 'XS', 'XS']" color="primary" :stretch="true">
-                    <span class="text-black font-bold text-xs text-center px-2">Dropdown item 1</span>
-                  </Shape>
-                </div>
-                <div class="w-[300px] h-[40px]">
-                  <Shape :radius="'XS'" color="primary" :stretch="true">
-                    <span class="text-black font-bold text-xs text-center px-2">Dropdown item 2</span>
-                  </Shape>
-                </div>
-                <div class="w-[300px] h-[40px]">
-                  <Shape :radius="'XS'" color="primary" :stretch="true">
-                    <span class="text-black font-bold text-xs text-center px-2">Dropdown item 3</span>
-                  </Shape>
-                </div>
-                <div class="w-[300px] h-[40px]">
-                  <Shape :radius="['XS', 'XS', 'FULL', 'FULL']" color="primary" :stretch="true">
-                    <span class="text-black font-bold text-xs text-center px-2">Dropdown item 4</span>
-                  </Shape>
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-[200px] h-[100px]">
+                    <Shape :radius="['S', 'NONE', 'S', 'NONE']" color="primary" :stretch="true" />
+                  </div>
+                  <p class="text-[10px] font-mono text-slate-500">Asymmetric (S, NONE, S, NONE)</p>
                 </div>
               </div>
-              <p class="text-[10px] text-slate-600 font-mono">['FULL','FULL','XS','XS'] + 'XS' + 'XS' + ['XS','XS','FULL','FULL']</p>
             </div>
           </div>
         </div>
@@ -343,7 +331,87 @@
         </div>
       </section>
 
-      <!-- SECTION 7: Elevation Showcase -->
+      <!-- SECTION 7: Morphing (Inter-Shape) -->
+      <section class="flex flex-col gap-6">
+        <div class="flex w-full justify-start">
+          <h2 class="text-sm text-slate-500 uppercase tracking-widest text-left">Morphing (Inter-Shape)</h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <!-- LEFT: Description (1/3 width) -->
+          <div class="lg:col-span-1 flex flex-col justify-start gap-6">
+            <p class="text-xl text-slate-600 leading-relaxed">
+              Shapes can morph into one another using path interpolation.
+            </p>
+            <p class="text-lg text-slate-500 leading-relaxed">
+              This allows for organic transitions between symmetric corners, asymmetric corners, and complex artistic shapes.
+            </p>
+            <div class="p-4 bg-indigo-500/10 rounded-2xl border border-indigo-500/20">
+              <p class="text-sm text-indigo-700/80 leading-relaxed">
+                Using <span class="font-bold text-indigo-600">flubber</span> for smooth, high-fidelity path morphing.
+              </p>
+            </div>
+          </div>
+
+          <!-- RIGHT: Interactive Demos (2/3 width) -->
+          <div class="lg:col-span-2 flex flex-col gap-8">
+            <!-- Corner Morph -->
+            <div class="flex flex-col gap-4 p-6 bg-slate-200/30 rounded-2xl border border-slate-300/30">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-bold text-slate-600 uppercase">Corner Morph: Symmetric S $\leftrightarrow$ FULL</p>
+                <button @click="toggleCornerMorph" class="px-3 py-1 text-[10px] font-bold bg-slate-900 text-white rounded-full hover:opacity-80 transition-opacity">
+                  Toggle Radius
+                </button>
+              </div>
+              <div class="flex items-center justify-center bg-slate-100 rounded-xl p-6">
+                <div class="w-[200px] h-[80px]">
+                  <Shape :radius="currentCornerMorph" color="primary" :stretch="false" />
+                </div>
+              </div>
+              <p class="text-[10px] font-mono text-center text-slate-500">
+                Current: {{ currentCornerMorph }}
+              </p>
+            </div>
+
+            <!-- Asymmetric Morph -->
+            <div class="flex flex-col gap-4 p-6 bg-slate-200/30 rounded-2xl border border-slate-300/30">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-bold text-slate-600 uppercase">Asymmetric Morph: Left Side Only</p>
+                <button @click="toggleAsymMorph" class="px-3 py-1 text-[10px] font-bold bg-slate-900 text-white rounded-full hover:opacity-80 transition-opacity">
+                  Toggle Left
+                </button>
+              </div>
+              <div class="flex items-center justify-center bg-slate-100 rounded-xl p-6">
+                <div class="w-[200px] h-[80px]">
+                  <Shape :radius="currentAsymMorph" color="primary" :stretch="false" />
+                </div>
+              </div>
+              <p class="text-[10px] font-mono text-center text-slate-500">
+                Current: {{ currentAsymMorph }}
+              </p>
+            </div>
+
+            <!-- Shape Morph -->
+            <div class="flex flex-col gap-4 p-6 bg-slate-200/30 rounded-2xl border border-slate-300/30">
+              <div class="flex items-center justify-between">
+                <p class="text-xs font-bold text-slate-600 uppercase">Shape Morph: Soft-Boom $\leftrightarrow$ Boom</p>
+                <button @click="toggleShapeMorph" class="px-3 py-1 text-[10px] font-bold bg-slate-900 text-white rounded-full hover:opacity-80 transition-opacity">
+                  Toggle Shape
+                </button>
+              </div>
+              <div class="flex items-center justify-center bg-slate-100 rounded-xl p-6">
+                <div class="w-[120px] h-[120px]">
+                  <Shape :shape="currentShapeMorph" color="primary" :stretch="false" />
+                </div>
+              </div>
+              <p class="text-[10px] font-mono text-center text-slate-500">
+                Current: {{ currentShapeMorph }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 8: Elevation Showcase -->
       <section class="flex flex-col gap-6">
         <div class="flex w-full justify-start">
           <h2 class="text-sm text-slate-500 uppercase tracking-widest text-left">Elevation Showcase</h2>
@@ -413,6 +481,27 @@ const sliceShapes = computed(() => ['circle', 'slanted', 'square', 'arch', 'semi
 
 const demoW = ref(200);
 const demoH = ref(100);
+
+const currentCornerMorph = ref('S');
+const toggleCornerMorph = () => {
+  currentCornerMorph.value = currentCornerMorph.value === 'S' 
+    ? 'FULL' 
+    : 'S';
+};
+
+const currentAsymMorph = ref(['XS', 'XS', 'XS', 'XS']);
+const toggleAsymMorph = () => {
+  currentAsymMorph.value = currentAsymMorph.value[0] === 'XS' 
+    ? ['FULL', 'FULL', 'XS', 'XS'] 
+    : ['XS', 'XS', 'XS', 'XS'];
+};
+
+const currentShapeMorph = ref('soft-boom');
+const toggleShapeMorph = () => {
+  currentShapeMorph.value = currentShapeMorph.value === 'soft-boom' 
+    ? 'boom' 
+    : 'soft-boom';
+};
 
 const morphShapes = Object.keys(SHAPE_LIBRARY);
 const morphIndex = ref(0);

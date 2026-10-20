@@ -89,13 +89,90 @@ export const M3_COLOR_PALETTES = {
     light: '#49454F',
     dark: '#CAC4D0',
   },
+  surfaceContainerLowest: {
+    light: '#FFFFFF',
+    dark: '#000000',
+  },
+  surfaceContainerLow: {
+    light: '#F7F2FA',
+    dark: '#1D1B20',
+  },
+  surfaceContainer: {
+    light: '#F3EDF7',
+    dark: '#211F26',
+  },
+  surfaceContainerHigh: {
+    light: '#ECE6F0',
+    dark: '#2B2930',
+  },
+  surfaceContainerHighest: {
+    light: '#E6E0E9',
+    dark: '#36343B',
+  },
+  surfaceBright: {
+    light: '#F3EDF7',
+    dark: '#3C3B3F',
+  },
+  surfaceDim: {
+    light: '#D0C9D0',
+    dark: '#141216',
+  },
   outline: {
     light: '#79747E',
-    dark: '#938F//98', // Fixing common M3 outline
+    dark: '#938F99',
   },
   outlineVariant: {
     light: '#CAC4D0',
     dark: '#49454F',
+  },
+  // Utility Roles (Extended M3)
+  success: {
+    light: '#2E7D32',
+    dark: '#81C784',
+  },
+  onSuccess: {
+    light: '#FFFFFF',
+    dark: '#003300',
+  },
+  successContainer: {
+    light: '#C8E6C9',
+    dark: '#1B5E20',
+  },
+  onSuccessContainer: {
+    light: '#003300',
+    dark: '#C8E6C9',
+  },
+  warning: {
+    light: '#F9A825',
+    dark: '#FDD835',
+  },
+  onWarning: {
+    light: '#FFFFFF',
+    dark: '#332B00',
+  },
+  warningContainer: {
+    light: '#FFF1B8',
+    dark: '#5D4037',
+  },
+  onWarningContainer: {
+    light: '#332B00',
+    dark: '#FFF1B8',
+  },
+  info: {
+    light: '#1976D2',
+    dark: '#82B1FF',
+  },
+  onInfo: {
+    light: '#FFFFFF',
+    dark: '#001A33',
+  },
+  infoContainer: {
+    light: '#BBDEFB',
+    dark: '#0D47A1',
+  },
+  onInfoContainer: {
+    light: '#001A33',
+    dark: '#BBDEFB',
   },
 } as const;
 

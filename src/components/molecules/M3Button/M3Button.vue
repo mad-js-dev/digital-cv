@@ -18,7 +18,7 @@
       <Shape 
         v-if="props.variant !== 'text'"
         :radius="resolvedRadius" 
-        stretch 
+        :stretch="true" 
         :color="resolvedSurface"
         :stroke="resolvedBorder"
         :stroke-width="props.variant === 'outlined' ? 2 : 0"
@@ -83,7 +83,7 @@
       <!-- Main Section (Left) -->
       <Shape 
         :radius="[resolvedRadius, 'NONE', 'NONE', resolvedRadius]" 
-        stretch 
+        :stretch="true" 
         :color="resolvedSurface"
         :stroke="resolvedBorder"
         :stroke-width="props.variant === 'outlined' ? 2 : 0"
@@ -113,7 +113,7 @@
       <!-- Dropdown Section (Right) -->
       <Shape 
         :radius="['NONE', resolvedRadius, resolvedRadius, 'NONE']" 
-        stretch 
+        :stretch="true" 
         :color="resolvedSurface"
         :stroke="resolvedBorder"
         :stroke-width="props.variant === 'outlined' ? 2 : 0"
@@ -155,6 +155,7 @@ interface Props {
   split?: boolean;
   trailingIcon?: string;
   isOpen?: boolean;
+  toggled?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -166,6 +167,7 @@ const props = withDefaults(defineProps<Props>(), {
   split: false,
   trailingIcon: 'expand_more',
   isOpen: false,
+  toggled: false,
 });
 
 const slots = useSlots();
@@ -197,6 +199,7 @@ const resolvedRadius = computed(() => {
     if (props.shape === 'square') return 'FULL';
     return props.radius || 'FULL';
   }
+  if (props.toggled) return 'M';
   if (props.radius) return props.radius;
   return M3_BUTTON_SPECS.shapes[props.shape]?.radius || 'FULL';
 });
@@ -208,8 +211,6 @@ const pixelRadius = computed(() => {
   if (typeof r === 'number') return r;
   if (r === 'FULL') return sizeConfig.value.height / 2;
   
-  // We need to resolve the token (e.g., 'S', 'M', 'L') to its numeric value from CORNER_RADIUS
-  // We import CORNER_RADIUS at the top, so we can use it here.
   const resolved = (r as any);
   const val = (typeof resolved === 'string' && resolved in CORNER_RADIUS) 
     ? CORNER_RADIUS[resolved as any] 
