@@ -6,7 +6,7 @@
     ]"
     :style="surfaceStyle"
   >
-    <!-- State Layer Overlay -->
+    <!-- State Layer Overlay: True M3 implementation using color-mix with On-Color -->
     <div 
       v-if="stateLayerColor" 
       class="absolute inset-0 pointer-events-none transition-colors duration-200"
@@ -22,8 +22,7 @@
       class="relative z-10 flex items-center justify-center"
       :style="contentPaddingStyle"
     >
-      <!-- Apply the dynamic contrast color to the content -->
-      <slot :style="{ color: resolvedContentColor }" />
+      <slot />
     </div>
   </div>
 </template>
@@ -31,17 +30,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { ELEVATION_TOKENS, type ElevationLevel } from '@/constants/elevation';
-import { type ColorRole, M3_COLOR_PALETTES } from '@/constants/colors';
+import { type ColorRole } from '@/constants/colors';
 import { 
   SURFACE_RADIUS, type SurfaceRadius, 
   SURFACE_VARIANTS, type SurfaceVariant, 
   SURFACE_PADDING, type SurfacePadding,
-  SURFACE_STATE_LAYERS
+  type SurfaceRole
 } from './specs';
 
 interface Props {
   radius?: SurfaceRadius | SurfaceRadius[] | number | number[];
-  color?: ColorRole;
+  color?: SurfaceRole | ColorRole;
   elevation?: ElevationLevel;
   paddingX?: SurfacePadding | number | string;
   paddingY?: SurfacePadding | number | string;
@@ -76,6 +75,9 @@ const resolveRadiusValue = (val: any): string => {
 };
 
 const resolvedRadius = computed(() => {
+  if (props.state === 'hover') return resolveRadiusValue('S');
+  if (props.state === 'active') return resolveRadiusValue('L');
+  
   if (Array.isArray(props.radius)) {
     return props.radius.map(r => resolveRadiusValue(r)).join(' ');
   }
@@ -86,8 +88,7 @@ const resolvedRadius = computed(() => {
 const variantSpec = computed(() => SURFACE_VARIANTS[props.variant]);
 
 const resolvedSurfaceRole = computed(() => {
-  // If the user passed a specific color role, use it. Otherwise use variant default.
-  return props.color || variantSpec.value.role;
+  return (props.color || variantSpec.value.role) as SurfaceRole;
 });
 
 const resolvedSurface = computed(() => {
@@ -100,8 +101,6 @@ const resolvedContentColor = computed(() => {
   const role = resolvedSurfaceRole.value;
   if (role === 'transparent') return `var(--md-sys-color-on-surface)`;
   
-  // Automatic "On-Color" mapping
-  // If role is 'primary', we need 'onPrimary'
   const onRole = role.startsWith('on') ? role : `on${role.charAt(0).toUpperCase() + role.slice(1)}`;
   return `var(--md-sys-color-${onRole})`;
 });
@@ -127,11 +126,16 @@ const resolvedElevation = computed(() => {
 const stateLayerColor = computed(() => {
   if (props.state === 'base') return 'transparent';
   
-  const role = resolvedSurfaceRole.value;
-  const isDark = role === 'primary' || role === 'primaryContainer' || role === 'tertiary';
-  const palette = isDark ? SURFACE_STATE_LAYERS.dark : SURFACE_STATE_LAYERS.light;
+  const onRole = resolvedContentColor.value; // The CSS variable for the "On-Color"
   
-  return palette[props.state as keyof typeof palette];
+  // M3 Standard Opacity for State Layers:
+  // Hover: 8% | Focused: 10% | Active: 12%
+  let opacity = '92%'; // 100% - 8%
+  if (props.state === 'focused') opacity = '90%';
+  if (props.state === 'active') opacity = '88%';
+  
+  // color-mix blends the on-color with transparent to create the precise overlay
+  return `color-mix(in srgb, ${onRole}, transparent ${opacity})`;
 });
 
 // --- Styles ---
@@ -142,7 +146,7 @@ const surfaceStyle = computed(() => ({
   filter: resolvedElevation.value,
   width: props.width ? (typeof props.width === 'number' ? `${props.width}px` : props.width) : 'auto',
   height: props.height ? (typeof props.height === 'number' ? `${props.height}px` : props.height) : 'auto',
-  color: resolvedContentColor.value, // Apply contrast color to the container as well
+  color: resolvedContentColor.value,
 }));
 
 const resolvePadding = (val: any): string => {

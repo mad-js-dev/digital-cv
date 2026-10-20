@@ -5,10 +5,21 @@ export const SURFACE_RADIUS = {
   S: CORNER_RADIUS.S,
   M: CORNER_RADIUS.M,
   L: CORNER_RADIUS.L,
-  FULL: 9999,
+  FULL: 100,
 } as const;
 
 export type SurfaceRadius = keyof typeof SURFACE_RADIUS;
+
+export const SURFACE_ROLES = {
+  brand: ['primary', 'secondary', 'tertiary'] as const,
+  neutral: ['surface', 'surfaceVariant', 'surfaceContainerLowest', 'surfaceContainerLow', 'surfaceContainer', 'surfaceContainerHigh', 'surfaceContainerHighest'] as const,
+  tonal: ['primaryContainer', 'secondaryContainer', 'tertiaryContainer'] as const,
+  utility: ['success', 'warning', 'info', 'error'] as const,
+  depth: ['surfaceBright', 'surfaceDim'] as const,
+} as const;
+
+export type SurfaceRoleCategory = keyof typeof SURFACE_ROLES;
+export type SurfaceRole = typeof SURFACE_ROLES[SurfaceRoleCategory][number];
 
 export const SURFACE_VARIANTS = {
   filled: {
@@ -17,6 +28,11 @@ export const SURFACE_VARIANTS = {
     border: 'none',
   },
   tonal: {
+    role: 'primaryContainer',
+    onRole: 'onPrimaryContainer',
+    border: 'none',
+  },
+  container: {
     role: 'surfaceContainer',
     onRole: 'onSurface',
     border: 'none',
@@ -44,16 +60,3 @@ export const SURFACE_PADDING = {
 } as const;
 
 export type SurfacePadding = keyof typeof SURFACE_PADDING;
-
-export const SURFACE_STATE_LAYERS = {
-  light: {
-    hover: 'rgba(0, 0, 0, 0.08)',
-    active: 'rgba(0, 0, 0, 0.12)',
-    focused: 'rgba(0, 0, 0, 0.1)',
-  },
-  dark: {
-    hover: 'rgba(255, 255, 255, 0.08)',
-    active: 'rgba(255, 255, 255, 0.12)',
-    focused: 'rgba(255, 255, 255, 0.1)',
-  },
-} as const;
