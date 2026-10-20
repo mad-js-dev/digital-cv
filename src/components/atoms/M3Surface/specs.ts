@@ -12,9 +12,9 @@ export type SurfaceRadius = keyof typeof SURFACE_RADIUS;
 
 export const SURFACE_ROLES = {
   brand: ['primary', 'secondary', 'tertiary'] as const,
-  neutral: ['surface', 'surfaceVariant', 'surfaceContainerLowest', 'surfaceContainerLow', 'surfaceContainer', 'surfaceContainerHigh', 'surfaceContainerHighest'] as const,
   tonal: ['primaryContainer', 'secondaryContainer', 'tertiaryContainer'] as const,
-  utility: ['success', 'warning', 'info', 'error'] as const,
+  neutral: ['surface', 'surfaceVariant', 'surfaceContainerLowest', 'surfaceContainerLow', 'surfaceContainer', 'surfaceContainerHigh', 'surfaceContainerHighest'] as const,
+  utility: ['success', 'successContainer', 'warning', 'warningContainer', 'info', 'infoContainer', 'error', 'errorContainer'] as const,
   depth: ['surfaceBright', 'surfaceDim'] as const,
 } as const;
 
@@ -51,12 +51,57 @@ export const SURFACE_VARIANTS = {
 
 export type SurfaceVariant = keyof typeof SURFACE_VARIANTS;
 
+export const SURFACE_DEPTH_MAP = {
+  lowest: 'surfaceContainerLowest',
+  low: 'surfaceContainerLow',
+  default: 'surfaceContainer',
+  high: 'surfaceContainerHigh',
+  highest: 'surfaceContainerHighest',
+} as const;
+
+export type SurfaceDepth = keyof typeof SURFACE_DEPTH_MAP;
+
+export const SURFACE_SIZE_PROFILES = {
+  xs: {
+    radius: 'S',
+    elevation: 'level0',
+    depthRole: 'surfaceContainerLow',
+    padding: 'xs',
+  },
+  sm: {
+    radius: 'S',
+    elevation: 'level1',
+    depthRole: 'surfaceContainer',
+    padding: 'sm',
+  },
+  md: {
+    radius: 'M',
+    elevation: 'level2',
+    depthRole: 'surfaceContainerHigh',
+    padding: 'md',
+  },
+  lg: {
+    radius: 'L',
+    elevation: 'level3',
+    depthRole: 'surfaceContainerHighest',
+    padding: 'lg',
+  },
+  xl: {
+    radius: 'L',
+    elevation: 'level4',
+    depthRole: 'surfaceContainerHighest',
+    padding: 'lg',
+  },
+} as const;
+
+export type SurfaceSize = keyof typeof SURFACE_SIZE_PROFILES;
+
 export const SURFACE_PADDING = {
   none: 0,
-  xs: SPACING_TOKENS.xs || 4,
-  sm: SPACING_TOKENS.sm || 8,
-  md: SPACING_TOKENS.md || 16,
-  lg: SPACING_TOKENS.lg || 24,
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
 } as const;
 
 export type SurfacePadding = keyof typeof SURFACE_PADDING;

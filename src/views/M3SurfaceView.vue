@@ -1,244 +1,331 @@
 <template>
   <div class="min-h-screen bg-slate-50 text-slate-900 p-8 flex flex-col items-center gap-12">
     <header class="text-center max-w-3xl">
-      <h1 class="text-4xl font-bold tracking-tight mb-4">M3Surface Showcase</h1>
+      <h1 class="text-4xl font-bold tracking-tight mb-4">M3Surface Master Showcase</h1>
       <p class="text-lg text-slate-600 leading-relaxed">
-        The <span class="font-mono font-bold text-indigo-600">M3Surface</span> is a content-first wrapper that handles the "skin" of a component. 
-        It now implements the full Material 3 Surface role system, including tonal containers, utility roles, and automatic contrast.
+        The <span class="font-mono font-bold text-indigo-600">M3Surface</span> is a content-first wrapper implementing the full Material 3 specification. 
+        This showcase guides you from individual manual properties to the automated profile system.
       </p>
     </header>
 
     <div class="w-full max-w-6xl space-y-20">
       
-      <!-- SECTION 1: Radius & Corner Logic -->
+      <!-- Component Properties Group -->
+      <div class="flex flex-col gap-12 border-l-4 border-indigo-500 pl-8 py-2">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-3xl font-black uppercase tracking-tighter text-slate-800">Component Properties</h2>
+          <p class="text-slate-500 max-w-2xl">
+            Before exploring automated profiles, here is a breakdown of the individual properties that control the surface's appearance. 
+            These can be set manually for specialized components.
+          </p>
+        </div>
+
+        <!-- SECTION 1: Corner Radius & Geometry -->
+        <section class="flex flex-col gap-8">
+          <div class="flex flex-col gap-2">
+            <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">1. Corner Radius & Geometry</h3>
+            <p class="text-slate-600">The most basic property. Surfaces can be set to standard M3 tokens, asymmetric arrays, or custom numeric values.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div v-for="r in ['S', 'M', 'L', 'FULL']" :key="r" class="flex flex-col gap-4 items-center">
+              <M3Surface :radius="r" color="primary" class="p-4">{{ r === 'FULL' ? 'Full (Pill)' : r }}</M3Surface>
+              <span class="text-xs font-mono text-slate-400">radius="{{ r }}"</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+            <div class="flex flex-col gap-4 items-center p-6 bg-white rounded-2xl border border-slate-200">
+              <M3Surface :radius="['M', 'FULL', 'FULL', 'M']" color="primary" class="p-6">Asymmetric (M, FULL, FULL, M)</M3Surface>
+              <span class="text-xs font-mono text-slate-400">radius=["M", "FULL", "FULL", "M"]</span>
+            </div>
+            <div class="flex flex-col gap-4 items-center p-6 bg-white rounded-2xl border border-slate-200">
+              <M3Surface :radius="[20, 0, 20, 0]" color="primary" class="p-6">Custom Numeric [20, 0, 20, 0]</M3Surface>
+              <span class="text-xs font-mono text-slate-400">radius=[20, 0, 20, 0]</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 1.1: Corner Morphing -->
+        <section class="flex flex-col gap-8">
+          <div class="flex flex-col gap-2">
+            <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">1.1 Corner Morphing</h3>
+            <p class="text-slate-600">Because we use CSS border-radius, any change to the radius prop is smoothly interpolated by the browser.</p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
+              <h4 class="font-bold">Symmetric Transition</h4>
+              <M3Surface :radius="symmetricRadius" color="primary" class="p-8 text-center font-bold transition-all duration-300">
+                Symmetric Morph
+              </M3Surface>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button v-for="r in ['S', 'M', 'L', 'FULL']" :key="r" @click="symmetricRadius = r" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', symmetricRadius === r ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  {{ r }}
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
+              <h4 class="font-bold">Asymmetric Transition</h4>
+              <M3Surface :radius="asymmetricRadius" color="primary" class="p-8 text-center font-bold transition-all duration-300">
+                Asymmetric Morph
+              </M3Surface>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button @click="asymmetricRadius = ['M', 'M', 'M', 'M']" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym('M','M','M','M') ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  Square
+                </button>
+                <button @click="asymmetricRadius = ['M', 'FULL', 'FULL', 'M']" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym('M','FULL','FULL','M') ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  Pill-Corners
+                </button>
+                <button @click="asymmetricRadius = [20, 0, 20, 0]" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym(20,0,20,0) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  Leaf Shape
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 2: Color Control -->
+        <section class="flex flex-col gap-12">
+          <div class="flex flex-col gap-2">
+            <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">2. Color Control</h3>
+            <div class="flex flex-col gap-4">
+              <p class="text-slate-600 leading-relaxed">
+                Exploring the M3 color system. We organize roles by their functional palette to showcase the 
+                <span class="font-bold text-indigo-600">Automatic Contrast Engine</span>.
+              </p>
+              <div class="p-6 bg-indigo-50 rounded-2xl border border-indigo-100 text-sm text-indigo-900 leading-relaxed">
+                <strong class="block mb-2 text-indigo-700 uppercase tracking-wider text-xs">How the "Automagic" Contrast Works:</strong>
+                <p class="mb-3">
+                  In standard CSS, you'd have to manually pair a background color with a text color. M3 changes this by introducing 
+                  <span class="font-bold">On-Roles</span>. Every surface color has a mathematically paired contrast partner.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex flex-col gap-1">
+                    <span class="font-bold text-indigo-600">The Mapping:</span>
+                    <ul class="list-disc list-inside text-xs space-y-1 opacity-80">
+                      <li><code class="bg-white px-1 rounded">color="primary"</code> $\rightarrow$ resolves to <code class="bg-white px-1 rounded">onPrimary</code></li>
+                      <li><code class="bg-white px-1 rounded">color="secondaryContainer"</code> $\rightarrow$ resolves to <code class="bg-white px-1 rounded">onSecondaryContainer</code></li>
+                      <li><code class="bg-white px-1 rounded">color="success"</code> $\rightarrow$ resolves to <code class="bg-white px-1 rounded">onSuccess</code></li>
+                    </ul>
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span class="font-bold text-indigo-600">The Fallback:</span>
+                    <p class="text-xs opacity-80">
+                      If a specific "On-Role" isn't found, the engine falls back to the generic <code class="bg-white px-1 rounded">onSurface</code> token, ensuring that text is <strong class="text-indigo-700">never</strong> invisible, regardless of the chosen background.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-12">
+            <!-- Palette Groups in specific order: Brand -> Tonal -> Neutral -> Utility -> Depth -->
+            <div v-for="cat in roleCategories" :key="cat.id" class="flex flex-col gap-4">
+              <div class="flex flex-col gap-1">
+                <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider">{{ cat.label }}</h4>
+                <p class="text-xs text-slate-500">{{ cat.desc }}</p>
+              </div>
+              <div v-if="cat.id !== 'neutral'" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div v-for="role in cat.roles" :key="role" class="flex flex-col gap-2">
+                  <M3Surface :color="role" class="p-4 text-center font-bold truncate">
+                    Sample Text
+                  </M3Surface>
+                  <span class="text-[10px] font-mono text-center block text-slate-400">{{ role }}</span>
+                </div>
+              </div>
+              <div v-else class="flex flex-col gap-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <div v-for="role in cat.roles.slice(0, 2)" :key="role" class="flex flex-col gap-2">
+                    <M3Surface :color="role" class="p-4 text-center font-bold truncate">
+                      Sample Text
+                    </M3Surface>
+                    <span class="text-[10px] font-mono text-center block text-slate-400">{{ role }}</span>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  <div v-for="role in cat.roles.slice(2)" :key="role" class="flex flex-col gap-2">
+                    <M3Surface :color="role" class="p-4 text-center font-bold truncate">
+                      Sample Text
+                    </M3Surface>
+                    <span class="text-[10px] font-mono text-center block text-slate-400">{{ role }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2.2 Color Role Morphing -->
+          <div class="flex flex-col gap-8 pt-8 border-t border-slate-200">
+            <div class="flex flex-col gap-2">
+              <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider">2.2 Color Role Morphing</h4>
+              <p class="text-xs text-slate-500">Demonstrating the fluid transition between semantic roles using CSS interpolation.</p>
+            </div>
+            
+            <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
+              <h5 class="font-bold">Role Transition</h5>
+              <M3Surface :color="currentRole" class="p-12 w-full max-w-md text-center text-2xl font-bold transition-all duration-500">
+                {{ currentRole }}
+              </M3Surface>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button v-for="role in allRoles" :key="role" @click="currentRole = role" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', currentRole === role ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  {{ role }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION 3: Elevation System -->
+        <section class="flex flex-col gap-12">
+          <div class="flex flex-col gap-2">
+            <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">3. Elevation System</h3>
+            <div class="flex flex-col gap-3">
+              <p class="text-slate-600 leading-relaxed">
+                Elevation creates a perceived z-axis depth. Instead of simple box-shadows, M3 uses 
+                <span class="font-bold text-indigo-600">drop-shadow filters</span> that follow the exact shape of the surface, including its morphing corners.
+              </p>
+              <p class="text-xs text-slate-500 italic">
+                Note: These examples use a neutral surface to isolate the shadow effect from color distractions.
+              </p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <!-- 3.1 Static Levels -->
+            <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
+              <h4 class="font-bold text-center">Static Elevation Levels</h4>
+              <div class="grid grid-cols-1 gap-4">
+                <div v-for="lvl in ['level0', 'level1', 'level2', 'level3', 'level4']" :key="lvl" class="flex items-center gap-4">
+                  <M3Surface :elevation="lvl" color="surfaceContainerLow" class="p-3 w-32 text-center text-xs font-bold">
+                    {{ lvl.toUpperCase() }}
+                  </M3Surface>
+                  <span class="text-[10px] font-mono text-slate-400">elevation="{{ lvl }}"</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3.2 Elevation Morphing -->
+            <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
+              <h4 class="font-bold text-center">Elevation Morphing</h4>
+              <M3Surface :elevation="currentElevation" color="surfaceContainerLow" class="p-12 w-full max-w-xs text-center text-lg font-bold transition-all duration-500">
+                {{ currentElevation.toUpperCase() }}
+              </M3Surface>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button v-for="lvl in ['level0', 'level1', 'level2', 'level3', 'level4']" :key="lvl" @click="currentElevation = lvl" 
+                  :class="['px-3 py-1 text-xs rounded font-bold transition-colors', currentElevation === lvl ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
+                  {{ lvl }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- SECTION 4: Neutral Depth Hierarchy -->
       <section class="flex flex-col gap-8">
         <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">1. Corner Radius & Geometry</h2>
-          <p class="text-slate-600">Demonstrating symmetric and asymmetric radius mapping from M3 tokens.</p>
+          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">4. Neutral Depth Hierarchy</h2>
+          <p class="text-slate-600">Semantic mapping to M3 Surface Container levels for layered UI hierarchy.</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="flex flex-col gap-4 items-center">
-            <M3Surface radius="S" color="primary" class="p-4">Small (S)</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius="S"</span>
-          </div>
-          <div class="flex flex-col gap-4 items-center">
-            <M3Surface radius="M" color="primary" class="p-4">Medium (M)</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius="M"</span>
-          </div>
-          <div class="flex flex-col gap-4 items-center">
-            <M3Surface radius="L" color="primary" class="p-4">Large (L)</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius="L"</span>
-          </div>
-          <div class="flex flex-col gap-4 items-center">
-            <M3Surface radius="FULL" color="primary" class="p-4">Full (Pill)</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius="FULL"</span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-          <div class="flex flex-col gap-4 items-center p-6 bg-white rounded-2xl border border-slate-200">
-            <M3Surface :radius="['M', 'FULL', 'FULL', 'M']" color="secondaryContainer" class="p-6">Asymmetric (M, FULL, FULL, M)</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius=["M", "FULL", "FULL", "M"]</span>
-          </div>
-          <div class="flex flex-col gap-4 items-center p-6 bg-white rounded-2xl border border-slate-200">
-            <M3Surface :radius="[20, 0, 20, 0]" color="tertiaryContainer" class="p-6">Custom Numeric [20, 0, 20, 0]</M3Surface>
-            <span class="text-xs font-mono text-slate-400">radius=[20, 0, 20, 0]</span>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+          <div v-for="d in depthLevels" :key="d.value" class="flex flex-col gap-2 items-center p-4 bg-white rounded-2xl border border-slate-200">
+            <M3Surface :depth="d.value" class="p-4 w-full text-center">{{ d.label }}</M3Surface>
+            <span class="text-[10px] font-mono text-slate-400">depth="{{ d.value }}"</span>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 2: M3 Surface Hierarchy -->
+      <!-- SECTION 5: Content Adaptation -->
       <section class="flex flex-col gap-8">
         <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">2. Surface Hierarchy & Variants</h2>
-          <p class="text-slate-600">Demonstrating the M3 tonal depth system and variants. Notice how the content color automatically adapts to the background contrast.</p>
+          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">5. Content Adaptation</h2>
+          <p class="text-slate-600">Content-First sizing: the surface expands to wrap its content without distorting corner radii.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-center mb-2">Short Content</h3>
+            <M3Surface color="tertiaryContainer" class="p-4 text-center">Short Text</M3Surface>
+          </div>
+          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-center mb-2">Long Content</h3>
+            <M3Surface color="tertiaryContainer" class="p-4 text-center">
+              This surface expands to fit longer content automatically without distorting the corners.
+            </M3Surface>
+          </div>
+          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-center mb-2">Mixed Content</h3>
+            <M3Surface color="tertiaryContainer" class="p-4 flex items-center justify-center gap-2">
+              <span>Icon</span>
+              <div class="w-4 h-4 bg-black rounded-full"></div>
+              <span>Dynamic Content</span>
+            </M3Surface>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: Size-Driven Profiles (The Automation) -->
+      <section class="flex flex-col gap-8">
+        <div class="flex flex-col gap-2">
+          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">6. Size-Driven Profiles</h2>
+          <p class="text-slate-600">The automation: instead of setting properties manually, use a \"Size\" to automatically handle geometry, elevation, and depth based on the component's perceived scale.</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Neutral Containers -->
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Neutral Containers</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface variant="container" color="surfaceContainerLowest" class="p-3 text-center">Lowest</M3Surface>
-              <M3Surface variant="container" color="surfaceContainerLow" class="p-3 text-center">Low</M3Surface>
-              <M3Surface variant="container" color="surfaceContainer" class="p-3 text-center">Default</M3Surface>
-              <M3Surface variant="container" color="surfaceContainerHigh" class="p-3 text-center">High</M3Surface>
-              <M3Surface variant="container" color="surfaceContainerHighest" class="p-3 text-center">Highest</M3Surface>
-            </div>
-          </div>
-
-          <!-- Accent Tonal Surfaces -->
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Accent Tonal Surfaces</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface variant="filled" color="primary" class="p-3 text-center">Primary Filled</M3Surface>
-              <M3Surface variant="tonal" color="primary" class="p-3 text-center">Primary Tonal</M3Surface>
-              <M3Surface variant="filled" color="secondary" class="p-3 text-center">Secondary Filled</M3Surface>
-              <M3Surface variant="tonal" color="secondary" class="p-3 text-center">Secondary Tonal</M3Surface>
-              <M3Surface variant="filled" color="tertiary" class="p-3 text-center">Tertiary Filled</M3Surface>
-              <M3Surface variant="tonal" color="tertiary" class="p-3 text-center">Tertiary Tonal</M3Surface>
-            </div>
-          </div>
-
-          <!-- Bright & Dim -->
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Brightness Tones</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface color="surfaceBright" class="p-3 text-center">Surface Bright</M3Surface>
-              <M3Surface color="surfaceDim" class="p-3 text-center">Surface Dim</M3Surface>
-              <M3Surface variant="outlined" color="surface" class="p-3 text-center">Outlined Surface</M3Surface>
-              <M3Surface variant="text" color="primary" class="p-3 text-center">Text Variant</M3Surface>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div v-for="s in sizes" :key="s.id" class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
+            <h3 class="font-bold text-center">{{ s.label }}</h3>
+            <p class="text-[10px] font-mono text-slate-400 text-center mb-2">
+              {{ s.radius }} / {{ s.elevation }} / {{ s.depth }}
+            </p>
+            <M3Surface :size="s.id" color="primary" class="p-4 text-center font-bold">
+              {{ s.id.toUpperCase() }}
+            </M3Surface>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 3: Utility Surface Roles -->
-      <section class="flex flex-col gap-8">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">3. Utility Surface Roles</h2>
-          <p class="text-slate-600">Semantic surfaces for system feedback (Success, Warning, Info) with matching contrast colors.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Success</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface color="success" class="p-3 text-center">Success Filled</M3Surface>
-              <M3Surface color="successContainer" class="p-3 text-center">Success Container</M3Surface>
-            </div>
-          </div>
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Warning</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface color="warning" class="p-3 text-center">Warning Filled</M3Surface>
-              <M3Surface color="warningContainer" class="p-3 text-center">Warning Container</M3Surface>
-            </div>
-          </div>
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Info</h3>
-            <div class="flex flex-col gap-3">
-              <M3Surface color="info" class="p-3 text-center">Info Filled</M3Surface>
-              <M3Surface color="infoContainer" class="p-3 text-center">Info Container</M3Surface>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 4: Automatic Contrast -->
-      <section class="flex flex-col gap-8">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">4. Automatic Contrast Engine</h2>
-          <p class="text-slate-600">The surface automatically resolves the correct "On-Color" for any content inside it, ensuring accessibility and contrast without manual styling.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="flex flex-col gap-2 items-center">
-            <M3Surface color="primary" class="p-4 w-full text-center font-bold">onPrimary</M3Surface>
-            <span class="text-xs font-mono text-slate-400">primary &rarr; onPrimary</span>
-          </div>
-          <div class="flex flex-col gap-2 items-center">
-            <M3Surface color="surfaceContainerLow" class="p-4 w-full text-center font-bold">onSurface</M3Surface>
-            <span class="text-xs font-mono text-slate-400">surfaceContainerLow &rarr; onSurface</span>
-          </div>
-          <div class="flex flex-col gap-2 items-center">
-            <M3Surface color="success" class="p-4 w-full text-center font-bold">onSuccess</M3Surface>
-            <span class="text-xs font-mono text-slate-400">success &rarr; onSuccess</span>
-          </div>
-          <div class="flex flex-col gap-2 items-center">
-            <M3Surface color="surfaceDim" class="p-4 w-full text-center font-bold">onSurface</M3Surface>
-            <span class="text-xs font-mono text-slate-400">surfaceDim &rarr; onSurface</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 5: Elevation & State Layers -->
-      <section class="flex flex-col gap-8">
-        <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">5. Elevation & State Interaction</h2>
-          <p class="text-slate-600">Interactive surfaces reacting to hover, active, and focused states with dynamic elevation.</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-          <!-- State Demo -->
-          <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-4">State Layers</h3>
-            <div class="flex flex-col gap-4">
-              <M3Surface state="base" color="primary" class="p-4 text-center">Base State</M3Surface>
-              <M3Surface state="hover" color="primary" class="p-4 text-center">Hover State</M3Surface>
-              <M3Surface state="active" color="primary" class="p-4 text-center">Active State</M3Surface>
-              <M3Surface state="focused" color="primary" class="p-4 text-center">Focused State</M3Surface>
-            </div>
-          </div>
-
-          <!-- Elevation Demo -->
-          <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-4">Elevation Levels</h3>
-            <div class="flex flex-col gap-6">
-              <M3Surface elevation="level0" color="surfaceVariant" class="p-4 text-center">Level 0</M3Surface>
-              <M3Surface elevation="level1" color="surfaceVariant" class="p-4 text-center">Level 1</M3Surface>
-              <M3Surface elevation="level2" color="surfaceVariant" class="p-4 text-center">Level 2</M3Surface>
-              <M3Surface elevation="level3" color="surfaceVariant" class="p-4 text-center">Level 3</M3Surface>
-              <M3Surface elevation="level4" color="surfaceVariant" class="p-4 text-center">Level 4</M3Surface>
-            </div>
-          </div>
-
-          <!-- Content Adaptation Demo -->
-          <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-4">Content Adaptation</h3>
-            <div class="flex flex-col gap-4">
-              <M3Surface color="tertiaryContainer" class="p-4 text-center">
-                Short Text
-              </M3Surface>
-              <M3Surface color="tertiaryContainer" class="p-4 text-center">
-                This surface expands to fit longer content automatically without distorting the corners.
-              </M3Surface>
-              <M3Surface color="tertiaryContainer" class="p-4 flex items-center justify-center gap-2">
-                <span>Icon</span>
-                <div class="w-4 h-4 bg-black rounded-full"></div>
-                <span>Dynamic Content</span>
-              </M3Surface>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION 6: Radius Morphing -->
+      <!-- SECTION 7: Interactive Morphing Lab -->
       <section class="flex flex-col gap-8 pb-20">
         <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">6. Radius Morphing</h2>
-          <p class="text-slate-600">Because we use CSS border-radius, the component can smoothly interpolate between different corner sizes. This is used for tactile feedback during interaction.</p>
+          <h2 class="text-xl font-bold uppercase tracking-widest text-slate-500">7. Interactive Morphing Lab</h2>
+          <p class="text-slate-600">Test the Size-driven transitions in real-time. Switch sizes and states to see the combined effect of radius and elevation.</p>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Interactive Morphing</h3>
-            <p class="text-xs text-slate-500 text-center mb-4">The state prop triggers specific radius shifts: Hover (S) &rarr; Base (M) &rarr; Active (L)</p>
-            <div class="flex flex-col gap-4">
-              <M3Surface :state="interactiveState" color="primary" class="p-4 text-center">
-                Interactive State: {{ interactiveState }}
-              </M3Surface>
-              <div class="flex justify-center gap-2">
-                <button @click="interactiveState = 'base'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Base</button>
-                <button @click="interactiveState = 'hover'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Hover</button>
-                <button @click="interactiveState = 'active'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Active</button>
-              </div>
+          <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-center">Size & State Morph</h3>
+            <M3Surface :size="currentSize" :state="interactiveState" color="primary" class="p-6 text-center text-lg font-bold">
+              Profile Morph
+            </M3Surface>
+            <div class="flex flex-wrap justify-center gap-2">
+              <button @click="interactiveState = 'base'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Base</button>
+              <button @click="interactiveState = 'hover'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Hover</button>
+              <button @click="interactiveState = 'active'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Active</button>
+            </div>
+            <div class="flex flex-wrap justify-center gap-2 mt-4">
+              <button v-for="s in sizes" :key="s.id" @click="currentSize = s.id" :class="['px-3 py-1 text-xs rounded font-bold transition-colors', currentSize === s.id ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100']">
+                {{ s.label }}
+              </button>
             </div>
           </div>
-          <div class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm">
-            <h3 class="font-bold text-center mb-2">Dynamic Props Morphing</h3>
-            <p class="text-xs text-slate-500 text-center mb-4">Changing the radius prop via state or animation creates a smooth transition.</p>
-            <div class="flex flex-col gap-4">
-              <M3Surface :radius="dynamicRadius" color="secondary" class="p-4 text-center">
-                Morphing Radius: {{ dynamicRadius }}
-              </M3Surface>
-              <div class="flex justify-center gap-2">
-                <button @click="dynamicRadius = 'S'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Small</button>
-                <button @click="dynamicRadius = 'M'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Medium</button>
-                <button @click="dynamicRadius = 'L'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Large</button>
-                <button @click="dynamicRadius = 'FULL'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">Full</button>
-              </div>
+          <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
+            <h3 class="font-bold text-center">Depth Transition</h3>
+            <M3Surface :depth="currentDepth" variant="container" class="p-6 text-center text-lg font-bold">
+              Current Depth: {{ currentDepth }}
+            </M3Surface>
+            <div class="flex flex-wrap justify-center gap-2">
+              <button @click="currentDepth = 'lowest'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Lowest</button>
+              <button @click="currentDepth = 'low'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Low</button>
+              <button @click="currentDepth = 'default'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Default</button>
+              <button @click="currentDepth = 'high'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">High</button>
+              <button @click="currentDepth = 'highest'" class="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 transition-colors">Highest</button>
             </div>
           </div>
         </div>
@@ -251,9 +338,51 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue';
+import { SURFACE_DEPTH_MAP, SURFACE_SIZE_PROFILES, SURFACE_ROLES } from '@/components/atoms/M3Surface/specs';
 
 const interactiveState = ref('base');
-const dynamicRadius = ref('M');
+const currentSize = ref('md');
+const currentDepth = ref('default');
+const currentElevation = ref('level0');
+
+// Color morphing state
+const currentRole = ref('primary');
+
+const allRoles = [
+  ...SURFACE_ROLES.brand,
+  ...SURFACE_ROLES.neutral,
+  ...SURFACE_ROLES.tonal,
+  ...SURFACE_ROLES.utility,
+  ...SURFACE_ROLES.depth,
+];
+
+const roleCategories = [
+  { id: 'brand', label: 'Brand Palette', roles: SURFACE_ROLES.brand, desc: 'High-emphasis primary, secondary and tertiary roles.' },
+  { id: 'tonal', label: 'Tonal Palette', roles: SURFACE_ROLES.tonal, desc: 'Softened brand colors for container elements.' },
+  { id: 'neutral', label: 'Neutral Palette', roles: SURFACE_ROLES.neutral, desc: 'The foundation surface and variant levels.' },
+  { id: 'utility', label: 'Utility Palette', roles: SURFACE_ROLES.utility, desc: 'Semantic system feedback (Success, Warning, Info, Error).' },
+  { id: 'depth', label: 'Depth Palette', roles: SURFACE_ROLES.depth, desc: 'Bright and Dim surface adjustments.' },
+];
+
+const sizes = Object.entries(SURFACE_SIZE_PROFILES).map(([id, spec]) => ({
+  id,
+  label: id.toUpperCase(),
+  radius: spec.radius,
+  elevation: spec.elevation,
+  depth: spec.depthRole,
+}));
+
+const depthLevels = Object.entries(SURFACE_DEPTH_MAP).map(([value, label]) => ({
+  value,
+  label: value.charAt(0).toUpperCase() + value.slice(1),
+}));
+
+const symmetricRadius = ref('M');
+const asymmetricRadius = ref(['M', 'M', 'M', 'M']);
+
+const isAsym = (tl: any, tr: any, br: any, bl: any) => {
+  return JSON.stringify(asymmetricRadius.value) === JSON.stringify([tl, tr, br, bl]);
+};
 </script>
 
 <style scoped>

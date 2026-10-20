@@ -6,7 +6,7 @@
     ]"
     :style="surfaceStyle"
   >
-    <!-- State Layer Overlay: True M3 implementation using color-mix with On-Color -->
+    <!-- State Layer Overlay -->
     <div 
       v-if="stateLayerColor" 
       class="absolute inset-0 pointer-events-none transition-colors duration-200"
@@ -30,21 +30,27 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { ELEVATION_TOKENS, type ElevationLevel } from '@/constants/elevation';
-import { type ColorRole } from '@/constants/colors';
+import { M3_COLOR_PALETTES, type ColorRole } from '@/constants/colors';
 import { 
   SURFACE_RADIUS, type SurfaceRadius, 
   SURFACE_VARIANTS, type SurfaceVariant, 
   SURFACE_PADDING, type SurfacePadding,
-  type SurfaceRole
+  SURFACE_SIZE_PROFILES, type SurfaceSize,
+  SURFACE_DEPTH_MAP, type SurfaceDepth,
+  SURFACE_ROLES,
+  type SurfaceRole,
+  type SurfaceState
 } from './specs';
 
 interface Props {
+  size?: SurfaceSize;
+  depth?: SurfaceDepth;
   radius?: SurfaceRadius | SurfaceRadius[] | number | number[];
   color?: SurfaceRole | ColorRole;
   elevation?: ElevationLevel;
   paddingX?: SurfacePadding | number | string;
   paddingY?: SurfacePadding | number | string;
-  state?: 'base' | 'hover' | 'active' | 'focused';
+  state?: SurfaceState;
   variant?: SurfaceVariant;
   width?: number | string;
   height?: number | string;
@@ -53,8 +59,10 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  size: 'md',
+  depth: undefined,
   radius: 'M',
-  color: 'primary',
+  color: undefined,
   elevation: 'level0',
   paddingX: 'md',
   paddingY: 'md',
@@ -66,6 +74,19 @@ const props = withDefaults(defineProps<Props>(), {
   strokeWidth: 0,
 });
 
+// --- Pure Helper: Role to Hex ---
+const resolveHex = (role: string) => {
+  if (!role) return 'transparent';
+  const trimmedRole = role.trim();
+  if (trimmedRole === 'transparent') return 'transparent';
+  
+  const palette = M3_COLOR_PALETTES[trimmedRole as ColorRole];
+  if (palette) return palette.light;
+  
+  const fallback = M3_COLOR_PALETTES['surface'];
+  return fallback ? fallback.light : 'transparent';
+};
+
 // --- Radius Resolver ---
 const resolveRadiusValue = (val: any): string => {
   if (typeof val === 'string') {
@@ -75,34 +96,45 @@ const resolveRadiusValue = (val: any): string => {
 };
 
 const resolvedRadius = computed(() => {
-  if (props.state === 'hover') return resolveRadiusValue('S');
-  if (props.state === 'active') return resolveRadiusValue('L');
-  
-  if (Array.isArray(props.radius)) {
-    return props.radius.map(r => resolveRadiusValue(r)).join(' ');
+  if (props.radius) {
+    if (Array.isArray(props.radius)) {
+      return props.radius.map(r => resolveRadiusValue(r)).join(' ');
+    }
+    return resolveRadiusValue(props.radius);
   }
-  return resolveRadiusValue(props.radius);
+  const sizeProfile = SURFACE_SIZE_PROFILES[props.size];
+  return resolveRadiusValue(sizeProfile.radius);
 });
 
 // --- Color & Contrast Resolver ---
 const variantSpec = computed(() => SURFACE_VARIANTS[props.variant]);
 
 const resolvedSurfaceRole = computed(() => {
-  return (props.color || variantSpec.value.role) as SurfaceRole;
+  if (props.color) return props.color as SurfaceRole;
+  if (props.depth) return SURFACE_DEPTH_MAP[props.depth] as SurfaceRole;
+  return variantSpec.value.role as SurfaceRole;
 });
 
 const resolvedSurface = computed(() => {
-  const role = resolvedSurfaceRole.value;
-  if (role === 'transparent') return 'transparent';
-  return `var(--md-sys-color-${role})`;
+  return resolveHex(resolvedSurfaceRole.value);
 });
 
 const resolvedContentColor = computed(() => {
   const role = resolvedSurfaceRole.value;
-  if (role === 'transparent') return `var(--md-sys-color-on-surface)`;
+  if (!role || role === 'transparent') return resolveHex('onSurface');
   
   const onRole = role.startsWith('on') ? role : `on${role.charAt(0).toUpperCase() + role.slice(1)}`;
-  return `var(--md-sys-color-${onRole})`;
+  const specificOnColor = resolveHex(onRole);
+  if (specificOnColor !== 'transparent') return specificOnColor;
+
+  if (role.toLowerCase().includes('container')) {
+    const baseRole = role.toLowerCase().replace('container', '').trim();
+    const baseOnRole = `on${baseRole.charAt(0).toUpperCase() + baseRole.slice(1)}`;
+    const baseOnColor = resolveHex(baseOnRole);
+    if (baseOnColor !== 'transparent') return baseOnColor;
+  }
+
+  return resolveHex('onSurface');
 });
 
 const resolvedBorder = computed(() => {
@@ -110,32 +142,32 @@ const resolvedBorder = computed(() => {
     return `${props.strokeWidth || 0}px solid ${props.stroke}`;
   }
   if (props.variant === 'outlined') {
-    return `1px solid var(--md-sys-color-outline)`;
+    return `1px solid ${resolveHex('outline')}`;
   }
   return 'none';
 });
 
 // --- Elevation Resolver ---
-const elevationSpec = computed(() => ELEVATION_TOKENS[props.elevation]);
 const resolvedElevation = computed(() => {
-  if (props.elevation === 'level0' || !elevationSpec.value) return 'none';
-  return `drop-shadow(0px ${elevationSpec.value.offsetY}px ${elevationSpec.value.blur}px ${elevationSpec.value.color})`;
+  // Priority: Explicit prop > Size-based default
+  const sizeProfile = SURFACE_SIZE_PROFILES[props.size];
+  
+  // To implement state-based lift, we could adjust the elevation here
+  // But for now we follow the provided prop/size logic.
+  const elevationLevel = props.elevation || sizeProfile.elevation || 'level0';
+  const spec = ELEVATION_TOKENS[elevationLevel];
+  if (!spec) return 'none';
+  return `drop-shadow(0px ${spec.offsetY}px ${spec.blur}px ${spec.color})`;
 });
 
 // --- State Layer Resolver ---
 const stateLayerColor = computed(() => {
   if (props.state === 'base') return 'transparent';
-  
-  const onRole = resolvedContentColor.value; // The CSS variable for the "On-Color"
-  
-  // M3 Standard Opacity for State Layers:
-  // Hover: 8% | Focused: 10% | Active: 12%
-  let opacity = '92%'; // 100% - 8%
+  const onRoleColor = resolvedContentColor.value; 
+  let opacity = '92%';
   if (props.state === 'focused') opacity = '90%';
   if (props.state === 'active') opacity = '88%';
-  
-  // color-mix blends the on-color with transparent to create the precise overlay
-  return `color-mix(in srgb, ${onRole}, transparent ${opacity})`;
+  return `color-mix(in srgb, ${onRoleColor}, transparent ${opacity})`;
 });
 
 // --- Styles ---
