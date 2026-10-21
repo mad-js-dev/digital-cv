@@ -13,18 +13,17 @@
     @focus="state = 'focused'"
     @blur="state = 'base'"
   >
-    <!-- STANDARD MODE: Single capsule -->
+    <!-- STANDARD MODE: Single surface -->
     <template v-if="!split">
-      <Shape 
+      <M3Surface 
         v-if="props.variant !== 'text'"
         :radius="resolvedRadius" 
-        :stretch="true" 
-        :color="resolvedSurface"
-        :stroke="resolvedBorder"
-        :stroke-width="props.variant === 'outlined' ? 2 : 0"
-        :elevation="resolvedElevation"
-        :padding-x="pixelRadius"
+        :color="variantSpec.surfaceRole"
+        :variant="variantSpec.surfaceVariant"
+        :elevation="variantSpec.elevation"
         :state="state"
+        :padding-x="sizeConfig.paddingX"
+        :padding-y="sizeConfig.paddingY"
       >
         <Layout 
           :direction="props.horizontal ? 'horizontal' : 'vertical'" 
@@ -35,7 +34,6 @@
           <Icon 
             v-if="icon" 
             :name="icon" 
-            :color="resolvedContent"
             :size="props.size"
             class="flex items-center justify-center" 
           />
@@ -43,13 +41,12 @@
             v-if="!props.icon || props.textVariant || hasSlot"
             :variant="textVariant || sizeConfig.textVariant" 
             :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
-            :style="{ color: `var(--md-sys-color-${resolvedContent})` }"
             :class="textClasses"
           >
             <slot />
           </Typography>
         </Layout>
-      </Shape>
+      </M3Surface>
 
       <!-- Fallback for text variant -->
       <Layout 
@@ -62,7 +59,6 @@
         <Icon 
           v-if="icon" 
           :name="icon" 
-          :color="resolvedContent"
           :size="props.size"
           class="flex items-center justify-center" 
         />
@@ -70,7 +66,6 @@
           v-if="!props.icon || props.textVariant || hasSlot"
           :variant="textVariant || sizeConfig.textVariant" 
           :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
-          :style="{ color: `var(--md-sys-color-${resolvedContent})` }"
           :class="textClasses"
         >
           <slot />
@@ -78,17 +73,17 @@
       </Layout>
     </template>
 
-    <!-- SPLIT MODE: Composite capsule -->
+    <!-- SPLIT MODE: Composite surfaces -->
     <div v-else class="flex items-center w-full h-full">
       <!-- Main Section (Left) -->
-      <Shape 
+      <M3Surface 
         :radius="[resolvedRadius, 'NONE', 'NONE', resolvedRadius]" 
-        :stretch="true" 
-        :color="resolvedSurface"
-        :stroke="resolvedBorder"
-        :stroke-width="props.variant === 'outlined' ? 2 : 0"
-        :elevation="resolvedElevation"
-        :padding-x="pixelRadius"
+        :color="variantSpec.surfaceRole"
+        :variant="variantSpec.surfaceVariant"
+        :elevation="variantSpec.elevation"
+        :state="state"
+        :padding-x="sizeConfig.paddingX"
+        :padding-y="sizeConfig.paddingY"
         class="flex-1"
       >
         <Layout 
@@ -97,39 +92,37 @@
           :padding="props.icon && !props.textVariant && !hasSlot ? 4 : sizeConfig.paddingY"
           class="flex items-center justify-center"
         >
-          <Icon v-if="icon" :name="icon" :color="resolvedContent" :size="props.size" class="flex items-center justify-center" />
+          <Icon v-if="icon" :name="icon" :size="props.size" class="flex items-center justify-center" />
           <Typography 
             v-if="!props.icon || props.textVariant || hasSlot"
             :variant="textVariant || sizeConfig.textVariant" 
             :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
-            :style="{ color: `var(--md-sys-color-${resolvedContent})` }"
             :class="textClasses"
           >
             <slot />
           </Typography>
         </Layout>
-      </Shape>
+      </M3Surface>
 
       <!-- Dropdown Section (Right) -->
-      <Shape 
+      <M3Surface 
         :radius="['NONE', resolvedRadius, resolvedRadius, 'NONE']" 
-        :stretch="true" 
-        :color="resolvedSurface"
-        :stroke="resolvedBorder"
-        :stroke-width="props.variant === 'outlined' ? 2 : 0"
-        :elevation="resolvedElevation"
-        :padding-x="pixelRadius"
+        :color="variantSpec.surfaceRole"
+        :variant="variantSpec.surfaceVariant"
+        :elevation="variantSpec.elevation"
+        :state="state"
+        :padding-x="sizeConfig.paddingX"
+        :padding-y="sizeConfig.paddingY"
         class="w-12 flex items-center justify-center"
       >
         <div class="relative w-full h-full flex items-center justify-center">
           <Icon 
             :name="trailingIcon || 'expand_more'" 
-            :color="resolvedContent" 
             :size="props.size" 
             :class="['transition-transform duration-300', isOpen ? 'rotate-180' : '']"
           />
         </div>
-      </Shape>
+      </M3Surface>
     </div>
   </button>
 </template>
@@ -139,7 +132,7 @@ import { ref, computed, useSlots } from 'vue';
 import Layout from '@/components/atoms/M3Layout/layout/Layout.vue';
 import Typography from '@/components/atoms/Typography/Typography.vue';
 import Icon from '@/components/atoms/Icon/Icon.vue';
-import Shape from '@/components/atoms/M3Shape/Shape.vue';
+import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue'; // Corrected import path check
 import { M3_BUTTON_SPECS, type M3ButtonSize, type M3ButtonVariant, type M3ButtonShape } from './specs';
 import { SPACING_TOKENS } from '@/constants/spacing';
 import { CORNER_RADIUS, type CornerRadius } from '@/constants/corners';
@@ -205,41 +198,6 @@ const resolvedRadius = computed(() => {
 });
 
 const variantSpec = computed(() => M3_BUTTON_SPECS.variants[props.variant]);
-
-const pixelRadius = computed(() => {
-  const r = resolvedRadius.value;
-  if (typeof r === 'number') return r;
-  if (r === 'FULL') return sizeConfig.value.height / 2;
-  
-  const resolved = (r as any);
-  const val = (typeof resolved === 'string' && resolved in CORNER_RADIUS) 
-    ? CORNER_RADIUS[resolved as any] 
-    : 0;
-    
-  return typeof val === 'number' ? val : 0;
-});
-
-// Dynamic State Resolvers
-const resolvedSurface = computed(() => {
-  const s = variantSpec.value.surface;
-  if (typeof s === 'object') return s.base;
-  return s;
-});
-
-const resolvedContent = computed(() => {
-  const c = variantSpec.value.content;
-  return typeof c === 'object' ? c[state.value] : c;
-});
-
-const resolvedBorder = computed(() => {
-  const b = variantSpec.value.border;
-  return typeof b === 'object' ? b[state.value] : b;
-});
-
-const resolvedElevation = computed(() => {
-  const e = variantSpec.value.elevation;
-  return typeof e === 'object' ? e[state.value] : e || 'level0';
-});
 
 const variantWrapperClass = computed(() => {
   switch (props.variant) {

@@ -22,19 +22,99 @@ export type SurfaceRoleCategory = keyof typeof SURFACE_ROLES;
 export type SurfaceRole = typeof SURFACE_ROLES[SurfaceRoleCategory][number];
 
 export const SURFACE_VARIANTS = {
-  filled: {
+  filledPrimary: {
     role: 'primary',
     onRole: 'onPrimary',
+    border: 'none',
+  },
+  filledSecondary: {
+    role: 'secondary',
+    onRole: 'onSecondary',
+    border: 'none',
+  },
+  filledTertiary: {
+    role: 'tertiary',
+    onRole: 'onTertiary',
+    border: 'none',
+  },
+  filledPrimaryContainer: {
+    role: 'primaryContainer',
+    onRole: 'onPrimaryContainer',
+    border: 'none',
+  },
+  filledSecondaryContainer: {
+    role: 'secondaryContainer',
+    onRole: 'onSecondaryContainer',
+    border: 'none',
+  },
+  filledTertiaryContainer: {
+    role: 'tertiaryContainer',
+    onRole: 'onTertiaryContainer',
+    border: 'none',
+  },
+  containerPrimary: {
+    role: 'primaryContainer',
+    onRole: 'onPrimaryContainer',
+    border: 'none',
+  },
+  containerSecondary: {
+    role: 'secondaryContainer',
+    onRole: 'onSecondaryContainer',
+    border: 'none',
+  },
+  containerTertiary: {
+    role: 'tertiaryContainer',
+    onRole: 'onTertiaryContainer',
+    border: 'none',
+  },
+  containerError: {
+    role: 'errorContainer',
+    onRole: 'onErrorContainer',
+    border: 'none',
+  },
+  containerSuccess: {
+    role: 'successContainer',
+    onRole: 'onSuccessContainer',
+    border: 'none',
+  },
+  containerWarning: {
+    role: 'warningContainer',
+    onRole: 'onWarningContainer',
+    border: 'none',
+  },
+  containerInfo: {
+    role: 'infoContainer',
+    onRole: 'onInfoContainer',
+    border: 'none',
+  },
+  containerLowest: {
+    role: 'surfaceContainerLowest',
+    onRole: 'onSurface',
+    border: 'none',
+  },
+  containerLow: {
+    role: 'surfaceContainerLow',
+    onRole: 'onSurface',
+    border: 'none',
+  },
+  containerNeutral: {
+    role: 'surfaceContainer',
+    onRole: 'onSurface',
+    border: 'none',
+  },
+  containerHigh: {
+    role: 'surfaceContainerHigh',
+    onRole: 'onSurface',
+    border: 'none',
+  },
+  containerHighest: {
+    role: 'surfaceContainerHighest',
+    onRole: 'onSurface',
     border: 'none',
   },
   tonal: {
     role: 'primaryContainer',
     onRole: 'onPrimaryContainer',
-    border: 'none',
-  },
-  container: {
-    role: 'surfaceContainer',
-    onRole: 'onSurface',
     border: 'none',
   },
   outlined: {

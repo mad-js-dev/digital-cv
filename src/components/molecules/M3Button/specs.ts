@@ -2,7 +2,7 @@
  * Material 3 Button Specifications
  * 
  * These tokens define the physical dimensions, spacing, and shapes for M3 Buttons.
- * Scale is based on an 8dp grid.
+ * Updated to align with M3Surface architecture (Variant + Role).
  */
 
 import { CORNER_RADIUS } from '@/constants/corners';
@@ -61,95 +61,34 @@ export const M3_BUTTON_SPECS = {
   },
   variants: {
     filled: {
-      surface: {
-        base: 'primary',
-        hover: 'primary-container',
-        active: 'primary',
-        focused: 'primary',
-      },
-      content: {
-        base: 'onPrimary',
-        hover: 'onPrimary',
-        active: 'onPrimary',
-        focused: 'onPrimary',
-      },
-      border: 'transparent',
-      shape: 'FULL',
+      surfaceVariant: 'filled',
+      surfaceRole: 'primary',
+      border: 'none',
+      elevation: 'level0',
     },
     elevated: {
-      surface: {
-        base: 'surface',
-        hover: 'surface-variant',
-        active: 'surface-variant',
-        focused: 'surface-variant',
-      },
-      content: {
-        base: 'primary',
-        hover: 'primary',
-        active: 'primary',
-        focused: 'primary',
-      },
-      border: 'transparent',
-      shape: 'FULL',
-      elevation: {
-        base: 'level1',
-        hover: 'level2',
-        active: 'level1',
-        focused: 'level2',
-      },
+      surfaceVariant: 'filled',
+      surfaceRole: 'surface',
+      border: 'none',
+      elevation: 'level1',
     },
     tonal: {
-      surface: {
-        base: 'secondaryContainer',
-        hover: 'secondaryContainer',
-        active: 'secondaryContainer',
-        focused: 'secondaryContainer',
-      },
-      content: {
-        base: 'onSecondaryContainer',
-        hover: 'onSecondaryContainer',
-        active: 'onSecondaryContainer',
-        focused: 'onSecondaryContainer',
-      },
-      border: 'transparent',
-      shape: 'FULL',
+      surfaceVariant: 'tonal',
+      surfaceRole: 'primary', // Result: primaryContainer
+      border: 'none',
+      elevation: 'level0',
     },
     outlined: {
-      surface: {
-        base: 'transparent',
-        hover: 'surface-variant',
-        active: 'surface-variant',
-        focused: 'surface-variant',
-      },
-      content: {
-        base: 'primary',
-        hover: 'primary',
-        active: 'primary',
-        focused: 'primary',
-      },
-      border: {
-        base: 'primary',
-        hover: 'primary',
-        active: 'primary',
-        focused: 'primary',
-      },
-      shape: 'FULL',
+      surfaceVariant: 'outlined',
+      surfaceRole: 'surface',
+      border: 'outline',
+      elevation: 'level0',
     },
     text: {
-      surface: {
-        base: 'transparent',
-        hover: 'surface-variant',
-        active: 'surface-variant',
-        focused: 'surface-variant',
-      },
-      content: {
-        base: 'primary',
-        hover: 'primary',
-        active: 'primary',
-        focused: 'primary',
-      },
-      border: 'transparent',
-      shape: 'FULL',
+      surfaceVariant: 'text',
+      surfaceRole: 'transparent',
+      border: 'none',
+      elevation: 'level0',
     },
   },
 } as const;

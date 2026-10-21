@@ -81,10 +81,7 @@ const resolveHex = (role: string) => {
   if (trimmedRole === 'transparent') return 'transparent';
   
   const palette = M3_COLOR_PALETTES[trimmedRole as ColorRole];
-  if (palette) return palette.light;
-  
-  const fallback = M3_COLOR_PALETTES['surface'];
-  return fallback ? fallback.light : 'transparent';
+  return palette ? palette.light : 'transparent';
 };
 
 // --- Radius Resolver ---
@@ -123,17 +120,24 @@ const resolvedContentColor = computed(() => {
   const role = resolvedSurfaceRole.value;
   if (!role || role === 'transparent') return resolveHex('onSurface');
   
+  // 1. Try Exact On-Role (e.g., primary -> onPrimary)
   const onRole = role.startsWith('on') ? role : `on${role.charAt(0).toUpperCase() + role.slice(1)}`;
   const specificOnColor = resolveHex(onRole);
   if (specificOnColor !== 'transparent') return specificOnColor;
 
+  // 2. Try Container Fallback (e.g., primaryContainer -> onPrimary)
   if (role.toLowerCase().includes('container')) {
     const baseRole = role.toLowerCase().replace('container', '').trim();
+    
+    // Special Case: surfaceContainer -> onSurface
+    if (baseRole === 'surface') return resolveHex('onSurface');
+    
     const baseOnRole = `on${baseRole.charAt(0).toUpperCase() + baseRole.slice(1)}`;
     const baseOnColor = resolveHex(baseOnRole);
     if (baseOnColor !== 'transparent') return baseOnColor;
   }
 
+  // 3. Global Fallback
   return resolveHex('onSurface');
 });
 
