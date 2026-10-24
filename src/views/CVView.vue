@@ -1,77 +1,66 @@
 <template>
-  <div class="w-full">
-    <div class="relative w-full h-screen grid transition-colors duration-300" 
+  <div 
+    ref="root"
+    class="w-full relative min-h-screen" 
+    :style="{ 
+      '--split-width': `${splitWidth}%`, 
+      '--image-left': `${imageLeft}px`,
+      background: `linear-gradient(to right, var(--color-bg-sidebar) var(--split-width), var(--color-bg-page) var(--split-width))` 
+    }">
+    
+    <!-- BACKGROUND LAYER (Z-10) -->
+    <div 
+      class="absolute inset-0 z-10 pointer-events-none" 
       :style="{ 
-        background: `linear-gradient(to right, var(--color-bg-sidebar) ${splitWidth}%, var(--color-bg-page) ${splitWidth}%)`,
-        gridTemplateColumns: `${splitWidth}% 1fr`
+        width: 'var(--split-width)', 
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 75vh, 0% 57.35vh)' 
       }">
       
-      <!-- Left Column: Background & Decorative Elements -->
-      <aside class="relative h-full overflow-hidden border-2 border-red-500">
-        <div 
-          class="absolute inset-0 z-0 pointer-events-none" 
-          :style="{ width: '100%' }">
-          
-          <svg 
-            viewBox="0 0 1400 1400" 
-            preserveAspectRatio="none" 
-            class="w-full h-full"
-          >
-            <defs>
-              <linearGradient id="slopeGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="white" />
-                <stop offset="100%" stop-color="#CCC" />
-              </linearGradient>
-            </defs>
-            <path 
-              d="M 0,0 L 1400,0 L 1400,1120 L 0,873 Z" 
-              fill="url(#slopeGrad)" 
-            />
-          </svg>
+      <svg 
+        viewBox="0 0 1400 1400" 
+        preserveAspectRatio="none" 
+        class="w-full h-full"
+      >
+        <defs>
+          <linearGradient id="slopeGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="white" />
+            <stop offset="100%" stop-color="#CCC" />
+          </linearGradient>
+        </defs>
+        <rect width="1400" height="1400" fill="url(#slopeGrad)" />
+      </svg>
 
-          <!-- Profile Image -->
-          <img 
-            src="@/assets/profile.png" 
-            class="absolute top-0 right-0 h-full object-cover z-10"
-            style="clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 0% 71%);"
-          />
-        </div>
-        <div class="mt-[550px]">
-          Lorem ipsum
+      <!-- Profile Image -->
+      <img 
+        src="@/assets/profile.png" 
+        class="absolute z-20 block top-[50px] w-[300px] h-auto"
+        :style="{ left: 'var(--image-left)' }"
+      />
+    </div>
+
+    <div class="relative w-full h-auto grid transition-none mx-auto" ref="gridContainer"
+      :style="{ 
+        gridTemplateColumns: 'var(--split-width) 1fr',
+        maxWidth: '1024px'
+      }">
+      
+      <!-- Left Column -->
+      <aside class="relative h-full overflow-hidden z-10 bg-transparent">
+        <div class="mt-[550px] float-right">
+          <Sidebar ref="sidebarComponent" />
         </div>
       </aside>
 
-      <!-- Right Column: Content -->
-      <section class="relative h-full flex items-center justify-center border-2 border-red-500">
+      <!-- Right Column -->
+      <section class="relative h-full flex flex-col items-center justify-center z-10">
         <div 
-          class=" bg-slate-300 dark:bg-slate-700 -translate-x-1/2 z-20"
+          class="bg-slate-300 dark:bg-slate-700 z-20"
         ></div>
-                    <Header :profile="cvStore.profile" />
+        <Header :profile="cvStore.profile" />
+        <Timeline :experiences="cvStore.experiences" />
       </section>
     </div>
-    <div class="relative flex justify-center min-h-screen transition-colors duration-300" style="overflow-x: clip;">
-      <!-- Background Bleed
-      <div 
-        class="fixed top-0 left-0 h-full z-0 transition-colors duration-300" 
-        style="width: 50vw; background: linear-gradient(to right, var(--color-bg-sidebar) 0%, var(--color-bg-page) 100%);"
-      ></div> -->
-      
-      <div class="w-full max-w-[1200px] mx-auto relative z-10">
-        <div 
-          ref="contentContainer"
-          class="flex w-full mx-auto bg-[var(--color-bg-page)] relative transition-colors duration-300"
-          style="max-width: 1024px;"
-        >
-          <Sidebar ref="sidebarComponent" />
-          <main class="flex-1 flex flex-col items-center justify-start">
-            <Header :profile="cvStore.profile" />
-            <Timeline :experiences="cvStore.experiences" />
-          </main>
-        </div>
-      </div>
-    </div>
   </div>
-  
 </template>
 
 <script setup lang="ts">
@@ -86,7 +75,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 const cvStore = useCvStore()
+const root = ref<HTMLElement | null>(null)
 const splitWidth = ref(44)
+const imageLeft = ref(300)
+const gridContainer = ref<HTMLElement | null>(null)
 const contentContainer = ref<HTMLElement | null>(null)
 const sidebarComponent = ref<any>(null)
 let trigger: any = null
@@ -95,7 +87,7 @@ onMounted(async () => {
   await nextTick();
   
   setTimeout(() => {
-    if (!contentContainer.value || !sidebarComponent.value) return
+    if (!sidebarComponent.value) return
 
     const sidebarEl = sidebarComponent.value.asideRef
 
@@ -110,16 +102,20 @@ onMounted(async () => {
     });
 
     // Animate everything in sync with an organic ease
-    tl.to(splitWidth, { 
-      value: 33, 
+    // We now animate CSS variables on the root element for maximum smoothness
+    tl.to(root.value, { 
+      '--split-width': '33%', 
       duration: 1, 
-      ease: 'power2.inOut',
-      onUpdate: () => {
-        // This ensures Vue detects the change and updates the DOM
-      }
+      ease: 'power2.inOut'
     }, 0);
 
-    tl.to(contentContainer.value, { 
+    tl.to(root.value, { 
+      '--image-left': '180px', 
+      duration: 1, 
+      ease: 'power2.inOut' 
+    }, 0);
+
+    tl.to(gridContainer.value, { 
       maxWidth: 1200, 
       duration: 1, 
       ease: 'power2.inOut' 
