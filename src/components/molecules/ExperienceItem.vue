@@ -70,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -98,12 +98,11 @@ const itemRef = ref<HTMLElement | null>(null)
 const groupRef = ref<HTMLElement | null>(null)
 let trigger: gsap.core.Timeline | null = null
 
-onMounted(() => {
-  if (!groupRef.value) return
+const setupAnimation = () => {
+  if (!groupRef.value || !itemRef.value) return
 
   const rotationAngle = isRight.value ? 90 : -90;
 
-  // 1. SET INITIAL STATE: Hidden and rotated
   gsap.set(groupRef.value, { 
     opacity: 0, 
     rotateY: rotationAngle,
@@ -111,13 +110,14 @@ onMounted(() => {
     zIndex: 1
   })
 
-  // 2. LIFECYCLE TIMELINE: One trigger to rule them all
   trigger = gsap.timeline({
     scrollTrigger: {
       trigger: itemRef.value,
       start: 'top 90%',
       end: 'top -10%',
-      scrub: 1,
+      scrub: true,
+      fastScrollEnd: true,
+      preventOverlaps: true
     }
   })
 
@@ -136,9 +136,7 @@ onMounted(() => {
     duration: 0.2, 
     ease: 'power1.in' 
   })
-})
+}
 
-onUnmounted(() => {
-  if (trigger) trigger.kill()
-})
+defineExpose({ setupAnimation })
 </script>

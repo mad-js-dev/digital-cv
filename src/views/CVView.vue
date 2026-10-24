@@ -46,7 +46,7 @@
       
       <!-- Left Column -->
       <aside class="relative h-full overflow-hidden z-10 bg-transparent">
-        <div class="mt-[550px] float-right">
+        <div class="mt-[460px] float-right relative -left-[60px]">
           <Sidebar ref="sidebarComponent" />
         </div>
       </aside>
@@ -57,7 +57,7 @@
           class="bg-slate-300 dark:bg-slate-700 z-20"
         ></div>
         <Header :profile="cvStore.profile" />
-        <Timeline :experiences="cvStore.experiences" />
+        <Timeline ref="timelineComponent" :experiences="cvStore.experiences" />
       </section>
     </div>
   </div>
@@ -79,7 +79,7 @@ const root = ref<HTMLElement | null>(null)
 const splitWidth = ref(44)
 const imageLeft = ref(300)
 const gridContainer = ref<HTMLElement | null>(null)
-const contentContainer = ref<HTMLElement | null>(null)
+const timelineComponent = ref<any>(null)
 const sidebarComponent = ref<any>(null)
 let trigger: any = null
 
@@ -126,6 +126,15 @@ onMounted(async () => {
       duration: 1, 
       ease: 'power2.inOut' 
     }, 0);
+
+    // FINAL REFRESH: Recalculate all experience item positions 
+    // now that the grid expansion is complete.
+    tl.add(() => {
+      if (timelineComponent.value?.initChildrenAnimations) {
+        timelineComponent.value.initChildrenAnimations();
+        ScrollTrigger.refresh();
+      }
+    });
 
     setTimeout(() => {
       ScrollTrigger.refresh();

@@ -13,6 +13,7 @@
       <ExperienceItem 
         v-for="(exp, index) in experiences" 
         :key="exp.id" 
+        ref="experienceItems"
         v-bind="exp" 
         :index="index"
         :is-last="index === experiences.length - 1"
@@ -27,8 +28,21 @@ import ExperienceItem from '../molecules/ExperienceItem.vue'
 import type { Experience } from '../../stores/cv'
 
 const experienceSection = ref<HTMLElement | null>(null)
+const experienceItems = ref<any[]>([])
 
-defineExpose({ experienceSection })
+// Method called by parent CVView.vue to initialize children animations
+const initChildrenAnimations = () => {
+  experienceItems.value.forEach(item => {
+    if (item?.setupAnimation) {
+      item.setupAnimation();
+    }
+  });
+}
+
+defineExpose({ 
+  experienceSection, 
+  initChildrenAnimations 
+})
 
 defineProps<{
   experiences: Experience[]
