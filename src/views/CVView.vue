@@ -24,10 +24,10 @@
         <defs>
           <linearGradient id="slopeGrad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="white" />
-            <stop offset="100%" stop-color="#CCC" />
+            <stop offset="100%" stop-color="#AAA" />
           </linearGradient>
         </defs>
-        <rect width="1400" height="1400" fill="url(#slopeGrad)" />
+        <rect width="1400" height="120" fill="url(#slopeGrad)" />
       </svg>
 
       <!-- Profile Image -->
