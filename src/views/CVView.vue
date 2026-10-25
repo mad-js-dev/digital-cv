@@ -112,16 +112,19 @@ onMounted(async () => {
     const name = root.value.querySelector('h1');
     const title = root.value.querySelector('p');
     const summary = root.value.querySelector('.max-w-2xl');
+    const sidebarContent = sidebarComponent.value?.asideRef;
 
     gsap.set([name, title, summary], { opacity: 0, y: 30 });
     gsap.set(root.value.querySelector('img'), { opacity: 0, y: 50 });
+    gsap.set(sidebarContent, { opacity: 0, x: -30 });
 
     // Autonomous Entrance Sequence (plays once on load)
     const intro = gsap.timeline({ delay: 0.5 });
     intro.to(root.value.querySelector('img'), { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
          .to(name, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5")
          .to(title, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.6")
-         .to(summary, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.6");
+         .to(summary, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.6")
+         .to(sidebarContent, { opacity: 1, x: 0, duration: 1, ease: 'power3.out' }, "-=0.4");
 
     // Synchronized Scroll Animation (the existing one)
     tl.to(splitWidth, { 
@@ -156,6 +159,7 @@ onMounted(async () => {
     }, 0);
 
     // FINAL REFRESH: Recalculate all experience item positions 
+
     // now that the grid expansion is complete.
     tl.add(() => {
       if (timelineComponent.value?.initChildrenAnimations) {

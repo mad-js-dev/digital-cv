@@ -1,7 +1,7 @@
 <template>
   <section 
     ref="experienceSection"
-    class="max-w-[1024px] mx-auto py-12 pl-10 pr-4 pb-32 transition-colors duration-300" 
+    class="max-w-[1024px] mx-auto py-12 pl-10 pr-4 pb-64 transition-colors duration-300" 
     style="perspective: 1200px;"
   >
     <div class="mb-12 text-center sm:text-left">
