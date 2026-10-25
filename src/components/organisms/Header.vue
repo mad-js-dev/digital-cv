@@ -1,6 +1,6 @@
 <template>
   <header 
-    class="max-w-[1024px] mx-auto py-12 pl-10 pr-4 transition-colors duration-300"
+    class="max-w-[1024px] py-12 pl-10 pr-4 transition-colors duration-300"
   >
     <div class="mb-12 text-center sm:text-left">
       <h1 class="text-[5rem] leading-[5.1rem] tracking-[1px] font-extrabold text-[var(--color-text-primary)] mt-8 mb-2 max-w-[60%]">{{ profile.name }}</h1>

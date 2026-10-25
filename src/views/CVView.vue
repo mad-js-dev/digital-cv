@@ -5,14 +5,14 @@
     :style="{ 
       '--split-width': `${splitWidth}%`, 
       '--image-left': `${imageLeft}px`,
-      background: `linear-gradient(to right, var(--color-bg-sidebar) var(--split-width), var(--color-bg-page) var(--split-width))` 
+      background: `linear-gradient(to right, var(--color-bg-sidebar) ${splitWidth}%, var(--color-bg-page) ${splitWidth}%)` 
     }">
     
     <!-- BACKGROUND LAYER (Z-10) -->
     <div 
       class="absolute inset-0 z-10 pointer-events-none" 
       :style="{ 
-        width: 'var(--split-width)', 
+        width: `${splitWidth}%`, 
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 75vh, 0% 57.35vh)' 
       }">
       
@@ -34,25 +34,29 @@
       <img 
         src="@/assets/profile.png" 
         class="absolute z-20 block top-[50px] w-[300px] h-auto"
-        :style="{ left: 'var(--image-left)' }"
+        :style="{ left: `${imageLeft}px` }"
       />
     </div>
 
     <div class="relative w-full h-auto grid transition-none mx-auto" ref="gridContainer"
       :style="{ 
         gridTemplateColumns: 'var(--split-width) 1fr',
-        maxWidth: '1024px'
+        maxWidth: '1024px',
+        alignItems: 'start'
       }">
       
       <!-- Left Column -->
-      <aside class="relative h-full overflow-hidden z-10 bg-transparent">
-        <div class="mt-[460px] float-right relative -left-[60px]">
+      <aside class="relative h-full z-10 bg-transparent">
+        <div 
+          class="mt-[460px] relative sticky top-0 self-start" 
+          :style="{ paddingLeft: `${sidebarPadding}px` }"
+        >
           <Sidebar ref="sidebarComponent" />
         </div>
       </aside>
 
       <!-- Right Column -->
-      <section class="relative h-full flex flex-col items-center justify-center z-10">
+      <section class="relative h-full flex flex-col items-start z-10">
         <div 
           class="bg-slate-300 dark:bg-slate-700 z-20"
         ></div>
@@ -78,6 +82,7 @@ const cvStore = useCvStore()
 const root = ref<HTMLElement | null>(null)
 const splitWidth = ref(44)
 const imageLeft = ref(300)
+const sidebarPadding = ref(150)
 const gridContainer = ref<HTMLElement | null>(null)
 const timelineComponent = ref<any>(null)
 const sidebarComponent = ref<any>(null)
@@ -103,14 +108,14 @@ onMounted(async () => {
 
     // Animate everything in sync with an organic ease
     // We now animate CSS variables on the root element for maximum smoothness
-    tl.to(root.value, { 
-      '--split-width': '33%', 
+    tl.to(splitWidth, { 
+      value: 33, 
       duration: 1, 
       ease: 'power2.inOut'
     }, 0);
 
-    tl.to(root.value, { 
-      '--image-left': '180px', 
+    tl.to(imageLeft, { 
+      value: 150, 
       duration: 1, 
       ease: 'power2.inOut' 
     }, 0);
@@ -119,6 +124,12 @@ onMounted(async () => {
       maxWidth: 1200, 
       duration: 1, 
       ease: 'power2.inOut' 
+    }, 0);
+
+    tl.to(sidebarPadding, {
+      value: 90,
+      duration: 1,
+      ease: 'power2.inOut'
     }, 0);
 
     tl.to(sidebarEl, { 
