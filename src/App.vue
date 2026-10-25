@@ -1,8 +1,10 @@
 <template>
-  <div class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300" style="overflow-x: clip;">
+  <div 
+    class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300" style="overflow-x: clip;">
     <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
       <DownloadButton v-if="$route.name === 'cv'" />
-      <HamburgerMenu />
+      <!-- <HamburgerMenu /> -->
+      <ThemeControl />
     </div>
     
     <!-- Background Bleed: Only visible when the route is 'cv' -->
@@ -22,6 +24,7 @@
 import { onMounted } from 'vue'
 import DownloadButton from './components/atoms/DownloadButton.vue'
 import HamburgerMenu from './components/atoms/HamburgerMenu.vue'
+import ThemeControl from './components/atoms/ThemeControl.vue'
 import { useTheme } from '@/composables/useTheme'
 
 const { applyTheme } = useTheme()

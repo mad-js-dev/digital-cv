@@ -37,7 +37,8 @@
         class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[var(--color-bg-sidebar)] text-white transition-all duration-300"
       >
         <div class="flex flex-col items-center gap-16 w-full max-w-md px-6">
-          <!-- Navigation Section -->
+          <!-- Navigation Section - Commented out for production -->
+          <!-- 
           <nav class="flex flex-col items-center gap-6 w-full">
             <router-link 
               to="/" 
@@ -68,14 +69,10 @@
               CV
             </router-link>
           </nav>
-
-          <!-- Divider -->
-          <div class="w-full h-px bg-white/10"></div>
+          -->
 
           <!-- Preferences Section -->
           <div class="flex flex-col items-center gap-8 w-full">
-            <span class="text-xs uppercase tracking-[0.2em] text-white/40 font-semibold">Preferences</span>
-            
             <div class="flex flex-col items-center gap-6 w-full">
               <!-- Language and Theme integrated here -->
               <ThemeControl />
