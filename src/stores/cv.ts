@@ -46,7 +46,7 @@ export const PALETTES: Record<string, Palette> = {
     dark: {
       '--color-bg-page': '#0f172a',
       '--color-bg-main': '#1e293b',
-      '--color-bg-sidebar': '#0f172a',
+      '--color-bg-sidebar': '#080e1a',
       '--color-text-primary': '#e2e8f0',
       '--color-text-secondary': '#94a3b8',
       '--color-accent': '#f97316',
@@ -64,7 +64,7 @@ export const PALETTES: Record<string, Palette> = {
     dark: {
       '--color-bg-page': '#0a140a',
       '--color-bg-main': '#142214',
-      '--color-bg-sidebar': '#0a140a',
+      '--color-bg-sidebar': '#050a05',
       '--color-text-primary': '#d1dcd1',
       '--color-text-secondary': '#8a9d8a',
       '--color-accent': '#e5c17a',
@@ -82,7 +82,7 @@ export const PALETTES: Record<string, Palette> = {
     dark: {
       '--color-bg-page': '#1a0f1a',
       '--color-bg-main': '#2d1b2d',
-      '--color-bg-sidebar': '#1a0f1a',
+      '--color-bg-sidebar': '#110811',
       '--color-text-primary': '#f5e6f5',
       '--color-text-secondary': '#a38da1',
       '--color-accent': '#ff9a7b',
@@ -98,8 +98,8 @@ export const PALETTES: Record<string, Palette> = {
       '--color-accent': '#3b82f6',
     },
     dark: {
-      '--color-bg-page': '#000000',
-      '--color-bg-main': '#111111',
+      '--color-bg-page': '#111111',
+      '--color-bg-main': '#1a1a1a',
       '--color-bg-sidebar': '#000000',
       '--color-text-primary': '#eeeeee',
       '--color-text-secondary': '#888888',
@@ -150,8 +150,9 @@ export const useCvStore = defineStore('cv', {
         title: 'education',
         icon: 'graduation',
         items: [
-          { label: 'degree', value: 'Engineering in Computer Science' },
-          { label: 'specialization', value: 'Front-end Architecture' },
+          { label: 'school', value: 'Graphical Arts School Antoni Algueró' },
+          { label: '', value: 'CFGM Graphical Arts (Printing), 2006' },
+          { label: '', value: 'CFGM Digital Prepress, 2008' },
         ]
       }
     ],

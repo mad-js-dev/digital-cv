@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full py-6">
-    <div class="flex flex-col gap-9 w-full">
-      <div v-for="section in sections" :key="section.title" class="flex flex-col gap-3">
+    <div class="flex flex-col gap-6 w-full">
+      <div v-for="section in sections" :key="section.title" class="flex flex-col gap-2">
         <div class="flex items-center gap-3">
           <svg 
             :key="section.icon"
@@ -18,7 +18,7 @@
           </svg>
           <h3 class="text-base uppercase tracking-widest text-[var(--color-accent)] font-bold">{{ t(section.title) }}</h3>
         </div>
-        <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-1.5">
           <div v-for="item in section.items" :key="item.label" class="flex flex-col">
             <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ t(item.label) }}</span>
             <span class="text-sm text-white font-medium leading-tight">{{ item.value }}</span>
