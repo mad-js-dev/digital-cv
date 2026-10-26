@@ -1,5 +1,4 @@
 import { CORNER_RADIUS } from '@/constants/corners';
-import { SPACING_TOKENS } from '@/constants/spacing';
 
 export const SURFACE_RADIUS = {
   S: CORNER_RADIUS.S,
@@ -19,7 +18,7 @@ export const SURFACE_ROLES = {
 } as const;
 
 export type SurfaceRoleCategory = keyof typeof SURFACE_ROLES;
-export type SurfaceRole = typeof SURFACE_ROLES[SurfaceRoleCategory][number];
+export type SurfaceRole = typeof SURFACE_ROLES[SurfaceRoleCategory][number] | 'transparent';
 
 export const SURFACE_VARIANTS = {
   filledPrimary: {
@@ -141,7 +140,7 @@ export const SURFACE_DEPTH_MAP = {
 
 export type SurfaceDepth = keyof typeof SURFACE_DEPTH_MAP;
 
-export const SURFACE_SIZE_PROFILES = {
+export const SURFACE_PROFILES = {
   xs: {
     radius: 'S',
     elevation: 'level0',
@@ -174,7 +173,9 @@ export const SURFACE_SIZE_PROFILES = {
   },
 } as const;
 
-export type SurfaceSize = keyof typeof SURFACE_SIZE_PROFILES;
+export type SurfaceProfile = keyof typeof SURFACE_PROFILES;
+
+export type SurfaceState = 'base' | 'hover' | 'active' | 'focused';
 
 export const SURFACE_PADDING = {
   none: 0,

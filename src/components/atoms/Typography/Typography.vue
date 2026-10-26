@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { TYPE_SCALE, roleOf, type TypeStyleKey, type FONT_WEIGHTS } from '@/constants/typography'
+import { TYPE_SCALE, roleOf, type TypeStyleKey, type TypeStyle, type FONT_WEIGHTS } from '@/constants/typography'
 import { TYPOGRAPHY_SPECS, type TypographyRole } from './specs';
 
 // Allow the variant to be either a token key or a custom style object for flexibility
@@ -34,17 +34,17 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   role: 'body',
   size: 'medium',
-  color: TYPOGRAPHY_SPECS.defaults.color,
-  treatment: TYPOGRAPHY_SPECS.defaults.treatment,
+  color: TYPOGRAPHY_SPECS.defaults.color as TypeColor,
+  treatment: TYPOGRAPHY_SPECS.defaults.treatment as Treatment,
 });
 
 const defaultTag = computed(() => {
   // Determine role: from prop, or from variant string, or fallback to 'body'
   const activeRole = typeof props.variant === 'string' 
-    ? roleOf(props.variant) 
+    ? roleOf(props.variant as TypeStyleKey) 
     : props.role;
   
-  const roleSpec = TYPOGRAPHY_SPECS.roles[activeRole];
+  const roleSpec = TYPOGRAPHY_SPECS.roles[activeRole as TypographyRole];
   return roleSpec ? roleSpec.tag : 'span';
 })
 
@@ -62,13 +62,17 @@ const colorClass = computed(() => {
 
 const style = computed(() => {
   // 1. Determine the baseline style based on role and size
-  let baseline;
+  let baseline: TypeStyle | undefined;
   if (typeof props.variant === 'string') {
-    baseline = TYPE_SCALE[props.variant];
+    baseline = TYPE_SCALE[props.variant as TypeStyleKey];
   } else {
-    const roleSpec = TYPOGRAPHY_SPECS.roles[props.role];
-    const variantKey = roleSpec?.variants[props.size] || roleSpec?.defaultVariant || 'body-medium';
+    const roleSpec = TYPOGRAPHY_SPECS.roles[props.role as TypographyRole];
+    const variantKey = (roleSpec?.variants[props.size as keyof typeof roleSpec?.variants] || roleSpec?.defaultVariant || 'body-medium') as TypeStyleKey;
     baseline = TYPE_SCALE[variantKey];
+  }
+
+  if (!baseline) {
+    baseline = TYPE_SCALE['body-medium'];
   }
 
   // 2. Merge with custom object overrides if provided
@@ -80,7 +84,7 @@ const style = computed(() => {
   let weight = t.weight;
   if (props.weight) {
     weight = typeof props.weight === 'string' 
-      ? (window as any).FONT_WEIGHTS?.[props.weight] || props.weight 
+      ? FONT_WEIGHTS[props.weight as keyof typeof FONT_WEIGHTS] || props.weight 
       : props.weight;
   }
 

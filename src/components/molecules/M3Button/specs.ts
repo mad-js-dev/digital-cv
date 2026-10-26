@@ -5,8 +5,6 @@
  * Updated to align with M3Surface architecture (Variant + Role).
  */
 
-import { CORNER_RADIUS } from '@/constants/corners';
-
 export const M3_BUTTON_SPECS = {
   shapes: {
     round: {

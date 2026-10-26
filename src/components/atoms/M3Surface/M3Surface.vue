@@ -35,15 +35,14 @@ import {
   SURFACE_RADIUS, type SurfaceRadius, 
   SURFACE_VARIANTS, type SurfaceVariant, 
   SURFACE_PADDING, type SurfacePadding,
-  SURFACE_SIZE_PROFILES, type SurfaceSize,
+  SURFACE_PROFILES, type SurfaceProfile,
   SURFACE_DEPTH_MAP, type SurfaceDepth,
-  SURFACE_ROLES,
   type SurfaceRole,
   type SurfaceState
 } from './specs';
 
 interface Props {
-  size?: SurfaceSize;
+  size?: SurfaceProfile;
   depth?: SurfaceDepth;
   radius?: SurfaceRadius | SurfaceRadius[] | number | number[];
   color?: SurfaceRole | ColorRole;
@@ -99,7 +98,7 @@ const resolvedRadius = computed(() => {
     }
     return resolveRadiusValue(props.radius);
   }
-  const sizeProfile = SURFACE_SIZE_PROFILES[props.size];
+  const sizeProfile = SURFACE_PROFILES[props.size || 'md'];
   return resolveRadiusValue(sizeProfile.radius);
 });
 
@@ -154,7 +153,7 @@ const resolvedBorder = computed(() => {
 // --- Elevation Resolver ---
 const resolvedElevation = computed(() => {
   // Priority: Explicit prop > Size-based default
-  const sizeProfile = SURFACE_SIZE_PROFILES[props.size];
+  const sizeProfile = SURFACE_PROFILES[props.size || 'md'];
   
   // To implement state-based lift, we could adjust the elevation here
   // But for now we follow the provided prop/size logic.

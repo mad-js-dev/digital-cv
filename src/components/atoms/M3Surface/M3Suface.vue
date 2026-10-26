@@ -37,7 +37,6 @@ import {
   SURFACE_PADDING, type SurfacePadding,
   SURFACE_PROFILES, type SurfaceProfile,
   SURFACE_DEPTH_MAP, type SurfaceDepth,
-  SURFACE_ROLES,
   type SurfaceRole,
   type SurfaceState
 } from './specs';
@@ -59,7 +58,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  profile: 'button',
+  profile: 'md',
   depth: undefined,
   radius: 'M',
   color: undefined,
@@ -67,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
   paddingX: 'md',
   paddingY: 'md',
   state: 'base',
-  variant: 'filled',
+  variant: 'filledPrimary',
   width: undefined,
   height: undefined,
   stroke: 'transparent',

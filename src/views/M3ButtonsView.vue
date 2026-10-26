@@ -104,19 +104,19 @@ import M3Button from '@/components/molecules/M3Button/M3Button.vue';
 import { M3_BUTTON_SPECS } from '@/components/molecules/M3Button/specs';
 
 const sizes = [
-  { name: 'XS', type: 'xs', label: 'Extra Small' },
-  { name: 'SM', type: 'sm', label: 'Small' },
-  { name: 'MD', type: 'md', label: 'Medium' },
-  { name: 'LG', type: 'lg', label: 'Large' },
-  { name: 'XL', type: 'xl', label: 'Extra Large' },
+  { name: 'XS', type: 'xs' as any, label: 'Extra Small' },
+  { name: 'SM', type: 'sm' as any, label: 'Small' },
+  { name: 'MD', type: 'md' as any, label: 'Medium' },
+  { name: 'LG', type: 'lg' as any, label: 'Large' },
+  { name: 'XL', type: 'xl' as any, label: 'Extra Large' },
 ];
 
 const variants = [
-  { name: 'Filled', type: 'filled', label: 'Filled Button' },
-  { name: 'Elevated', type: 'elevated', label: 'Elevated Button' },
-  { name: 'Tonal', type: 'tonal', label: 'Tonal Button' },
-  { name: 'Outlined', type: 'outlined', label: 'Outlined Button' },
-  { name: 'Text', type: 'text', label: 'Text Button' },
+  { name: 'Filled', type: 'filled' as any, label: 'Filled Button' },
+  { name: 'Elevated', type: 'elevated' as any, label: 'Elevated Button' },
+  { name: 'Tonal', type: 'tonal' as any, label: 'Tonal Button' },
+  { name: 'Outlined', type: 'outlined' as any, label: 'Outlined Button' },
+  { name: 'Text', type: 'text' as any, label: 'Text Button' },
 ];
 
 const shapes = Object.entries(M3_BUTTON_SPECS.shapes).map(([key, value]) => ({
@@ -131,14 +131,13 @@ const elevations = [
   { name: 'Level 2', level: 'level2', label: 'Level 2' },
   { name: 'Level 3', level: 'level3', label: 'Level 3' },
   { name: 'Level 4', level: 'level4', label: 'Level 4' },
-  { name: 'Level 5', level: 'level5', label: 'Level 5' },
 ];
 
 const currentMorphRadius = ref('S');
 const isToggled = ref(false);
 const toggleMorph = () => {
   currentMorphRadius.value = currentMorphRadius.value === 'S' 
-    ? ['FULL', 'XS', 'XS', 'FULL'] 
+    ? 'M' 
     : 'S';
 };
 </script>

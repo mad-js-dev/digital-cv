@@ -136,7 +136,7 @@ interface Props {
   width?: number | string;
   height?: number | string;
   stretch?: boolean;
-  color?: ColorRole;
+  color?: ColorRole | 'transparent';
   stroke?: string;
   strokeWidth?: number;
   radius?: RadiusInput | RadiusInput[];
@@ -288,10 +288,10 @@ const sliceRegions = computed<SliceRegion[]>(() => {
     const shapeData = SHAPE_LIBRARY[props.shape];
     const insets = shapeData.slice;
     const [bx, by, w, h] = getNormalizedShape(props.shape)!.bbox;
-    const left = insets.left * w;
-    const right = insets.right * w;
-    const top = insets.top * h;
-    const bottom = insets.bottom * h;
+    const left = (insets?.left ?? 0) * w;
+    const right = (insets?.right ?? 0) * w;
+    const top = (insets?.top ?? 0) * h;
+    const bottom = (insets?.bottom ?? 0) * h;
     const W = size.w;
     const H = size.h;
     if (!W || !H) return [];

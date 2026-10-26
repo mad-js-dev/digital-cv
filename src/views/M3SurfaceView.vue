@@ -423,7 +423,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue';
-import { SURFACE_DEPTH_MAP, SURFACE_SIZE_PROFILES, SURFACE_ROLES, SURFACE_VARIANTS } from '@/components/atoms/M3Surface/specs';
+import { SURFACE_DEPTH_MAP, SURFACE_PROFILES, SURFACE_ROLES, SURFACE_VARIANTS } from '@/components/atoms/M3Surface/specs';
 
 const interactiveState = ref('base');
 const currentSize = ref<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
@@ -467,7 +467,7 @@ const filteredVariants = (type: 'filled-high' | 'filled-container' | 'neutral-co
   }) as (keyof typeof surfaceVariants)[];
 };
 
-const sizes = Object.entries(SURFACE_SIZE_PROFILES).map(([id, spec]) => ({
+const sizes = Object.entries(SURFACE_PROFILES).map(([id, spec]) => ({
   id: id as 'xs' | 'sm' | 'md' | 'lg' | 'xl',
   label: id.toUpperCase(),
   radius: spec.radius,

@@ -223,7 +223,7 @@ const containerStyle = computed(() => {
     height: `${sizeConfig.value.height}px`,
     minWidth: isIconButton ? `${sizeConfig.value.height}px` : 'auto',
     width: isIconButton ? `${sizeConfig.value.height}px` : 'auto',
-    '--color-accent': spec.surface,
+    '--color-accent': 'transparent',
     boxShadow: 'none',
   };
 });

@@ -23,7 +23,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import DownloadButton from './components/atoms/DownloadButton.vue'
-import HamburgerMenu from './components/atoms/HamburgerMenu.vue'
 import ThemeControl from './components/atoms/ThemeControl.vue'
 import { useTheme } from '@/composables/useTheme'
 
