@@ -27,7 +27,7 @@
             <stop offset="100%" stop-color="#AAA" />
           </linearGradient>
         </defs>
-        <rect width="1400" height="120" fill="url(#slopeGrad)" />
+        <rect width="1400" height="150" fill="url(#slopeGrad)" />
       </svg>
 
       <!-- Profile Image -->
