@@ -21,7 +21,7 @@
         <div class="flex flex-col gap-1.5">
           <div v-for="item in section.items" :key="item.label" class="flex flex-col">
             <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ t(item.label) }}</span>
-            <span class="text-sm text-white font-medium leading-tight">{{ item.value }}</span>
+            <span class="text-sm text-white font-medium leading-tight">{{ typeof item.value === 'object' ? item.value[lang] : item.value }}</span>
           </div>
         </div>
       </div>
@@ -34,7 +34,8 @@ import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCvStore } from '../../stores/cv'
 
-const { t } = useI18n()
+const { locale, t } = useI18n()
+const lang = computed(() => locale.value)
 const store = useCvStore()
 const sections = computed(() => store.sidebar)
 const asideRef = ref<HTMLElement | null>(null)

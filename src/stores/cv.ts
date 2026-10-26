@@ -25,7 +25,7 @@ export interface UserProfile {
 export interface SidebarSection {
   title: string; 
   icon: string;
-  items: { label: string; value: string }[];
+  items: { label: string; value: Translation | string }[];
 }
 
 interface Palette {
@@ -150,9 +150,30 @@ export const useCvStore = defineStore('cv', {
         title: 'education',
         icon: 'graduation',
         items: [
-          { label: 'school', value: 'Graphical Arts School Antoni Algueró' },
-          { label: '', value: 'CFGM Graphical Arts (Printing), 2006' },
-          { label: '', value: 'CFGM Digital Prepress, 2008' },
+          { 
+            label: 'school', 
+            value: { 
+              en: 'Graphical Arts School Antoni Algueró', 
+              es: 'Escuela de Artes Gráficas Antoni Algueró', 
+              ca: 'Escola d\'Arts Gràfiques Antoni Algueró' 
+            } 
+          },
+          { 
+            label: '', 
+            value: { 
+              en: 'CFGM Graphical Arts (Printing), 2006', 
+              es: 'CFGM de Artes Gráficas (Imprenta), 2006', 
+              ca: 'CFGM d\'Arts Gràfiques (Imprenta), 2006' 
+            } 
+          },
+          { 
+            label: '', 
+            value: { 
+              en: 'CFGM Digital Prepress, 2008', 
+              es: 'CFGM de Preimpresión Digital, 2008', 
+              ca: 'CFGM de Preimpressió Digital, 2008' 
+            } 
+          },
         ]
       }
     ],
