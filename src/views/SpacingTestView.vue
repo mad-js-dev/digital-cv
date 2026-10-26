@@ -159,7 +159,7 @@
 <script setup lang="ts">
 import Layout from '@/components/atoms/M3Layout/layout/Layout.vue';
 import { SPACING_SCALE, SPACING_TOKENS } from '@/constants/spacing';
-import type { LayoutSettings } from '@/components/atoms/layout/layout.defaults';
+import type { LayoutSettings } from '@/components/atoms/M3Layout/layout/layout.defaults';
 
 const demoSettings: Record<string, LayoutSettings> = {
   small: { gap: SPACING_TOKENS.space100, padding: SPACING_TOKENS.space100 }, // 8 / 8

@@ -254,8 +254,8 @@
                   {{ v_id.replace('filled', '') }}
                 </M3Surface>
                 <div class="text-[10px] font-mono text-slate-400 space-y-1 px-1">
-                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].role }}</span></div>
-                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].onRole }}</span></div>
+                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].role }}</span></div>
+                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].onRole }}</span></div>
                 </div>
               </div>
             </div>
@@ -270,8 +270,8 @@
                   {{ v_id.replace('filled', '') }}
                 </M3Surface>
                 <div class="text-[10px] font-mono text-slate-400 space-y-1 px-1">
-                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].role }}</span></div>
-                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].onRole }}</span></div>
+                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].role }}</span></div>
+                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].onRole }}</span></div>
                 </div>
               </div>
             </div>
@@ -286,8 +286,8 @@
                   {{ v_id.replace('container', '').trim() }}
                 </M3Surface>
                 <div class="text-[10px] font-mono text-slate-400 space-y-1 px-1">
-                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].role }}</span></div>
-                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].onRole }}</span></div>
+                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].role }}</span></div>
+                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].onRole }}</span></div>
                 </div>
               </div>
             </div>
@@ -302,8 +302,8 @@
                   {{ v_id.replace('container', '').trim() }}
                 </M3Surface>
                 <div class="text-[10px] font-mono text-slate-400 space-y-1 px-1">
-                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].role }}</span></div>
-                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ surfaceVariants[v_id].onRole }}</span></div>
+                  <div class="flex justify-between"><span>Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].role }}</span></div>
+                  <div class="flex justify-between"><span>On-Role:</span> <span class="text-slate-600">{{ (surfaceVariants as any)[v_id].onRole }}</span></div>
                 </div>
               </div>
             </div>
@@ -401,7 +401,7 @@
             </div>
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
               <h3 class="font-bold text-center">Depth Transition</h3>
-              <M3Surface :depth="currentDepth" variant="container" class="p-6 text-center text-lg font-bold">
+              <M3Surface :depth="currentDepth" variant="containerLow" class="p-6 text-center text-lg font-bold">
                 Current Depth: {{ currentDepth }}
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
@@ -426,8 +426,8 @@ import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue';
 import { SURFACE_DEPTH_MAP, SURFACE_SIZE_PROFILES, SURFACE_ROLES, SURFACE_VARIANTS } from '@/components/atoms/M3Surface/specs';
 
 const interactiveState = ref('base');
-const currentSize = ref('md');
-const currentDepth = ref('default');
+const currentSize = ref<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
+const currentDepth = ref<'default' | 'lowest' | 'low' | 'high' | 'highest'>('default');
 const currentElevation = ref('level0');
 
 // Color morphing state
@@ -464,19 +464,19 @@ const filteredVariants = (type: 'filled-high' | 'filled-container' | 'neutral-co
        return id.startsWith('container') && utilities.some(u => id.toLowerCase().includes(u));
     }
     return false;
-  });
+  }) as (keyof typeof surfaceVariants)[];
 };
 
 const sizes = Object.entries(SURFACE_SIZE_PROFILES).map(([id, spec]) => ({
-  id,
+  id: id as 'xs' | 'sm' | 'md' | 'lg' | 'xl',
   label: id.toUpperCase(),
   radius: spec.radius,
   elevation: spec.elevation,
   depth: spec.depthRole,
 }));
 
-const depthLevels = Object.entries(SURFACE_DEPTH_MAP).map(([value, label]) => ({
-  value,
+const depthLevels = Object.entries(SURFACE_DEPTH_MAP).map(([value]) => ({
+  value: value as 'default' | 'lowest' | 'low' | 'high' | 'highest',
   label: value.charAt(0).toUpperCase() + value.slice(1),
 }));
 

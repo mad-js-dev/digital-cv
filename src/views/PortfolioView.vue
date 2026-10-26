@@ -25,10 +25,10 @@
               <p class="text-slate-400 max-w-md">A deep dive into the M3 shape system, tokenization, and organic morphing logic.</p>
             </div>
             <div class="flex gap-4">
-              <Shape shape="square" :size="40" color="slate" />
-              <Shape shape="rounded" :size="40" color="accent" />
-              <Shape shape="pill" :size="40" color="slate" />
-              <Shape shape="blob" :size="40" color="accent" />
+              <Shape shape="square" :size="40" color="surfaceVariant" />
+              <Shape shape="rounded" :size="40" color="primary" />
+              <Shape shape="pill" :size="40" color="surfaceVariant" />
+              <Shape shape="blob" :size="40" color="primary" />
             </div>
           </div>
         </div>
@@ -87,21 +87,21 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                    <Shape shape="blob" :size="80" color="accent" class="mb-6" />
+                    <Shape shape="blob" :size="80" color="primary" class="mb-6" />
                     <h3 class="text-xl font-bold text-white mb-2">Original Shapes</h3>
                     <p class="text-slate-400 text-sm">The foundation of every component, from rectangles to organic blobs.</p>
                   </div>
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
                     <div class="flex items-end gap-2 mb-6">
-                      <Shape shape="square" :radius="4" :size="30" color="slate" />
-                      <Shape shape="square" :radius="12" :size="40" color="slate" />
-                      <Shape shape="square" :radius="24" :size="50" color="accent" />
+                      <Shape shape="square" :radius="4" :size="30" color="surfaceVariant" />
+                      <Shape shape="square" :radius="12" :size="40" color="surfaceVariant" />
+                      <Shape shape="square" :radius="24" :size="50" color="primary" />
                     </div>
                     <h3 class="text-xl font-bold text-white mb-2">Radius Scale</h3>
                     <p class="text-slate-400 text-sm">A consistent scale from 4px to fully rounded for clear visual hierarchy.</p>
                   </div>
                   <div class="p-8 rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center text-center">
-                    <Shape shape="pill" :size="80" color="accent" class="mb-6" />
+                    <Shape shape="pill" :size="80" color="primary" class="mb-6" />
                     <h3 class="text-xl font-bold text-white mb-2">Shape Morphing</h3>
                     <p class="text-slate-400 text-sm">Fluid transitions between shapes to guide user focus during interactions.</p>
                   </div>
@@ -132,7 +132,7 @@
                   >
                     <Shape 
                       :shape="shapeName" 
-                      color="slate"
+                      color="surfaceVariant"
                       class="group-hover:text-accent transition-colors"
                     />
                     <span class="text-[10px] font-mono text-slate-500 group-hover:text-slate-300 uppercase">{{ shapeName }}</span>
@@ -154,9 +154,9 @@
                     We use a consistent SVG path coordinate system to enable seamless transitions between any two tokens in the library.
                   </p>
                   <div class="flex justify-center items-center gap-12">
-                    <Shape shape="square" :size="60" color="slate" />
+                    <Shape shape="square" :size="60" color="surfaceVariant" />
                     <span class="text-3xl text-slate-600">→</span>
-                    <Shape shape="pill" :size="60" color="accent" />
+                    <Shape shape="pill" :size="60" color="primary" />
                   </div>
                 </div>
                 
@@ -164,7 +164,7 @@
 
               <!-- Page 3: Summary -->
               <div v-if="currentPage === 3" class="h-full w-full p-12 flex flex-col items-center justify-center text-center">
-                <Shape shape="blob" :size="120" color="accent" class="mb-8 animate-pulse" />
+                <Shape shape="blob" :size="120" color="primary" class="mb-8 animate-pulse" />
                 <h2 class="text-4xl font-bold text-white mb-4">System Complete</h2>
                 <p class="text-slate-400 max-w-lg mx-auto mb-8">
                   The shape system provides the visual grammar for the entire product, ensuring consistency across every pixel.

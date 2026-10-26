@@ -28,7 +28,7 @@
                   <td class="p-4 align-top text-xs">{{ size }}</td>
                   <td class="p-4 align-top font-mono text-[10px] text-accent">{{ `${role}-${size.toLowerCase()}` }}</td>
                   <td class="p-4 align-middle">
-                    <Typography :variant="`${role}-${size.toLowerCase()}`" color="white">
+                    <Typography :variant="(`${role}-${size.toLowerCase()}` as any)" color="white">
                       The quick brown fox jumps over the lazy dog.
                     </Typography>
                   </td>

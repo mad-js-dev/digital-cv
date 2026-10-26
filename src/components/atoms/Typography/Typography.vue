@@ -10,7 +10,7 @@ import { TYPE_SCALE, roleOf, type TypeStyleKey, type FONT_WEIGHTS } from '@/cons
 import { TYPOGRAPHY_SPECS, type TypographyRole } from './specs';
 
 // Allow the variant to be either a token key or a custom style object for flexibility
-type VariantValue = TypeStyleKey | Partial<typeof TYPE_SCALE['display-large']>;
+type VariantValue = TypeStyleKey | Partial<TypeStyle>;
 type TypeColor = 'current' | 'primary' | 'secondary' | 'accent' | 'white';
 type Treatment = 'uppercase' | 'lowercase' | 'capitalize' | 'none';
 

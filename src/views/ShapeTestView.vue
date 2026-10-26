@@ -505,7 +505,6 @@ const toggleShapeMorph = () => {
 
 const morphShapes = Object.keys(SHAPE_LIBRARY);
 const morphIndex = ref(0);
-const morphShape = computed(() => morphShapes[morphIndex.value]);
 let morphTimer: ReturnType<typeof setInterval> | null = null;
 onMounted(() => {
   morphTimer = setInterval(() => {
