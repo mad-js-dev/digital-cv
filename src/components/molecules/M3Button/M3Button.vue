@@ -17,9 +17,9 @@
     <template v-if="!split">
       <M3Surface 
         v-if="props.variant !== 'text'"
-        :radius="resolvedRadius" 
-        :color="variantSpec.surfaceRole"
-        :variant="variantSpec.surfaceVariant"
+        :radius="(resolvedRadius as any)" 
+        :color="(variantSpec.surfaceRole as any)"
+        :variant="(variantSpec.surfaceVariant as any)"
         :elevation="variantSpec.elevation"
         :state="state"
         :padding-x="sizeConfig.paddingX"
@@ -39,7 +39,7 @@
           />
           <Typography 
             v-if="!props.icon || props.textVariant || hasSlot"
-            :variant="textVariant || sizeConfig.textVariant" 
+            :variant="(textVariant || sizeConfig.textVariant) as any" 
             :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
             :class="textClasses"
           >
@@ -64,7 +64,7 @@
         />
         <Typography 
           v-if="!props.icon || props.textVariant || hasSlot"
-          :variant="textVariant || sizeConfig.textVariant" 
+          :variant="(textVariant || sizeConfig.textVariant) as any" 
           :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
           :class="textClasses"
         >
@@ -77,9 +77,9 @@
     <div v-else class="flex items-center w-full h-full">
       <!-- Main Section (Left) -->
       <M3Surface 
-        :radius="[resolvedRadius, 'NONE', 'NONE', resolvedRadius]" 
-        :color="variantSpec.surfaceRole"
-        :variant="variantSpec.surfaceVariant"
+        :radius="([resolvedRadius, 'NONE', 'NONE', resolvedRadius] as any)" 
+        :color="(variantSpec.surfaceRole as any)"
+        :variant="(variantSpec.surfaceVariant as any)"
         :elevation="variantSpec.elevation"
         :state="state"
         :padding-x="sizeConfig.paddingX"
@@ -95,7 +95,7 @@
           <Icon v-if="icon" :name="icon" :size="props.size" class="flex items-center justify-center" />
           <Typography 
             v-if="!props.icon || props.textVariant || hasSlot"
-            :variant="textVariant || sizeConfig.textVariant" 
+            :variant="(textVariant || sizeConfig.textVariant) as any" 
             :role="props.size === 'xs' ? 'label' : props.size === 'sm' ? 'label' : props.size === 'md' ? 'label' : props.size === 'lg' ? 'label' : 'title'"
             :class="textClasses"
           >
@@ -106,9 +106,9 @@
 
       <!-- Dropdown Section (Right) -->
       <M3Surface 
-        :radius="['NONE', resolvedRadius, resolvedRadius, 'NONE']" 
-        :color="variantSpec.surfaceRole"
-        :variant="variantSpec.surfaceVariant"
+        :radius="(['NONE', resolvedRadius, resolvedRadius, 'NONE'] as any)" 
+        :color="(variantSpec.surfaceRole as any)"
+        :variant="(variantSpec.surfaceVariant as any)"
         :elevation="variantSpec.elevation"
         :state="state"
         :padding-x="sizeConfig.paddingX"
@@ -132,10 +132,10 @@ import { ref, computed, useSlots } from 'vue';
 import Layout from '@/components/atoms/M3Layout/layout/Layout.vue';
 import Typography from '@/components/atoms/Typography/Typography.vue';
 import Icon from '@/components/atoms/Icon/Icon.vue';
-import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue'; // Corrected import path check
+import M3Surface from '@/components/atoms/M3Surface/M3Surface.vue';
 import { M3_BUTTON_SPECS, type M3ButtonSize, type M3ButtonVariant, type M3ButtonShape } from './specs';
 import { SPACING_TOKENS } from '@/constants/spacing';
-import { CORNER_RADIUS, type CornerRadius } from '@/constants/corners';
+import { type CornerRadius } from '@/constants/corners';
 
 interface Props {
   variant?: M3ButtonVariant;
@@ -175,7 +175,7 @@ const sizeConfig = computed(() => {
   const spec = M3_BUTTON_SPECS.sizes[props.size];
   const resolve = (token: any) => {
     if (typeof token === 'number') return token;
-    return SPACING_TOKENS[token] || 0;
+    return (SPACING_TOKENS as any)[token] || 0;
   };
   return {
     height: resolve(spec.height),
@@ -207,16 +207,19 @@ const variantWrapperClass = computed(() => {
   }
 });
 
-const textClasses = {
-  filled: 'text-black',
-  tonal: 'text-black',
-  elevated: 'text-black',
-  outlined: 'text-black',
-  text: 'text-black',
-}[props.variant || 'filled'];
+const textClasses = computed(() => {
+  const mapping: Record<string, string> = {
+    filled: 'text-black',
+    tonal: 'text-black',
+    elevated: 'text-black',
+    outlined: 'text-black',
+    text: 'text-black',
+  };
+  return mapping[props.variant || 'filled'];
+});
 
 const containerStyle = computed(() => {
-  const spec = M3_BUTTON_SPECS.variants[props.variant];
+// Remove unused spec declaration
   const isIconButton = props.icon && !props.textVariant && !hasSlot.value;
   return {
     minHeight: `${sizeConfig.value.height}px`,

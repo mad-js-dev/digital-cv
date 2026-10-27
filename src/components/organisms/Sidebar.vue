@@ -21,7 +21,7 @@
         <div class="flex flex-col gap-1.5">
           <div v-for="item in section.items" :key="item.label" class="flex flex-col">
             <span class="text-[10px] uppercase text-slate-400 dark:text-slate-500 font-semibold">{{ t(item.label) }}</span>
-            <span class="text-sm text-white font-medium leading-tight">{{ typeof item.value === 'object' ? item.value[lang] : item.value }}</span>
+            <span class="text-sm text-white font-medium leading-tight">{{ typeof item.value === 'object' ? (item.value as any)[lang] : item.value }}</span>
           </div>
         </div>
       </div>

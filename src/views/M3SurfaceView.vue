@@ -56,7 +56,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
               <h4 class="font-bold">Symmetric Transition</h4>
-              <M3Surface :radius="symmetricRadius" color="primary" class="p-8 text-center font-bold transition-all duration-300">
+              <M3Surface :radius="(symmetricRadius as any)" color="primary" class="p-8 text-center font-bold transition-all duration-300">
                 Symmetric Morph
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
@@ -69,19 +69,19 @@
 
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
               <h4 class="font-bold">Asymmetric Transition</h4>
-              <M3Surface :radius="asymmetricRadius" color="primary" class="p-8 text-center font-bold transition-all duration-300">
+              <M3Surface :radius="(asymmetricRadius as any)" color="primary" class="p-8 text-center font-bold transition-all duration-300">
                 Asymmetric Morph
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
-                <button @click="asymmetricRadius = ['M', 'M', 'M', 'M']" 
+                <button @click="(asymmetricRadius as any) = ['M', 'M', 'M', 'M']" 
                   :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym('M','M','M','M') ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
                   Square
                 </button>
-                <button @click="asymmetricRadius = ['M', 'FULL', 'FULL', 'M']" 
+                <button @click="(asymmetricRadius as any) = ['M', 'FULL', 'FULL', 'M']" 
                   :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym('M','FULL','FULL','M') ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
                   Pill-Corners
                 </button>
-                <button @click="asymmetricRadius = [20, 0, 20, 0]" 
+                <button @click="(asymmetricRadius as any) = [20, 0, 20, 0]" 
                   :class="['px-3 py-1 text-xs rounded font-bold transition-colors', isAsym(20,0,20,0) ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200']">
                   Leaf Shape
                 </button>
@@ -170,7 +170,7 @@
             
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
               <h5 class="font-bold">Role Transition</h5>
-              <M3Surface :color="currentRole" class="p-12 w-full max-w-md text-center text-2xl font-bold transition-all duration-500">
+              <M3Surface :color="(currentRole as any)" class="p-12 w-full max-w-md text-center text-2xl font-bold transition-all duration-500">
                 {{ currentRole }}
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
@@ -215,7 +215,7 @@
             <!-- 3.2 Elevation Morphing -->
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
               <h4 class="font-bold text-center">Elevation Morphing</h4>
-              <M3Surface :elevation="currentElevation" color="surfaceContainerLow" class="p-12 w-full max-w-xs text-center text-lg font-bold transition-all duration-500">
+              <M3Surface :elevation="(currentElevation as any)" color="surfaceContainerLow" class="p-12 w-full max-w-xs text-center text-lg font-bold transition-all duration-500">
                 {{ currentElevation.toUpperCase() }}
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
@@ -242,7 +242,7 @@
         <section class="flex flex-col gap-8">
           <div class="flex flex-col gap-2">
             <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">4. Surface Variants (Presets)</h3>
-            <p class="text-slate-600">Variants bundle a specific color role, contrast partner, and border style to define a common UI pattern (e.g., "Tonal" for cards, "Outlined" for inputs).</p>
+            <p class="text-slate-600">Variants bundle a specific color role, contrast partner, and border style to define a common UI pattern (e.g., \"Tonal\" for cards, \"Outlined\" for inputs).</p>
           </div>
           
           <!-- Filled Row 1: High-Emphasis -->
@@ -280,7 +280,7 @@
           <!-- Filled Row 3: Neutral Containers -->
           <div class="flex flex-col gap-4 pt-4 border-t border-slate-100">
             <h4 class="text-xs font-bold text-slate-400 uppercase tracking-tighter">Neutral Containers</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <div v-for="v_id in filteredVariants('neutral-container')" :key="v_id" class="flex flex-col gap-3">
                 <M3Surface :variant="v_id" class="p-4 text-center font-bold capitalize">
                   {{ v_id.replace('container', '').trim() }}
@@ -314,7 +314,7 @@
         <section class="flex flex-col gap-8">
           <div class="flex flex-col gap-2">
             <h3 class="text-xl font-bold uppercase tracking-widest text-slate-500">5. Size-Driven Profiles</h3>
-            <p class="text-slate-600">The peak of the system. One prop (<code>size</code>) coordinates radius, elevation, and depth role based on the component's visual scale.</p>
+            <p class="text-slate-600">The peak of the system. One prop (<code class="font-mono">size</code>) coordinates radius, elevation, and depth role based on the component's visual scale.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
             <div v-for="s in sizes" :key="s.id" class="flex flex-col gap-4 p-6 bg-white rounded-3xl border border-slate-200 shadow-sm items-center">
@@ -385,7 +385,7 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="flex flex-col gap-6 p-8 bg-white rounded-3xl border border-slate-200 shadow-sm">
               <h3 class="font-bold text-center">Size & State Morph</h3>
-              <M3Surface :size="currentSize" :state="interactiveState" color="primary" class="p-6 text-center text-lg font-bold">
+              <M3Surface :size="currentSize" :state="(interactiveState as any)" color="primary" class="p-6 text-center text-lg font-bold">
                 Profile Morph
               </M3Surface>
               <div class="flex flex-wrap justify-center gap-2">
@@ -415,7 +415,6 @@
           </div>
         </section>
       </div>
-
     </div>
   </div>
 </template>

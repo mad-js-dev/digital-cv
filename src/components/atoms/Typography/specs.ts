@@ -5,7 +5,7 @@
  * and their visual properties.
  */
 
-import { TYPE_SCALE, FONT_WEIGHTS } from '@/constants/typography';
+// No unused imports here
 
 export const TYPOGRAPHY_SPECS = {
   roles: {

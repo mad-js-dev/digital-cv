@@ -1,5 +1,5 @@
 import { ref, computed, onMounted } from 'vue';
-import { M3_COLOR_PALETTES, type ColorRole } from '@/constants/colors';
+import { M3_COLOR_PALETTES } from '@/constants/colors';
 
 export type ThemeMode = 'light' | 'dark';
 

@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { TYPE_SCALE, roleOf, type TypeStyleKey, type TypeStyle, type FONT_WEIGHTS } from '@/constants/typography'
+import { TYPE_SCALE, roleOf, type TypeStyleKey, type TypeStyle, FONT_WEIGHTS } from '@/constants/typography'
 import { TYPOGRAPHY_SPECS, type TypographyRole } from './specs';
 
 // Allow the variant to be either a token key or a custom style object for flexibility
@@ -67,7 +67,8 @@ const style = computed(() => {
     baseline = TYPE_SCALE[props.variant as TypeStyleKey];
   } else {
     const roleSpec = TYPOGRAPHY_SPECS.roles[props.role as TypographyRole];
-    const variantKey = (roleSpec?.variants[props.size as keyof typeof roleSpec?.variants] || roleSpec?.defaultVariant || 'body-medium') as TypeStyleKey;
+    const variants = roleSpec?.variants;
+    const variantKey = (variants?.[props.size as keyof typeof variants] || roleSpec?.defaultVariant || 'body-medium') as TypeStyleKey;
     baseline = TYPE_SCALE[variantKey];
   }
 
@@ -76,9 +77,9 @@ const style = computed(() => {
   }
 
   // 2. Merge with custom object overrides if provided
-  const t = typeof props.variant === 'object' 
-    ? { ...baseline, ...props.variant } 
-    : baseline;
+    const t = typeof props.variant === 'object' 
+      ? { ...baseline, ...props.variant } 
+      : baseline;
 
   // 3. Resolve weight: prop override -> token default
   let weight = t.weight;

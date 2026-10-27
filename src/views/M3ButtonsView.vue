@@ -65,7 +65,7 @@
         <div class="flex flex-wrap justify-center gap-8 p-8 bg-[var(--md-sys-color-surface-variant)] rounded-3xl border border-[var(--md-sys-color-outline-variant)]">
           <div v-for="sh in shapes" :key="sh.type" class="flex flex-col gap-2 items-center">
             <span class="text-[10px] font-mono text-[var(--md-sys-color-on-surface-variant)] opacity-60 uppercase">{{ sh.name }}</span>
-            <M3Button :shape="sh.type" variant="filled">
+            <M3Button :shape="(sh.type as any)" variant="filled">
               {{ sh.label }}
             </M3Button>
           </div>
@@ -125,19 +125,16 @@ const shapes = Object.entries(M3_BUTTON_SPECS.shapes).map(([key, value]) => ({
   label: value.label,
 }));
 
-const elevations = [
-  { name: 'Level 0', level: 'level0', label: 'No Elevation' },
-  { name: 'Level 1', level: 'level1', label: 'Level 1' },
-  { name: 'Level 2', level: 'level2', label: 'Level 2' },
-  { name: 'Level 3', level: 'level3', label: 'Level 3' },
-  { name: 'Level 4', level: 'level4', label: 'Level 4' },
-];
+// Removed unused elevations array
 
-const currentMorphRadius = ref('S');
+// Removed unused currentMorphRadius ref
 const isToggled = ref(false);
-const toggleMorph = () => {
-  currentMorphRadius.value = currentMorphRadius.value === 'S' 
-    ? 'M' 
-    : 'S';
-};
+// Removed unused toggleMorph function
 </script>
+
+<style scoped>
+.text-primary { color: var(--color-primario); }
+.text-on-primary { color: #ffffff; }
+.text-secondary-container { color: var(--color-secondary, #e8def8); }
+.text-on-secondary-container { color: #1d192b; }
+</style>

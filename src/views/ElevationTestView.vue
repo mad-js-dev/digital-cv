@@ -21,8 +21,8 @@
             </div>
           </div>
           <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-6">
-            <div v-for="(spec, level) in elevationTokens" :key="level" class="flex flex-col items-center gap-3">
-              <Shape :elevation="level" :radius="20" color="#1e293b" class="w-24 h-24 flex items-center justify-center">
+            <div v-for="(_spec, level) in elevationTokens" :key="level" class="flex flex-col items-center gap-3">
+              <Shape :elevation="level" :radius="20" :color="('#1e293b' as any)" class="w-24 h-24 flex items-center justify-center">
                 <span class="text-2xl font-bold text-slate-400">{{ level }}</span>
               </Shape>
               <p class="text-[10px] text-slate-500 font-mono">{{ level }}</p>
@@ -74,3 +74,6 @@ import { ELEVATION_TOKENS } from '@/constants/elevation'
 
 const elevationTokens = ELEVATION_TOKENS;
 </script>
+
+<style scoped>
+</style>

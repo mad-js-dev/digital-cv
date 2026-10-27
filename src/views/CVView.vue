@@ -108,7 +108,7 @@ onMounted(async () => {
 
     // --- OPTION 1: CINEMATIC ENTRANCE ---
     // Initial states for the staggered entrance
-    const header = root.value.querySelector('header'); // fallback if ref not used
+    // Removed unused _header declaration
     const name = root.value?.querySelector('h1');
     const title = root.value?.querySelector('p');
     const summary = root.value?.querySelector('.max-w-2xl');
@@ -116,12 +116,12 @@ onMounted(async () => {
 
     if (name && title && summary && root.value) {
       gsap.set([name, title, summary], { opacity: 0, y: 30 });
-      gsap.set(root.value.querySelector('img'), { opacity: 0, y: 50 });
+      gsap.set(root.value?.querySelector('img'), { opacity: 0, y: 50 });
       gsap.set(sidebarContent, { opacity: 0, x: -30 });
 
       // Autonomous Entrance Sequence (plays once on load)
       const intro = gsap.timeline({ delay: 0.5 });
-      intro.to(root.value.querySelector('img'), { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
+      intro.to(root.value?.querySelector('img'), { opacity: 1, y: 0, duration: 1, ease: 'power3.out' })
            .to(name, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5")
            .to(title, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.6")
            .to(summary, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.6")

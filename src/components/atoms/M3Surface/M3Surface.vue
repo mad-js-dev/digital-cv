@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
   paddingX: 'md',
   paddingY: 'md',
   state: 'base',
-  variant: 'filled',
+  variant: 'filledPrimary',
   width: undefined,
   height: undefined,
   stroke: 'transparent',
@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 // --- Pure Helper: Role to Hex ---
 const resolveHex = (role: string) => {
-  if (!role) return 'transparent';
+  if (!role || role === 'transparent') return 'transparent';
   const trimmedRole = role.trim();
   if (trimmedRole === 'transparent') return 'transparent';
   
@@ -152,11 +152,7 @@ const resolvedBorder = computed(() => {
 
 // --- Elevation Resolver ---
 const resolvedElevation = computed(() => {
-  // Priority: Explicit prop > Size-based default
   const sizeProfile = SURFACE_PROFILES[props.size || 'md'];
-  
-  // To implement state-based lift, we could adjust the elevation here
-  // But for now we follow the provided prop/size logic.
   const elevationLevel = props.elevation || sizeProfile.elevation || 'level0';
   const spec = ELEVATION_TOKENS[elevationLevel];
   if (!spec) return 'none';

@@ -42,7 +42,7 @@ import {
 } from './specs';
 
 interface Props {
-  profile?: SurfaceProfile;
+  size?: SurfaceProfile;
   depth?: SurfaceDepth;
   radius?: SurfaceRadius | SurfaceRadius[] | number | number[];
   color?: SurfaceRole | ColorRole;
@@ -58,7 +58,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  profile: 'md',
+  size: 'md',
   depth: undefined,
   radius: 'M',
   color: undefined,
@@ -76,9 +76,11 @@ const props = withDefaults(defineProps<Props>(), {
 // --- Pure Helper: Role to Hex ---
 const resolveHex = (role: string) => {
   if (!role || role === 'transparent') return 'transparent';
-  const palette = M3_COLOR_PALETTES[role as ColorRole];
-  if (!palette) return 'transparent';
-  return palette.light;
+  const trimmedRole = role.trim();
+  if (trimmedRole === 'transparent') return 'transparent';
+  
+  const palette = M3_COLOR_PALETTES[trimmedRole as ColorRole];
+  return palette ? palette.light : 'transparent';
 };
 
 // --- Radius Resolver ---
@@ -90,31 +92,22 @@ const resolveRadiusValue = (val: any): string => {
 };
 
 const resolvedRadius = computed(() => {
-  const profile = SURFACE_PROFILES[props.profile];
-  const stateRadius = profile.radiusProfile[props.state || 'base'];
   if (props.radius) {
     if (Array.isArray(props.radius)) {
       return props.radius.map(r => resolveRadiusValue(r)).join(' ');
     }
     return resolveRadiusValue(props.radius);
   }
-  if (Array.isArray(stateRadius)) {
-    return stateRadius.map(r => resolveRadiusValue(r)).join(' ');
-  }
-  return resolveRadiusValue(stateRadius);
+  const sizeProfile = SURFACE_PROFILES[props.size || 'md'];
+  return resolveRadiusValue(sizeProfile.radius);
 });
 
 // --- Color & Contrast Resolver ---
 const variantSpec = computed(() => SURFACE_VARIANTS[props.variant]);
 
 const resolvedSurfaceRole = computed(() => {
-  // 1. Absolute Priority: Explicit color prop
   if (props.color) return props.color as SurfaceRole;
-  
-  // 2. Secondary Priority: Depth mapping
   if (props.depth) return SURFACE_DEPTH_MAP[props.depth] as SurfaceRole;
-  
-  // 3. Default: Variant's assigned role
   return variantSpec.value.role as SurfaceRole;
 });
 
@@ -125,8 +118,25 @@ const resolvedSurface = computed(() => {
 const resolvedContentColor = computed(() => {
   const role = resolvedSurfaceRole.value;
   if (!role || role === 'transparent') return resolveHex('onSurface');
+  
+  // 1. Try Exact On-Role (e.g., primary -> onPrimary)
   const onRole = role.startsWith('on') ? role : `on${role.charAt(0).toUpperCase() + role.slice(1)}`;
-  return resolveHex(onRole);
+  const specificOnColor = resolveHex(onRole);
+  if (specificOnColor !== 'transparent') return specificOnColor;
+
+  // 2. Try Container Fallback (e.g., primaryContainer -> onPrimary)
+  if (role.toLowerCase().includes('container')) {
+    const baseRole = role.toLowerCase().replace('container', '').trim();
+    
+    // Special Case: surfaceContainer -> onSurface
+    if (baseRole === 'surface') return resolveHex('onSurface');
+    
+    const baseOnRole = `on${baseRole.charAt(0).toUpperCase() + baseRole.slice(1)}`;
+    const baseOnColor = resolveHex(baseOnRole);
+    if (baseOnColor !== 'transparent') return baseOnColor;
+  }
+
+  // 3. Global Fallback\n  return resolveHex('onSurface');
 });
 
 const resolvedBorder = computed(() => {
@@ -141,9 +151,8 @@ const resolvedBorder = computed(() => {
 
 // --- Elevation Resolver ---
 const resolvedElevation = computed(() => {
-  const profile = SURFACE_PROFILES[props.profile];
-  const stateElevation = profile.elevationProfile[props.state || 'base'];
-  const elevationLevel = props.elevation || stateElevation || 'level0';
+  const sizeProfile = SURFACE_PROFILES[props.size || 'md'];
+  const elevationLevel = props.elevation || sizeProfile.elevation || 'level0';
   const spec = ELEVATION_TOKENS[elevationLevel];
   if (!spec) return 'none';
   return `drop-shadow(0px ${spec.offsetY}px ${spec.blur}px ${spec.color})`;
