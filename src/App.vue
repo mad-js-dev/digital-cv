@@ -2,7 +2,7 @@
   <div 
     class="relative flex justify-center min-h-screen bg-[var(--color-bg-page)] transition-colors duration-300" style="overflow-x: clip;">
     <div class="fixed top-6 right-6 z-50 flex items-center gap-3">
-      <DownloadButton v-if="$route.name === 'cv'" />
+      <DownloadButton />
       <!-- <HamburgerMenu /> -->
       <ThemeControl />
     </div>
